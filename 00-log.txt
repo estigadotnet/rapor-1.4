@@ -1,0 +1,26 @@
+.LOG
+
+2:38 PM 3/17/2020
+buat dashboard dulu;
+tampilkan informasi sekolah yang terpilih;
+tapi bagaimana bila aplikasi bisa digunakan multiuser ?;
+pada saat yang bersamaan :: beberapa user dapat memanage data sekolah yang berbeda;
+
+perlu dicarikan triknya dulu ...
+
+aplikasi ini digunakan tidak hanya statis, tapi diupayakan bisa dinamis,
+
+user yang berbeda... yang login bersamaan... dapat memanage data sekolah yang berbeda pada saat yang bersamaan
+
+
+3:42 PM 3/17/2020
+kliatannya main session aja,
+siapa yang milih itu sebagai yang terpilih... maka data itu dianggap sebagai acuan data sekolah yang terpilih,
+saat login :: diminta untuk memilih data sekolah yang mana yang ingin dimanage datanya
+
+
+6:21 PM 3/17/2020
+buat session form, untuk memilih sekolah mana yang akan diprose,
+membuat form ini memang susah, tapi gpp, untuk berikutnya bisa digunakan untuk aplikasi lain yang memerlukan - 
+pemilihan data sebelum semua menu dijalankan
+
