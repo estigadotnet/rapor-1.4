@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Mar 17, 2020 at 12:23 PM
+-- Generation Time: Mar 18, 2020 at 12:45 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -209,7 +209,28 @@ INSERT INTO `t204_audittrail` (`id`, `datetime`, `script`, `user`, `action`, `ta
 (27, '2020-03-17 10:37:24', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
 (28, '2020-03-17 10:38:39', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
 (29, '2020-03-17 10:39:09', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
-(30, '2020-03-17 11:18:23', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', '');
+(30, '2020-03-17 11:18:23', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(31, '2020-03-18 03:27:45', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(32, '2020-03-18 03:34:25', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(33, '2020-03-18 03:34:33', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(34, '2020-03-18 10:47:55', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(35, '2020-03-18 10:48:25', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(36, '2020-03-18 10:48:37', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(37, '2020-03-18 10:52:18', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(38, '2020-03-18 10:58:11', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(39, '2020-03-18 10:58:17', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(40, '2020-03-18 11:04:28', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(41, '2020-03-18 11:04:39', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(42, '2020-03-18 11:08:39', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(43, '2020-03-18 11:08:46', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(44, '2020-03-18 11:11:46', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(45, '2020-03-18 11:11:50', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(46, '2020-03-18 11:14:12', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(47, '2020-03-18 11:14:17', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(48, '2020-03-18 11:15:44', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(49, '2020-03-18 11:15:49', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(50, '2020-03-18 11:16:56', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(51, '2020-03-18 11:43:32', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 --
 -- Indexes for dumped tables
@@ -278,7 +299,7 @@ ALTER TABLE `t201_employees`
 -- AUTO_INCREMENT for table `t204_audittrail`
 --
 ALTER TABLE `t204_audittrail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -494,6 +494,7 @@ class logout
 	function User_LoggedOut($usr) {
 
 		//echo "User Logged Out";
+		session_destroy();
 	}
 } // End class
 ?>
