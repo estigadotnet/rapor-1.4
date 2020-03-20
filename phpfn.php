@@ -8069,8 +8069,12 @@ function ConnectDb($info) {
 	}
 
 	//$conn->raiseErrorFn = "";
-	// Database connected event
+	// Let ADOdb outputs connection errors by echo(), set output function after connection
 
+	if (!isset($GLOBALS["ADODB_OUTP"]))
+		$GLOBALS["ADODB_OUTP"] = PROJECT_NAMESPACE . "SetDebugMessage";
+
+	// Database connected event
 	Database_Connected($conn);
 	$GLOBALS["CONNECTIONS"][$dbid] = $conn;
 	return $conn;
@@ -8732,8 +8736,13 @@ function UnFormatDateTime($dt, $namedformat) {
 		}
 		$dt = $year . "-" . str_pad($month, 2, "0", STR_PAD_LEFT) . "-" . str_pad($day, 2, "0", STR_PAD_LEFT);
 		if (count($arDateTime) > 1) { // Time
-			list($hr, $min, $sec) = array_pad(explode($TIME_SEPARATOR, $arDateTime[1]), 3, 0);
-			$dt .= " " . str_pad($hr, 2, "0", STR_PAD_LEFT) . ":" . str_pad($min, 2, "0", STR_PAD_LEFT) . ":" . str_pad($sec, 2, "0", STR_PAD_LEFT);
+			$arDateTime[1] = str_replace($TIME_SEPARATOR, ":", $arDateTime[1]);
+			if (count($arDateTime) > 2 && substr_count($arDateTime[1], ":") == 1) { // Short time
+				$dt .= UnformatShortTime($arDateTime[1] . " " . $arDateTime[2]);
+			} else {
+				list($hr, $min, $sec) = array_pad(explode(":", $arDateTime[1]), 3, 0);
+				$dt .= " " . str_pad($hr, 2, "0", STR_PAD_LEFT) . ":" . str_pad($min, 2, "0", STR_PAD_LEFT) . ":" . str_pad($sec, 2, "0", STR_PAD_LEFT);
+			}
 		}
 		return $dt;
 	} else {
@@ -8749,7 +8758,7 @@ function UnFormatDateTime($dt, $namedformat) {
 /**
  * Unformat short time (to HH:mm:ss)
  *
- * @param string short time (hh:mm AM/PM/midnight)
+ * @param string short time (hh:mm AM/PM)
  * @return string
  */
 function UnformatShortTime($tm) {
@@ -8772,10 +8781,9 @@ function UnformatShortTime($tm) {
 			$hr = 0;
 			$min = 0;
 		}
-	} else { // Not short time, ignore
-		return $tm;
+		return str_pad($hr, 2, "0", STR_PAD_LEFT) . ":" . str_pad($min, 2, "0", STR_PAD_LEFT) . ":" . str_pad($sec, 2, "0", STR_PAD_LEFT);
 	}
-	return str_pad($hr, 2, "0", STR_PAD_LEFT) . ":" . str_pad($min, 2, "0", STR_PAD_LEFT) . ":" . str_pad($sec, 2, "0", STR_PAD_LEFT);
+	return $tm; // Not short time, ignore
 }
 
 /**

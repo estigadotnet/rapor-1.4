@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Mar 18, 2020 at 12:45 PM
+-- Generation Time: Mar 20, 2020 at 12:32 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -41,7 +41,8 @@ CREATE TABLE `t001_sekolah` (
 --
 
 INSERT INTO `t001_sekolah` (`id`, `Nama`, `Alamat`, `KepalaSekolah`, `NIPKepalaSekolah`) VALUES
-(1, 'MINU Karakter Bojonegoro', NULL, NULL, NULL);
+(1, 'MINU Karakter Bojonegoro', NULL, NULL, NULL),
+(2, 'MINU Unggulan Bojonegoro', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -230,7 +231,73 @@ INSERT INTO `t204_audittrail` (`id`, `datetime`, `script`, `user`, `action`, `ta
 (48, '2020-03-18 11:15:44', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
 (49, '2020-03-18 11:15:49', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
 (50, '2020-03-18 11:16:56', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
-(51, '2020-03-18 11:43:32', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
+(51, '2020-03-18 11:43:32', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(52, '2020-03-19 02:40:10', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(53, '2020-03-19 04:39:18', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(54, '2020-03-19 04:39:27', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(55, '2020-03-19 05:07:57', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(56, '2020-03-19 05:08:06', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(57, '2020-03-19 05:08:35', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(58, '2020-03-19 05:08:44', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(59, '2020-03-19 05:11:25', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(60, '2020-03-19 05:11:29', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(61, '2020-03-19 05:15:34', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(62, '2020-03-19 05:15:41', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(63, '2020-03-19 08:10:13', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(64, '2020-03-19 08:10:21', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(65, '2020-03-19 08:40:34', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(66, '2020-03-19 08:40:43', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(67, '2020-03-19 09:30:43', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(68, '2020-03-19 09:30:50', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(69, '2020-03-19 10:27:43', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(70, '2020-03-19 10:27:51', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(71, '2020-03-19 10:35:22', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(72, '2020-03-19 10:35:27', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(73, '2020-03-20 01:54:12', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(74, '2020-03-20 01:56:53', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(75, '2020-03-20 01:57:01', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(76, '2020-03-20 01:59:06', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(77, '2020-03-20 01:59:11', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(78, '2020-03-20 02:05:57', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(79, '2020-03-20 02:06:05', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(80, '2020-03-20 02:07:35', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(81, '2020-03-20 02:07:58', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(82, '2020-03-20 02:09:54', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(83, '2020-03-20 02:10:02', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(84, '2020-03-20 02:16:16', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(85, '2020-03-20 02:16:23', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(86, '2020-03-20 02:20:49', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(87, '2020-03-20 02:21:00', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(88, '2020-03-20 02:24:56', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(89, '2020-03-20 02:25:02', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(90, '2020-03-20 02:27:28', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(91, '2020-03-20 02:27:34', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(92, '2020-03-20 02:33:09', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(93, '2020-03-20 02:33:16', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(94, '2020-03-20 02:34:21', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(95, '2020-03-20 02:34:26', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(96, '2020-03-20 02:34:42', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(97, '2020-03-20 03:30:24', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(98, '2020-03-20 03:30:38', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(99, '2020-03-20 03:31:04', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(100, '2020-03-20 03:35:32', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(101, '2020-03-20 03:35:37', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(102, '2020-03-20 03:36:01', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(103, '2020-03-20 04:19:54', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(104, '2020-03-20 04:20:18', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(105, '2020-03-20 04:22:52', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(106, '2020-03-20 08:16:26', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(107, '2020-03-20 08:16:30', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(108, '2020-03-20 08:43:17', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(109, '2020-03-20 08:43:25', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(110, '2020-03-20 08:43:41', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(111, '2020-03-20 08:43:45', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(112, '2020-03-20 09:25:08', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(113, '2020-03-20 09:25:22', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(114, '2020-03-20 09:30:21', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(115, '2020-03-20 09:30:25', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(116, '2020-03-20 09:36:11', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(117, '2020-03-20 09:36:16', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 --
 -- Indexes for dumped tables
@@ -281,7 +348,7 @@ ALTER TABLE `t204_audittrail`
 -- AUTO_INCREMENT for table `t001_sekolah`
 --
 ALTER TABLE `t001_sekolah`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `t101_session`
@@ -299,7 +366,7 @@ ALTER TABLE `t201_employees`
 -- AUTO_INCREMENT for table `t204_audittrail`
 --
 ALTER TABLE `t204_audittrail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
