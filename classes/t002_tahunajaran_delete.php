@@ -4,7 +4,7 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t001_sekolah_delete extends t001_sekolah
+class t002_tahunajaran_delete extends t002_tahunajaran
 {
 
 	// Page ID
@@ -14,10 +14,10 @@ class t001_sekolah_delete extends t001_sekolah
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't001_sekolah';
+	public $TableName = 't002_tahunajaran';
 
 	// Page object name
-	public $PageObjName = "t001_sekolah_delete";
+	public $PageObjName = "t002_tahunajaran_delete";
 
 	// Page headings
 	public $Heading = "";
@@ -341,10 +341,10 @@ class t001_sekolah_delete extends t001_sekolah
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t001_sekolah)
-		if (!isset($GLOBALS["t001_sekolah"]) || get_class($GLOBALS["t001_sekolah"]) == PROJECT_NAMESPACE . "t001_sekolah") {
-			$GLOBALS["t001_sekolah"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t001_sekolah"];
+		// Table object (t002_tahunajaran)
+		if (!isset($GLOBALS["t002_tahunajaran"]) || get_class($GLOBALS["t002_tahunajaran"]) == PROJECT_NAMESPACE . "t002_tahunajaran") {
+			$GLOBALS["t002_tahunajaran"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t002_tahunajaran"];
 		}
 
 		// Table object (t201_employees)
@@ -357,7 +357,7 @@ class t001_sekolah_delete extends t001_sekolah
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't001_sekolah');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't002_tahunajaran');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -386,14 +386,14 @@ class t001_sekolah_delete extends t001_sekolah
 		Page_Unloaded();
 
 		// Export
-		global $t001_sekolah;
+		global $t002_tahunajaran;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t001_sekolah);
+				$doc = new $class($t002_tahunajaran);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -564,7 +564,7 @@ class t001_sekolah_delete extends t001_sekolah
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t001_sekolahlist.php"));
+					$this->terminate(GetUrl("t002_tahunajaranlist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -577,10 +577,8 @@ class t001_sekolah_delete extends t001_sekolah
 		}
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->Visible = FALSE;
-		$this->Nama->setVisibility();
-		$this->Alamat->setVisibility();
-		$this->KepalaSekolah->setVisibility();
-		$this->NIPKepalaSekolah->setVisibility();
+		$this->Mulai->setVisibility();
+		$this->Selesai->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -606,7 +604,7 @@ class t001_sekolah_delete extends t001_sekolah
 
 		if (!$Security->canDelete()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t001_sekolahlist.php");
+			$this->terminate("t002_tahunajaranlist.php");
 			return;
 		}
 
@@ -617,7 +615,7 @@ class t001_sekolah_delete extends t001_sekolah
 		$this->RecKeys = $this->getRecordKeys(); // Load record keys
 		$filter = $this->getFilterFromRecordKeys();
 		if ($filter == "") {
-			$this->terminate("t001_sekolahlist.php"); // Prevent SQL injection, return to list
+			$this->terminate("t002_tahunajaranlist.php"); // Prevent SQL injection, return to list
 			return;
 		}
 
@@ -659,7 +657,7 @@ class t001_sekolah_delete extends t001_sekolah
 			if ($this->TotalRecords <= 0) { // No record found, exit
 				if ($this->Recordset)
 					$this->Recordset->close();
-				$this->terminate("t001_sekolahlist.php"); // Return to list
+				$this->terminate("t002_tahunajaranlist.php"); // Return to list
 			}
 		}
 	}
@@ -727,10 +725,8 @@ class t001_sekolah_delete extends t001_sekolah
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->Nama->setDbValue($row['Nama']);
-		$this->Alamat->setDbValue($row['Alamat']);
-		$this->KepalaSekolah->setDbValue($row['KepalaSekolah']);
-		$this->NIPKepalaSekolah->setDbValue($row['NIPKepalaSekolah']);
+		$this->Mulai->setDbValue($row['Mulai']);
+		$this->Selesai->setDbValue($row['Selesai']);
 	}
 
 	// Return a row with default values
@@ -738,10 +734,8 @@ class t001_sekolah_delete extends t001_sekolah
 	{
 		$row = [];
 		$row['id'] = NULL;
-		$row['Nama'] = NULL;
-		$row['Alamat'] = NULL;
-		$row['KepalaSekolah'] = NULL;
-		$row['NIPKepalaSekolah'] = NULL;
+		$row['Mulai'] = NULL;
+		$row['Selesai'] = NULL;
 		return $row;
 	}
 
@@ -757,10 +751,8 @@ class t001_sekolah_delete extends t001_sekolah
 
 		// Common render codes for all row types
 		// id
-		// Nama
-		// Alamat
-		// KepalaSekolah
-		// NIPKepalaSekolah
+		// Mulai
+		// Selesai
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -768,41 +760,23 @@ class t001_sekolah_delete extends t001_sekolah
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// Nama
-			$this->Nama->ViewValue = $this->Nama->CurrentValue;
-			$this->Nama->ViewCustomAttributes = "";
+			// Mulai
+			$this->Mulai->ViewValue = $this->Mulai->CurrentValue;
+			$this->Mulai->ViewCustomAttributes = "";
 
-			// Alamat
-			$this->Alamat->ViewValue = $this->Alamat->CurrentValue;
-			$this->Alamat->ViewCustomAttributes = "";
+			// Selesai
+			$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
+			$this->Selesai->ViewCustomAttributes = "";
 
-			// KepalaSekolah
-			$this->KepalaSekolah->ViewValue = $this->KepalaSekolah->CurrentValue;
-			$this->KepalaSekolah->ViewCustomAttributes = "";
+			// Mulai
+			$this->Mulai->LinkCustomAttributes = "";
+			$this->Mulai->HrefValue = "";
+			$this->Mulai->TooltipValue = "";
 
-			// NIPKepalaSekolah
-			$this->NIPKepalaSekolah->ViewValue = $this->NIPKepalaSekolah->CurrentValue;
-			$this->NIPKepalaSekolah->ViewCustomAttributes = "";
-
-			// Nama
-			$this->Nama->LinkCustomAttributes = "";
-			$this->Nama->HrefValue = "";
-			$this->Nama->TooltipValue = "";
-
-			// Alamat
-			$this->Alamat->LinkCustomAttributes = "";
-			$this->Alamat->HrefValue = "";
-			$this->Alamat->TooltipValue = "";
-
-			// KepalaSekolah
-			$this->KepalaSekolah->LinkCustomAttributes = "";
-			$this->KepalaSekolah->HrefValue = "";
-			$this->KepalaSekolah->TooltipValue = "";
-
-			// NIPKepalaSekolah
-			$this->NIPKepalaSekolah->LinkCustomAttributes = "";
-			$this->NIPKepalaSekolah->HrefValue = "";
-			$this->NIPKepalaSekolah->TooltipValue = "";
+			// Selesai
+			$this->Selesai->LinkCustomAttributes = "";
+			$this->Selesai->HrefValue = "";
+			$this->Selesai->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -906,7 +880,7 @@ class t001_sekolah_delete extends t001_sekolah
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t001_sekolahlist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t002_tahunajaranlist.php"), "", $this->TableVar, TRUE);
 		$pageId = "delete";
 		$Breadcrumb->add("delete", $pageId, $url);
 	}

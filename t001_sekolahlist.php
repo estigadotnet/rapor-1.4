@@ -141,21 +141,21 @@ $t001_sekolah_list->renderListOptions();
 // Render list options (header, left)
 $t001_sekolah_list->ListOptions->render("header", "left");
 ?>
-<?php if ($t001_sekolah_list->id->Visible) { // id ?>
-	<?php if ($t001_sekolah_list->SortUrl($t001_sekolah_list->id) == "") { ?>
-		<th data-name="id" class="<?php echo $t001_sekolah_list->id->headerCellClass() ?>"><div id="elh_t001_sekolah_id" class="t001_sekolah_id"><div class="ew-table-header-caption"><?php echo $t001_sekolah_list->id->caption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="id" class="<?php echo $t001_sekolah_list->id->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event, '<?php echo $t001_sekolah_list->SortUrl($t001_sekolah_list->id) ?>', 2);"><div id="elh_t001_sekolah_id" class="t001_sekolah_id">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $t001_sekolah_list->id->caption() ?></span><span class="ew-table-header-sort"><?php if ($t001_sekolah_list->id->getSort() == "ASC") { ?><i class="fas fa-sort-up"></i><?php } elseif ($t001_sekolah_list->id->getSort() == "DESC") { ?><i class="fas fa-sort-down"></i><?php } ?></span></div>
-		</div></div></th>
-	<?php } ?>
-<?php } ?>
 <?php if ($t001_sekolah_list->Nama->Visible) { // Nama ?>
 	<?php if ($t001_sekolah_list->SortUrl($t001_sekolah_list->Nama) == "") { ?>
 		<th data-name="Nama" class="<?php echo $t001_sekolah_list->Nama->headerCellClass() ?>"><div id="elh_t001_sekolah_Nama" class="t001_sekolah_Nama"><div class="ew-table-header-caption"><?php echo $t001_sekolah_list->Nama->caption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="Nama" class="<?php echo $t001_sekolah_list->Nama->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event, '<?php echo $t001_sekolah_list->SortUrl($t001_sekolah_list->Nama) ?>', 2);"><div id="elh_t001_sekolah_Nama" class="t001_sekolah_Nama">
 			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $t001_sekolah_list->Nama->caption() ?><?php echo $Language->phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($t001_sekolah_list->Nama->getSort() == "ASC") { ?><i class="fas fa-sort-up"></i><?php } elseif ($t001_sekolah_list->Nama->getSort() == "DESC") { ?><i class="fas fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($t001_sekolah_list->Alamat->Visible) { // Alamat ?>
+	<?php if ($t001_sekolah_list->SortUrl($t001_sekolah_list->Alamat) == "") { ?>
+		<th data-name="Alamat" class="<?php echo $t001_sekolah_list->Alamat->headerCellClass() ?>"><div id="elh_t001_sekolah_Alamat" class="t001_sekolah_Alamat"><div class="ew-table-header-caption"><?php echo $t001_sekolah_list->Alamat->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Alamat" class="<?php echo $t001_sekolah_list->Alamat->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event, '<?php echo $t001_sekolah_list->SortUrl($t001_sekolah_list->Alamat) ?>', 2);"><div id="elh_t001_sekolah_Alamat" class="t001_sekolah_Alamat">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $t001_sekolah_list->Alamat->caption() ?><?php echo $Language->phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($t001_sekolah_list->Alamat->getSort() == "ASC") { ?><i class="fas fa-sort-up"></i><?php } elseif ($t001_sekolah_list->Alamat->getSort() == "DESC") { ?><i class="fas fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -242,17 +242,17 @@ while ($t001_sekolah_list->RecordCount < $t001_sekolah_list->StopRecord) {
 // Render list options (body, left)
 $t001_sekolah_list->ListOptions->render("body", "left", $t001_sekolah_list->RowCount);
 ?>
-	<?php if ($t001_sekolah_list->id->Visible) { // id ?>
-		<td data-name="id" <?php echo $t001_sekolah_list->id->cellAttributes() ?>>
-<span id="el<?php echo $t001_sekolah_list->RowCount ?>_t001_sekolah_id">
-<span<?php echo $t001_sekolah_list->id->viewAttributes() ?>><?php echo $t001_sekolah_list->id->getViewValue() ?></span>
-</span>
-</td>
-	<?php } ?>
 	<?php if ($t001_sekolah_list->Nama->Visible) { // Nama ?>
 		<td data-name="Nama" <?php echo $t001_sekolah_list->Nama->cellAttributes() ?>>
 <span id="el<?php echo $t001_sekolah_list->RowCount ?>_t001_sekolah_Nama">
 <span<?php echo $t001_sekolah_list->Nama->viewAttributes() ?>><?php echo $t001_sekolah_list->Nama->getViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($t001_sekolah_list->Alamat->Visible) { // Alamat ?>
+		<td data-name="Alamat" <?php echo $t001_sekolah_list->Alamat->cellAttributes() ?>>
+<span id="el<?php echo $t001_sekolah_list->RowCount ?>_t001_sekolah_Alamat">
+<span<?php echo $t001_sekolah_list->Alamat->viewAttributes() ?>><?php echo $t001_sekolah_list->Alamat->getViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

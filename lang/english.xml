@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2020/3/20" version="16.0.1" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2020/3/21" version="16.0.1" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -863,7 +863,10 @@
       <phrase id="menutext" value="Setup" />
     </menu>
     <menu id="1">
-      <phrase id="menutext" value="t 001 sekolah" />
+      <phrase id="menutext" value="Sekolah" />
+    </menu>
+    <menu id="10">
+      <phrase id="menutext" value="Tahun Ajaran" />
     </menu>
     <menu id="8">
       <phrase id="menutext" value="Setting" />
@@ -887,7 +890,7 @@
       <phrase id="tblcaption" value="Home" />
     </table>
     <table id="t001_sekolah">
-      <phrase id="tblcaption" value="t 001 sekolah" />
+      <phrase id="tblcaption" value="Sekolah" />
       <field id="id">
         <phrase id="fldcaption" value="id" />
       </field>
@@ -901,7 +904,19 @@
         <phrase id="fldcaption" value="Kepala Sekolah" />
       </field>
       <field id="nipkepalasekolah">
-        <phrase id="fldcaption" value="NIPKepala Sekolah" />
+        <phrase id="fldcaption" value="NIP Kepala Sekolah" />
+      </field>
+    </table>
+    <table id="t002_tahunajaran">
+      <phrase id="tblcaption" value="Tahun Ajaran" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="mulai">
+        <phrase id="fldcaption" value="Mulai" />
+      </field>
+      <field id="selesai">
+        <phrase id="fldcaption" value="Selesai" />
       </field>
     </table>
     <table id="t101_session">

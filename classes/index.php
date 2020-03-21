@@ -287,6 +287,8 @@ class index
 			$this->terminate("c201_home.php"); // Exit and go to default page
 		if ($Security->allowList(CurrentProjectID() . 't001_sekolah'))
 			$this->terminate("t001_sekolahlist.php");
+		if ($Security->allowList(CurrentProjectID() . 't002_tahunajaran'))
+			$this->terminate("t002_tahunajaranlist.php");
 		if ($Security->allowList(CurrentProjectID() . 't101_session'))
 			$this->terminate("t101_sessionlist.php");
 		if ($Security->allowList(CurrentProjectID() . 't201_employees'))

@@ -70,11 +70,11 @@ $t001_sekolah_delete->showMessage();
 <table class="table ew-table">
 	<thead>
 	<tr class="ew-table-header">
-<?php if ($t001_sekolah_delete->id->Visible) { // id ?>
-		<th class="<?php echo $t001_sekolah_delete->id->headerCellClass() ?>"><span id="elh_t001_sekolah_id" class="t001_sekolah_id"><?php echo $t001_sekolah_delete->id->caption() ?></span></th>
-<?php } ?>
 <?php if ($t001_sekolah_delete->Nama->Visible) { // Nama ?>
 		<th class="<?php echo $t001_sekolah_delete->Nama->headerCellClass() ?>"><span id="elh_t001_sekolah_Nama" class="t001_sekolah_Nama"><?php echo $t001_sekolah_delete->Nama->caption() ?></span></th>
+<?php } ?>
+<?php if ($t001_sekolah_delete->Alamat->Visible) { // Alamat ?>
+		<th class="<?php echo $t001_sekolah_delete->Alamat->headerCellClass() ?>"><span id="elh_t001_sekolah_Alamat" class="t001_sekolah_Alamat"><?php echo $t001_sekolah_delete->Alamat->caption() ?></span></th>
 <?php } ?>
 <?php if ($t001_sekolah_delete->KepalaSekolah->Visible) { // KepalaSekolah ?>
 		<th class="<?php echo $t001_sekolah_delete->KepalaSekolah->headerCellClass() ?>"><span id="elh_t001_sekolah_KepalaSekolah" class="t001_sekolah_KepalaSekolah"><?php echo $t001_sekolah_delete->KepalaSekolah->caption() ?></span></th>
@@ -103,17 +103,17 @@ while (!$t001_sekolah_delete->Recordset->EOF) {
 	$t001_sekolah_delete->renderRow();
 ?>
 	<tr <?php echo $t001_sekolah->rowAttributes() ?>>
-<?php if ($t001_sekolah_delete->id->Visible) { // id ?>
-		<td <?php echo $t001_sekolah_delete->id->cellAttributes() ?>>
-<span id="el<?php echo $t001_sekolah_delete->RowCount ?>_t001_sekolah_id" class="t001_sekolah_id">
-<span<?php echo $t001_sekolah_delete->id->viewAttributes() ?>><?php echo $t001_sekolah_delete->id->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($t001_sekolah_delete->Nama->Visible) { // Nama ?>
 		<td <?php echo $t001_sekolah_delete->Nama->cellAttributes() ?>>
 <span id="el<?php echo $t001_sekolah_delete->RowCount ?>_t001_sekolah_Nama" class="t001_sekolah_Nama">
 <span<?php echo $t001_sekolah_delete->Nama->viewAttributes() ?>><?php echo $t001_sekolah_delete->Nama->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($t001_sekolah_delete->Alamat->Visible) { // Alamat ?>
+		<td <?php echo $t001_sekolah_delete->Alamat->cellAttributes() ?>>
+<span id="el<?php echo $t001_sekolah_delete->RowCount ?>_t001_sekolah_Alamat" class="t001_sekolah_Alamat">
+<span<?php echo $t001_sekolah_delete->Alamat->viewAttributes() ?>><?php echo $t001_sekolah_delete->Alamat->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

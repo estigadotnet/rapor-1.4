@@ -4,20 +4,20 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t001_sekolah_delete extends t001_sekolah
+class t002_tahunajaran_add extends t002_tahunajaran
 {
 
 	// Page ID
-	public $PageID = "delete";
+	public $PageID = "add";
 
 	// Project ID
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't001_sekolah';
+	public $TableName = 't002_tahunajaran';
 
 	// Page object name
-	public $PageObjName = "t001_sekolah_delete";
+	public $PageObjName = "t002_tahunajaran_add";
 
 	// Page headings
 	public $Heading = "";
@@ -341,10 +341,10 @@ class t001_sekolah_delete extends t001_sekolah
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t001_sekolah)
-		if (!isset($GLOBALS["t001_sekolah"]) || get_class($GLOBALS["t001_sekolah"]) == PROJECT_NAMESPACE . "t001_sekolah") {
-			$GLOBALS["t001_sekolah"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t001_sekolah"];
+		// Table object (t002_tahunajaran)
+		if (!isset($GLOBALS["t002_tahunajaran"]) || get_class($GLOBALS["t002_tahunajaran"]) == PROJECT_NAMESPACE . "t002_tahunajaran") {
+			$GLOBALS["t002_tahunajaran"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t002_tahunajaran"];
 		}
 
 		// Table object (t201_employees)
@@ -353,11 +353,11 @@ class t001_sekolah_delete extends t001_sekolah
 
 		// Page ID (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
-			define(PROJECT_NAMESPACE . "PAGE_ID", 'delete');
+			define(PROJECT_NAMESPACE . "PAGE_ID", 'add');
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't001_sekolah');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't002_tahunajaran');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -386,14 +386,14 @@ class t001_sekolah_delete extends t001_sekolah
 		Page_Unloaded();
 
 		// Export
-		global $t001_sekolah;
+		global $t002_tahunajaran;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t001_sekolah);
+				$doc = new $class($t002_tahunajaran);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -421,8 +421,24 @@ class t001_sekolah_delete extends t001_sekolah
 		if ($url != "") {
 			if (!Config("DEBUG") && ob_get_length())
 				ob_end_clean();
-			SaveDebugMessage();
-			AddHeader("Location", $url);
+
+			// Handle modal response
+			if ($this->IsModal) { // Show as modal
+				$row = ["url" => $url, "modal" => "1"];
+				$pageName = GetPageName($url);
+				if ($pageName != $this->getListUrl()) { // Not List page
+					$row["caption"] = $this->getModalCaption($pageName);
+					if ($pageName == "t002_tahunajaranview.php")
+						$row["view"] = "1";
+				} else { // List page should not be shown as modal => error
+					$row["error"] = $this->getFailureMessage();
+					$this->clearFailureMessage();
+				}
+				WriteJson($row);
+			} else {
+				SaveDebugMessage();
+				AddHeader("Location", $url);
+			}
 		}
 		exit();
 	}
@@ -513,6 +529,79 @@ class t001_sekolah_delete extends t001_sekolah
 			$this->id->Visible = FALSE;
 	}
 
+	// Lookup data
+	public function lookup()
+	{
+		global $Language, $Security;
+		if (!isset($Language))
+			$Language = new Language(Config("LANGUAGE_FOLDER"), Post("language", ""));
+
+		// Set up API request
+		if (!$this->setupApiRequest())
+			return FALSE;
+
+		// Get lookup object
+		$fieldName = Post("field");
+		if (!array_key_exists($fieldName, $this->fields))
+			return FALSE;
+		$lookupField = $this->fields[$fieldName];
+		$lookup = $lookupField->Lookup;
+		if ($lookup === NULL)
+			return FALSE;
+		$tbl = $lookup->getTable();
+		if (!$Security->allowLookup(Config("PROJECT_ID") . $tbl->TableName)) // Lookup permission
+			return FALSE;
+
+		// Get lookup parameters
+		$lookupType = Post("ajax", "unknown");
+		$pageSize = -1;
+		$offset = -1;
+		$searchValue = "";
+		if (SameText($lookupType, "modal")) {
+			$searchValue = Post("sv", "");
+			$pageSize = Post("recperpage", 10);
+			$offset = Post("start", 0);
+		} elseif (SameText($lookupType, "autosuggest")) {
+			$searchValue = Get("q", "");
+			$pageSize = Param("n", -1);
+			$pageSize = is_numeric($pageSize) ? (int)$pageSize : -1;
+			if ($pageSize <= 0)
+				$pageSize = Config("AUTO_SUGGEST_MAX_ENTRIES");
+			$start = Param("start", -1);
+			$start = is_numeric($start) ? (int)$start : -1;
+			$page = Param("page", -1);
+			$page = is_numeric($page) ? (int)$page : -1;
+			$offset = $start >= 0 ? $start : ($page > 0 && $pageSize > 0 ? ($page - 1) * $pageSize : 0);
+		}
+		$userSelect = Decrypt(Post("s", ""));
+		$userFilter = Decrypt(Post("f", ""));
+		$userOrderBy = Decrypt(Post("o", ""));
+		$keys = Post("keys");
+		$lookup->LookupType = $lookupType; // Lookup type
+		if ($keys !== NULL) { // Selected records from modal
+			if (is_array($keys))
+				$keys = implode(Config("MULTIPLE_OPTION_SEPARATOR"), $keys);
+			$lookup->FilterFields = []; // Skip parent fields if any
+			$lookup->FilterValues[] = $keys; // Lookup values
+			$pageSize = -1; // Show all records
+		} else { // Lookup values
+			$lookup->FilterValues[] = Post("v0", Post("lookupValue", ""));
+		}
+		$cnt = is_array($lookup->FilterFields) ? count($lookup->FilterFields) : 0;
+		for ($i = 1; $i <= $cnt; $i++)
+			$lookup->FilterValues[] = Post("v" . $i, "");
+		$lookup->SearchValue = $searchValue;
+		$lookup->PageSize = $pageSize;
+		$lookup->Offset = $offset;
+		if ($userSelect != "")
+			$lookup->UserSelect = $userSelect;
+		if ($userFilter != "")
+			$lookup->UserFilter = $userFilter;
+		if ($userOrderBy != "")
+			$lookup->UserOrderBy = $userOrderBy;
+		$lookup->toJson($this); // Use settings from current page
+	}
+
 	// Set up API request
 	public function setupApiRequest()
 	{
@@ -530,14 +619,15 @@ class t001_sekolah_delete extends t001_sekolah
 		}
 		return FALSE;
 	}
+	public $FormClassName = "ew-horizontal ew-form ew-add-form";
+	public $IsModal = FALSE;
+	public $IsMobileOrModal = FALSE;
 	public $DbMasterFilter = "";
 	public $DbDetailFilter = "";
 	public $StartRecord;
-	public $TotalRecords = 0;
-	public $RecordCount;
-	public $RecKeys = [];
-	public $StartRowCount = 1;
-	public $RowCount = 0;
+	public $Priv = 0;
+	public $OldRecordset;
+	public $CopyRecord;
 
 	//
 	// Page run
@@ -545,7 +635,11 @@ class t001_sekolah_delete extends t001_sekolah
 
 	public function run()
 	{
-		global $ExportType, $CustomExportType, $ExportFileName, $UserProfile, $Language, $Security, $CurrentForm;
+		global $ExportType, $CustomExportType, $ExportFileName, $UserProfile, $Language, $Security, $CurrentForm,
+			$FormError, $SkipHeaderFooter;
+
+		// Is modal
+		$this->IsModal = (Param("modal") == "1");
 
 		// User profile
 		$UserProfile = new UserProfile();
@@ -560,11 +654,11 @@ class t001_sekolah_delete extends t001_sekolah
 			$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName);
 			if ($Security->isLoggedIn())
 				$Security->TablePermission_Loaded();
-			if (!$Security->canDelete()) {
+			if (!$Security->canAdd()) {
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t001_sekolahlist.php"));
+					$this->terminate(GetUrl("t002_tahunajaranlist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -575,12 +669,13 @@ class t001_sekolah_delete extends t001_sekolah
 				$Security->UserID_Loaded();
 			}
 		}
+
+		// Create form object
+		$CurrentForm = new HttpForm();
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->Visible = FALSE;
-		$this->Nama->setVisibility();
-		$this->Alamat->setVisibility();
-		$this->KepalaSekolah->setVisibility();
-		$this->NIPKepalaSekolah->setVisibility();
+		$this->Mulai->setVisibility();
+		$this->Selesai->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -604,91 +699,164 @@ class t001_sekolah_delete extends t001_sekolah
 		// Set up lookup cache
 		// Check permission
 
-		if (!$Security->canDelete()) {
+		if (!$Security->canAdd()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t001_sekolahlist.php");
+			$this->terminate("t002_tahunajaranlist.php");
 			return;
+		}
+
+		// Check modal
+		if ($this->IsModal)
+			$SkipHeaderFooter = TRUE;
+		$this->IsMobileOrModal = IsMobile() || $this->IsModal;
+		$this->FormClassName = "ew-form ew-add-form ew-horizontal";
+		$postBack = FALSE;
+
+		// Set up current action
+		if (IsApi()) {
+			$this->CurrentAction = "insert"; // Add record directly
+			$postBack = TRUE;
+		} elseif (Post("action") !== NULL) {
+			$this->CurrentAction = Post("action"); // Get form action
+			$postBack = TRUE;
+		} else { // Not post back
+
+			// Load key values from QueryString
+			$this->CopyRecord = TRUE;
+			if (Get("id") !== NULL) {
+				$this->id->setQueryStringValue(Get("id"));
+				$this->setKey("id", $this->id->CurrentValue); // Set up key
+			} else {
+				$this->setKey("id", ""); // Clear key
+				$this->CopyRecord = FALSE;
+			}
+			if ($this->CopyRecord) {
+				$this->CurrentAction = "copy"; // Copy record
+			} else {
+				$this->CurrentAction = "show"; // Display blank record
+			}
+		}
+
+		// Load old record / default values
+		$loaded = $this->loadOldRecord();
+
+		// Load form values
+		if ($postBack) {
+			$this->loadFormValues(); // Load form values
+		}
+
+		// Validate form if post back
+		if ($postBack) {
+			if (!$this->validateForm()) {
+				$this->EventCancelled = TRUE; // Event cancelled
+				$this->restoreFormValues(); // Restore form values
+				$this->setFailureMessage($FormError);
+				if (IsApi()) {
+					$this->terminate();
+					return;
+				} else {
+					$this->CurrentAction = "show"; // Form error, reset action
+				}
+			}
+		}
+
+		// Perform current action
+		switch ($this->CurrentAction) {
+			case "copy": // Copy an existing record
+				if (!$loaded) { // Record not loaded
+					if ($this->getFailureMessage() == "")
+						$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
+					$this->terminate("t002_tahunajaranlist.php"); // No matching record, return to list
+				}
+				break;
+			case "insert": // Add new record
+				$this->SendEmail = TRUE; // Send email on add success
+				if ($this->addRow($this->OldRecordset)) { // Add successful
+					if ($this->getSuccessMessage() == "")
+						$this->setSuccessMessage($Language->phrase("AddSuccess")); // Set up success message
+					$returnUrl = $this->getReturnUrl();
+					if (GetPageName($returnUrl) == "t002_tahunajaranlist.php")
+						$returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
+					elseif (GetPageName($returnUrl) == "t002_tahunajaranview.php")
+						$returnUrl = $this->getViewUrl(); // View page, return to View page with keyurl directly
+					if (IsApi()) { // Return to caller
+						$this->terminate(TRUE);
+						return;
+					} else {
+						$this->terminate($returnUrl);
+					}
+				} elseif (IsApi()) { // API request, return
+					$this->terminate();
+					return;
+				} else {
+					$this->EventCancelled = TRUE; // Event cancelled
+					$this->restoreFormValues(); // Add failed, restore form values
+				}
 		}
 
 		// Set up Breadcrumb
 		$this->setupBreadcrumb();
 
-		// Load key parameters
-		$this->RecKeys = $this->getRecordKeys(); // Load record keys
-		$filter = $this->getFilterFromRecordKeys();
-		if ($filter == "") {
-			$this->terminate("t001_sekolahlist.php"); // Prevent SQL injection, return to list
-			return;
-		}
+		// Render row based on row type
+		$this->RowType = ROWTYPE_ADD; // Render add type
 
-		// Set up filter (WHERE Clause)
-		$this->CurrentFilter = $filter;
-
-		// Get action
-		if (IsApi()) {
-			$this->CurrentAction = "delete"; // Delete record directly
-		} elseif (Post("action") !== NULL) {
-			$this->CurrentAction = Post("action");
-		} elseif (Get("action") == "1") {
-			$this->CurrentAction = "delete"; // Delete record directly
-		} else {
-			$this->CurrentAction = "show"; // Display record
-		}
-		if ($this->isDelete()) {
-			$this->SendEmail = TRUE; // Send email on delete success
-			if ($this->deleteRows()) { // Delete rows
-				if ($this->getSuccessMessage() == "")
-					$this->setSuccessMessage($Language->phrase("DeleteSuccess")); // Set up success message
-				if (IsApi()) {
-					$this->terminate(TRUE);
-					return;
-				} else {
-					$this->terminate($this->getReturnUrl()); // Return to caller
-				}
-			} else { // Delete failed
-				if (IsApi()) {
-					$this->terminate();
-					return;
-				}
-				$this->CurrentAction = "show"; // Display record
-			}
-		}
-		if ($this->isShow()) { // Load records for display
-			if ($this->Recordset = $this->loadRecordset())
-				$this->TotalRecords = $this->Recordset->RecordCount(); // Get record count
-			if ($this->TotalRecords <= 0) { // No record found, exit
-				if ($this->Recordset)
-					$this->Recordset->close();
-				$this->terminate("t001_sekolahlist.php"); // Return to list
-			}
-		}
+		// Render row
+		$this->resetAttributes();
+		$this->renderRow();
 	}
 
-	// Load recordset
-	public function loadRecordset($offset = -1, $rowcnt = -1)
+	// Get upload files
+	protected function getUploadFiles()
+	{
+		global $CurrentForm, $Language;
+	}
+
+	// Load default values
+	protected function loadDefaultValues()
+	{
+		$this->id->CurrentValue = NULL;
+		$this->id->OldValue = $this->id->CurrentValue;
+		$this->Mulai->CurrentValue = NULL;
+		$this->Mulai->OldValue = $this->Mulai->CurrentValue;
+		$this->Selesai->CurrentValue = NULL;
+		$this->Selesai->OldValue = $this->Selesai->CurrentValue;
+	}
+
+	// Load form values
+	protected function loadFormValues()
 	{
 
-		// Load List page SQL
-		$sql = $this->getListSql();
-		$conn = $this->getConnection();
+		// Load from form
+		global $CurrentForm;
 
-		// Load recordset
-		$dbtype = GetConnectionType($this->Dbid);
-		if ($this->UseSelectLimit) {
-			$conn->raiseErrorFn = Config("ERROR_FUNC");
-			if ($dbtype == "MSSQL") {
-				$rs = $conn->selectLimit($sql, $rowcnt, $offset, ["_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())]);
-			} else {
-				$rs = $conn->selectLimit($sql, $rowcnt, $offset);
-			}
-			$conn->raiseErrorFn = "";
-		} else {
-			$rs = LoadRecordset($sql, $conn);
+		// Check field name 'Mulai' first before field var 'x_Mulai'
+		$val = $CurrentForm->hasValue("Mulai") ? $CurrentForm->getValue("Mulai") : $CurrentForm->getValue("x_Mulai");
+		if (!$this->Mulai->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->Mulai->Visible = FALSE; // Disable update for API request
+			else
+				$this->Mulai->setFormValue($val);
 		}
 
-		// Call Recordset Selected event
-		$this->Recordset_Selected($rs);
-		return $rs;
+		// Check field name 'Selesai' first before field var 'x_Selesai'
+		$val = $CurrentForm->hasValue("Selesai") ? $CurrentForm->getValue("Selesai") : $CurrentForm->getValue("x_Selesai");
+		if (!$this->Selesai->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->Selesai->Visible = FALSE; // Disable update for API request
+			else
+				$this->Selesai->setFormValue($val);
+		}
+
+		// Check field name 'id' first before field var 'x_id'
+		$val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
+	}
+
+	// Restore form values
+	public function restoreFormValues()
+	{
+		global $CurrentForm;
+		$this->Mulai->CurrentValue = $this->Mulai->FormValue;
+		$this->Selesai->CurrentValue = $this->Selesai->FormValue;
 	}
 
 	// Load row based on key values
@@ -727,22 +895,42 @@ class t001_sekolah_delete extends t001_sekolah
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->Nama->setDbValue($row['Nama']);
-		$this->Alamat->setDbValue($row['Alamat']);
-		$this->KepalaSekolah->setDbValue($row['KepalaSekolah']);
-		$this->NIPKepalaSekolah->setDbValue($row['NIPKepalaSekolah']);
+		$this->Mulai->setDbValue($row['Mulai']);
+		$this->Selesai->setDbValue($row['Selesai']);
 	}
 
 	// Return a row with default values
 	protected function newRow()
 	{
+		$this->loadDefaultValues();
 		$row = [];
-		$row['id'] = NULL;
-		$row['Nama'] = NULL;
-		$row['Alamat'] = NULL;
-		$row['KepalaSekolah'] = NULL;
-		$row['NIPKepalaSekolah'] = NULL;
+		$row['id'] = $this->id->CurrentValue;
+		$row['Mulai'] = $this->Mulai->CurrentValue;
+		$row['Selesai'] = $this->Selesai->CurrentValue;
 		return $row;
+	}
+
+	// Load old record
+	protected function loadOldRecord()
+	{
+
+		// Load key values from Session
+		$validKey = TRUE;
+		if (strval($this->getKey("id")) != "")
+			$this->id->OldValue = $this->getKey("id"); // id
+		else
+			$validKey = FALSE;
+
+		// Load old record
+		$this->OldRecordset = NULL;
+		if ($validKey) {
+			$this->CurrentFilter = $this->getRecordFilter();
+			$sql = $this->getCurrentSql();
+			$conn = $this->getConnection();
+			$this->OldRecordset = LoadRecordset($sql, $conn);
+		}
+		$this->loadRowValues($this->OldRecordset); // Load row values
+		return $validKey;
 	}
 
 	// Render row values based on field settings
@@ -757,10 +945,8 @@ class t001_sekolah_delete extends t001_sekolah
 
 		// Common render codes for all row types
 		// id
-		// Nama
-		// Alamat
-		// KepalaSekolah
-		// NIPKepalaSekolah
+		// Mulai
+		// Selesai
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -768,107 +954,121 @@ class t001_sekolah_delete extends t001_sekolah
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// Nama
-			$this->Nama->ViewValue = $this->Nama->CurrentValue;
-			$this->Nama->ViewCustomAttributes = "";
+			// Mulai
+			$this->Mulai->ViewValue = $this->Mulai->CurrentValue;
+			$this->Mulai->ViewCustomAttributes = "";
 
-			// Alamat
-			$this->Alamat->ViewValue = $this->Alamat->CurrentValue;
-			$this->Alamat->ViewCustomAttributes = "";
+			// Selesai
+			$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
+			$this->Selesai->ViewCustomAttributes = "";
 
-			// KepalaSekolah
-			$this->KepalaSekolah->ViewValue = $this->KepalaSekolah->CurrentValue;
-			$this->KepalaSekolah->ViewCustomAttributes = "";
+			// Mulai
+			$this->Mulai->LinkCustomAttributes = "";
+			$this->Mulai->HrefValue = "";
+			$this->Mulai->TooltipValue = "";
 
-			// NIPKepalaSekolah
-			$this->NIPKepalaSekolah->ViewValue = $this->NIPKepalaSekolah->CurrentValue;
-			$this->NIPKepalaSekolah->ViewCustomAttributes = "";
+			// Selesai
+			$this->Selesai->LinkCustomAttributes = "";
+			$this->Selesai->HrefValue = "";
+			$this->Selesai->TooltipValue = "";
+		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
 
-			// Nama
-			$this->Nama->LinkCustomAttributes = "";
-			$this->Nama->HrefValue = "";
-			$this->Nama->TooltipValue = "";
+			// Mulai
+			$this->Mulai->EditAttrs["class"] = "form-control";
+			$this->Mulai->EditCustomAttributes = "";
+			if (!$this->Mulai->Raw)
+				$this->Mulai->CurrentValue = HtmlDecode($this->Mulai->CurrentValue);
+			$this->Mulai->EditValue = HtmlEncode($this->Mulai->CurrentValue);
+			$this->Mulai->PlaceHolder = RemoveHtml($this->Mulai->caption());
 
-			// Alamat
-			$this->Alamat->LinkCustomAttributes = "";
-			$this->Alamat->HrefValue = "";
-			$this->Alamat->TooltipValue = "";
+			// Selesai
+			$this->Selesai->EditAttrs["class"] = "form-control";
+			$this->Selesai->EditCustomAttributes = "";
+			if (!$this->Selesai->Raw)
+				$this->Selesai->CurrentValue = HtmlDecode($this->Selesai->CurrentValue);
+			$this->Selesai->EditValue = HtmlEncode($this->Selesai->CurrentValue);
+			$this->Selesai->PlaceHolder = RemoveHtml($this->Selesai->caption());
 
-			// KepalaSekolah
-			$this->KepalaSekolah->LinkCustomAttributes = "";
-			$this->KepalaSekolah->HrefValue = "";
-			$this->KepalaSekolah->TooltipValue = "";
+			// Add refer script
+			// Mulai
 
-			// NIPKepalaSekolah
-			$this->NIPKepalaSekolah->LinkCustomAttributes = "";
-			$this->NIPKepalaSekolah->HrefValue = "";
-			$this->NIPKepalaSekolah->TooltipValue = "";
+			$this->Mulai->LinkCustomAttributes = "";
+			$this->Mulai->HrefValue = "";
+
+			// Selesai
+			$this->Selesai->LinkCustomAttributes = "";
+			$this->Selesai->HrefValue = "";
 		}
+		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
+			$this->setupFieldTitles();
 
 		// Call Row Rendered event
 		if ($this->RowType != ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
 	}
 
-	// Delete records based on current filter
-	protected function deleteRows()
+	// Validate form
+	protected function validateForm()
+	{
+		global $Language, $FormError;
+
+		// Initialize form error message
+		$FormError = "";
+
+		// Check if validation required
+		if (!Config("SERVER_VALIDATE"))
+			return ($FormError == "");
+		if ($this->Mulai->Required) {
+			if (!$this->Mulai->IsDetailKey && $this->Mulai->FormValue != NULL && $this->Mulai->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->Mulai->caption(), $this->Mulai->RequiredErrorMessage));
+			}
+		}
+		if ($this->Selesai->Required) {
+			if (!$this->Selesai->IsDetailKey && $this->Selesai->FormValue != NULL && $this->Selesai->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->Selesai->caption(), $this->Selesai->RequiredErrorMessage));
+			}
+		}
+
+		// Return validate result
+		$validateForm = ($FormError == "");
+
+		// Call Form_CustomValidate event
+		$formCustomError = "";
+		$validateForm = $validateForm && $this->Form_CustomValidate($formCustomError);
+		if ($formCustomError != "") {
+			AddMessage($FormError, $formCustomError);
+		}
+		return $validateForm;
+	}
+
+	// Add record
+	protected function addRow($rsold = NULL)
 	{
 		global $Language, $Security;
-		if (!$Security->canDelete()) {
-			$this->setFailureMessage($Language->phrase("NoDeletePermission")); // No delete permission
-			return FALSE;
-		}
-		$deleteRows = TRUE;
-		$sql = $this->getCurrentSql();
 		$conn = $this->getConnection();
-		$conn->raiseErrorFn = Config("ERROR_FUNC");
-		$rs = $conn->execute($sql);
-		$conn->raiseErrorFn = "";
-		if ($rs === FALSE) {
-			return FALSE;
-		} elseif ($rs->EOF) {
-			$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
-			$rs->close();
-			return FALSE;
+
+		// Load db values from rsold
+		$this->loadDbValues($rsold);
+		if ($rsold) {
 		}
-		$rows = ($rs) ? $rs->getRows() : [];
-		$conn->beginTrans();
+		$rsnew = [];
 
-		// Clone old rows
-		$rsold = $rows;
-		if ($rs)
-			$rs->close();
+		// Mulai
+		$this->Mulai->setDbValueDef($rsnew, $this->Mulai->CurrentValue, "", FALSE);
 
-		// Call row deleting event
-		if ($deleteRows) {
-			foreach ($rsold as $row) {
-				$deleteRows = $this->Row_Deleting($row);
-				if (!$deleteRows)
-					break;
+		// Selesai
+		$this->Selesai->setDbValueDef($rsnew, $this->Selesai->CurrentValue, "", FALSE);
+
+		// Call Row Inserting event
+		$rs = ($rsold) ? $rsold->fields : NULL;
+		$insertRow = $this->Row_Inserting($rs, $rsnew);
+		if ($insertRow) {
+			$conn->raiseErrorFn = Config("ERROR_FUNC");
+			$addRow = $this->insert($rsnew);
+			$conn->raiseErrorFn = "";
+			if ($addRow) {
 			}
-		}
-		if ($deleteRows) {
-			$key = "";
-			foreach ($rsold as $row) {
-				$thisKey = "";
-				if ($thisKey != "")
-					$thisKey .= Config("COMPOSITE_KEY_SEPARATOR");
-				$thisKey .= $row['id'];
-				if (Config("DELETE_UPLOADED_FILES")) // Delete old files
-					$this->deleteUploadedFiles($row);
-				$conn->raiseErrorFn = Config("ERROR_FUNC");
-				$deleteRows = $this->delete($row); // Delete
-				$conn->raiseErrorFn = "";
-				if ($deleteRows === FALSE)
-					break;
-				if ($key != "")
-					$key .= ", ";
-				$key .= $thisKey;
-			}
-		}
-		if (!$deleteRows) {
-
-			// Set up error message
+		} else {
 			if ($this->getSuccessMessage() != "" || $this->getFailureMessage() != "") {
 
 				// Use the message, do nothing
@@ -876,28 +1076,27 @@ class t001_sekolah_delete extends t001_sekolah
 				$this->setFailureMessage($this->CancelMessage);
 				$this->CancelMessage = "";
 			} else {
-				$this->setFailureMessage($Language->phrase("DeleteCancelled"));
+				$this->setFailureMessage($Language->phrase("InsertCancelled"));
 			}
+			$addRow = FALSE;
 		}
-		if ($deleteRows) {
-			$conn->commitTrans(); // Commit the changes
-		} else {
-			$conn->rollbackTrans(); // Rollback changes
+		if ($addRow) {
+
+			// Call Row Inserted event
+			$rs = ($rsold) ? $rsold->fields : NULL;
+			$this->Row_Inserted($rs, $rsnew);
 		}
 
-		// Call Row Deleted event
-		if ($deleteRows) {
-			foreach ($rsold as $row) {
-				$this->Row_Deleted($row);
-			}
+		// Clean upload path if any
+		if ($addRow) {
 		}
 
-		// Write JSON for API request (Support single row only)
-		if (IsApi() && $deleteRows) {
-			$row = $this->getRecordsFromRecordset($rsold, TRUE);
+		// Write JSON for API request
+		if (IsApi() && $addRow) {
+			$row = $this->getRecordsFromRecordset([$rsnew], TRUE);
 			WriteJson(["success" => TRUE, $this->TableVar => $row]);
 		}
-		return $deleteRows;
+		return $addRow;
 	}
 
 	// Set up Breadcrumb
@@ -906,9 +1105,9 @@ class t001_sekolah_delete extends t001_sekolah
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t001_sekolahlist.php"), "", $this->TableVar, TRUE);
-		$pageId = "delete";
-		$Breadcrumb->add("delete", $pageId, $url);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t002_tahunajaranlist.php"), "", $this->TableVar, TRUE);
+		$pageId = ($this->isCopy()) ? "Copy" : "Add";
+		$Breadcrumb->add("add", $pageId, $url);
 	}
 
 	// Setup lookup options
@@ -1014,6 +1213,13 @@ class t001_sekolah_delete extends t001_sekolah
 		// Example:
 		//$footer = "your footer";
 
+	}
+
+	// Form Custom Validate event
+	function Form_CustomValidate(&$customError) {
+
+		// Return error message in CustomError
+		return TRUE;
 	}
 } // End class
 ?>

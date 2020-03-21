@@ -14,6 +14,8 @@ $USER_LEVEL_PRIVS = [["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c201_home.php","-2"
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c201_home.php","0","0"],
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t001_sekolah","-2","0"],
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t001_sekolah","0","0"],
+	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t002_tahunajaran","-2","0"],
+	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t002_tahunajaran","0","0"],
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t101_session","-2","0"],
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t101_session","0","0"],
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t201_employees","-2","0"],
@@ -27,7 +29,8 @@ $USER_LEVEL_PRIVS = [["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c201_home.php","-2"
 
 // User level table info
 $USER_LEVEL_TABLES = [["c201_home.php","c201_home","Home",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
-	["t001_sekolah","t001_sekolah","t 001 sekolah",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
+	["t001_sekolah","t001_sekolah","Sekolah",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
+	["t002_tahunajaran","t002_tahunajaran","Tahun Ajaran",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
 	["t101_session","t101_session","t 101 session",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
 	["t201_employees","t201_employees","t 201 employees",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
 	["t202_userlevels","t202_userlevels","t 202 userlevels",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],

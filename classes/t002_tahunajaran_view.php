@@ -4,7 +4,7 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t001_sekolah_view extends t001_sekolah
+class t002_tahunajaran_view extends t002_tahunajaran
 {
 
 	// Page ID
@@ -14,10 +14,10 @@ class t001_sekolah_view extends t001_sekolah
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't001_sekolah';
+	public $TableName = 't002_tahunajaran';
 
 	// Page object name
-	public $PageObjName = "t001_sekolah_view";
+	public $PageObjName = "t002_tahunajaran_view";
 
 	// Page URLs
 	public $AddUrl;
@@ -373,10 +373,10 @@ class t001_sekolah_view extends t001_sekolah
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t001_sekolah)
-		if (!isset($GLOBALS["t001_sekolah"]) || get_class($GLOBALS["t001_sekolah"]) == PROJECT_NAMESPACE . "t001_sekolah") {
-			$GLOBALS["t001_sekolah"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t001_sekolah"];
+		// Table object (t002_tahunajaran)
+		if (!isset($GLOBALS["t002_tahunajaran"]) || get_class($GLOBALS["t002_tahunajaran"]) == PROJECT_NAMESPACE . "t002_tahunajaran") {
+			$GLOBALS["t002_tahunajaran"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t002_tahunajaran"];
 		}
 		$keyUrl = "";
 		if (Get("id") !== NULL) {
@@ -401,7 +401,7 @@ class t001_sekolah_view extends t001_sekolah
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't001_sekolah');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't002_tahunajaran');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -442,14 +442,14 @@ class t001_sekolah_view extends t001_sekolah
 		Page_Unloaded();
 
 		// Export
-		global $t001_sekolah;
+		global $t002_tahunajaran;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t001_sekolah);
+				$doc = new $class($t002_tahunajaran);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -484,7 +484,7 @@ class t001_sekolah_view extends t001_sekolah
 				$pageName = GetPageName($url);
 				if ($pageName != $this->getListUrl()) { // Not List page
 					$row["caption"] = $this->getModalCaption($pageName);
-					if ($pageName == "t001_sekolahview.php")
+					if ($pageName == "t002_tahunajaranview.php")
 						$row["view"] = "1";
 				} else { // List page should not be shown as modal => error
 					$row["error"] = $this->getFailureMessage();
@@ -643,7 +643,7 @@ class t001_sekolah_view extends t001_sekolah
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t001_sekolahlist.php"));
+					$this->terminate(GetUrl("t002_tahunajaranlist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -700,10 +700,8 @@ class t001_sekolah_view extends t001_sekolah
 		// Setup export options
 		$this->setupExportOptions();
 		$this->id->Visible = FALSE;
-		$this->Nama->setVisibility();
-		$this->Alamat->setVisibility();
-		$this->KepalaSekolah->setVisibility();
-		$this->NIPKepalaSekolah->setVisibility();
+		$this->Mulai->setVisibility();
+		$this->Selesai->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -729,7 +727,7 @@ class t001_sekolah_view extends t001_sekolah
 
 		if (!$Security->canView()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t001_sekolahlist.php");
+			$this->terminate("t002_tahunajaranlist.php");
 			return;
 		}
 
@@ -755,7 +753,7 @@ class t001_sekolah_view extends t001_sekolah
 				$this->id->setFormValue(Route(2));
 				$this->RecKey["id"] = $this->id->FormValue;
 			} else {
-				$returnUrl = "t001_sekolahlist.php"; // Return to list
+				$returnUrl = "t002_tahunajaranlist.php"; // Return to list
 			}
 
 			// Get action
@@ -777,7 +775,7 @@ class t001_sekolah_view extends t001_sekolah
 					if (!$res) { // Load record based on key
 						if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 							$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
-						$returnUrl = "t001_sekolahlist.php"; // No matching record, return to list
+						$returnUrl = "t002_tahunajaranlist.php"; // No matching record, return to list
 					}
 			}
 
@@ -787,7 +785,7 @@ class t001_sekolah_view extends t001_sekolah
 				$this->terminate();
 			}
 		} else {
-			$returnUrl = "t001_sekolahlist.php"; // Not page request, return to list
+			$returnUrl = "t002_tahunajaranlist.php"; // Not page request, return to list
 		}
 		if ($returnUrl != "") {
 			$this->terminate($returnUrl);
@@ -927,10 +925,8 @@ class t001_sekolah_view extends t001_sekolah
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->Nama->setDbValue($row['Nama']);
-		$this->Alamat->setDbValue($row['Alamat']);
-		$this->KepalaSekolah->setDbValue($row['KepalaSekolah']);
-		$this->NIPKepalaSekolah->setDbValue($row['NIPKepalaSekolah']);
+		$this->Mulai->setDbValue($row['Mulai']);
+		$this->Selesai->setDbValue($row['Selesai']);
 	}
 
 	// Return a row with default values
@@ -938,10 +934,8 @@ class t001_sekolah_view extends t001_sekolah
 	{
 		$row = [];
 		$row['id'] = NULL;
-		$row['Nama'] = NULL;
-		$row['Alamat'] = NULL;
-		$row['KepalaSekolah'] = NULL;
-		$row['NIPKepalaSekolah'] = NULL;
+		$row['Mulai'] = NULL;
+		$row['Selesai'] = NULL;
 		return $row;
 	}
 
@@ -963,10 +957,8 @@ class t001_sekolah_view extends t001_sekolah
 
 		// Common render codes for all row types
 		// id
-		// Nama
-		// Alamat
-		// KepalaSekolah
-		// NIPKepalaSekolah
+		// Mulai
+		// Selesai
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -974,41 +966,23 @@ class t001_sekolah_view extends t001_sekolah
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// Nama
-			$this->Nama->ViewValue = $this->Nama->CurrentValue;
-			$this->Nama->ViewCustomAttributes = "";
+			// Mulai
+			$this->Mulai->ViewValue = $this->Mulai->CurrentValue;
+			$this->Mulai->ViewCustomAttributes = "";
 
-			// Alamat
-			$this->Alamat->ViewValue = $this->Alamat->CurrentValue;
-			$this->Alamat->ViewCustomAttributes = "";
+			// Selesai
+			$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
+			$this->Selesai->ViewCustomAttributes = "";
 
-			// KepalaSekolah
-			$this->KepalaSekolah->ViewValue = $this->KepalaSekolah->CurrentValue;
-			$this->KepalaSekolah->ViewCustomAttributes = "";
+			// Mulai
+			$this->Mulai->LinkCustomAttributes = "";
+			$this->Mulai->HrefValue = "";
+			$this->Mulai->TooltipValue = "";
 
-			// NIPKepalaSekolah
-			$this->NIPKepalaSekolah->ViewValue = $this->NIPKepalaSekolah->CurrentValue;
-			$this->NIPKepalaSekolah->ViewCustomAttributes = "";
-
-			// Nama
-			$this->Nama->LinkCustomAttributes = "";
-			$this->Nama->HrefValue = "";
-			$this->Nama->TooltipValue = "";
-
-			// Alamat
-			$this->Alamat->LinkCustomAttributes = "";
-			$this->Alamat->HrefValue = "";
-			$this->Alamat->TooltipValue = "";
-
-			// KepalaSekolah
-			$this->KepalaSekolah->LinkCustomAttributes = "";
-			$this->KepalaSekolah->HrefValue = "";
-			$this->KepalaSekolah->TooltipValue = "";
-
-			// NIPKepalaSekolah
-			$this->NIPKepalaSekolah->LinkCustomAttributes = "";
-			$this->NIPKepalaSekolah->HrefValue = "";
-			$this->NIPKepalaSekolah->TooltipValue = "";
+			// Selesai
+			$this->Selesai->LinkCustomAttributes = "";
+			$this->Selesai->HrefValue = "";
+			$this->Selesai->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1022,17 +996,17 @@ class t001_sekolah_view extends t001_sekolah
 		global $Language;
 		if (SameText($type, "excel")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft001_sekolahview, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft002_tahunajaranview, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportExcelUrl . "\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\">" . $Language->phrase("ExportToExcel") . "</a>";
 		} elseif (SameText($type, "word")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft001_sekolahview, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft002_tahunajaranview, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportWordUrl . "\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\">" . $Language->phrase("ExportToWord") . "</a>";
 		} elseif (SameText($type, "pdf")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft001_sekolahview, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft002_tahunajaranview, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportPdfUrl . "\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\">" . $Language->phrase("ExportToPDF") . "</a>";
 		} elseif (SameText($type, "html")) {
@@ -1043,7 +1017,7 @@ class t001_sekolah_view extends t001_sekolah
 			return "<a href=\"" . $this->ExportCsvUrl . "\" class=\"ew-export-link ew-csv\" title=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\">" . $Language->phrase("ExportToCsv") . "</a>";
 		} elseif (SameText($type, "email")) {
 			$url = $custom ? ",url:'" . $this->pageUrl() . "export=email&amp;custom=1'" : "";
-			return '<button id="emf_t001_sekolah" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t001_sekolah\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft001_sekolahview, key:' . ArrayToJsonAttribute($this->RecKey) . ', sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
+			return '<button id="emf_t002_tahunajaran" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t002_tahunajaran\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft002_tahunajaranview, key:' . ArrayToJsonAttribute($this->RecKey) . ', sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
 		} elseif (SameText($type, "print")) {
 			return "<a href=\"" . $this->ExportPrintUrl . "\" class=\"ew-export-link ew-print\" title=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\">" . $Language->phrase("PrinterFriendly") . "</a>";
 		}
@@ -1210,7 +1184,7 @@ class t001_sekolah_view extends t001_sekolah
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t001_sekolahlist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t002_tahunajaranlist.php"), "", $this->TableVar, TRUE);
 		$pageId = "view";
 		$Breadcrumb->add("view", $pageId, $url);
 	}

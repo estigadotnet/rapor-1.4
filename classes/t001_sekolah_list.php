@@ -812,9 +812,9 @@ class t001_sekolah_list extends t001_sekolah
 
 		// Setup export options
 		$this->setupExportOptions();
-		$this->id->setVisibility();
+		$this->id->Visible = FALSE;
 		$this->Nama->setVisibility();
-		$this->Alamat->Visible = FALSE;
+		$this->Alamat->setVisibility();
 		$this->KepalaSekolah->setVisibility();
 		$this->NIPKepalaSekolah->setVisibility();
 		$this->hideFieldsForAddEdit();
@@ -1357,8 +1357,8 @@ class t001_sekolah_list extends t001_sekolah
 		if (Get("order") !== NULL) {
 			$this->CurrentOrder = Get("order");
 			$this->CurrentOrderType = Get("ordertype", "");
-			$this->updateSort($this->id, $ctrl); // id
 			$this->updateSort($this->Nama, $ctrl); // Nama
+			$this->updateSort($this->Alamat, $ctrl); // Alamat
 			$this->updateSort($this->KepalaSekolah, $ctrl); // KepalaSekolah
 			$this->updateSort($this->NIPKepalaSekolah, $ctrl); // NIPKepalaSekolah
 			$this->setStartRecordNumber(1); // Reset start position
@@ -1396,8 +1396,8 @@ class t001_sekolah_list extends t001_sekolah
 			if ($this->Command == "resetsort") {
 				$orderBy = "";
 				$this->setSessionOrderBy($orderBy);
-				$this->id->setSort("");
 				$this->Nama->setSort("");
+				$this->Alamat->setSort("");
 				$this->KepalaSekolah->setSort("");
 				$this->NIPKepalaSekolah->setSort("");
 			}
@@ -1460,6 +1460,14 @@ class t001_sekolah_list extends t001_sekolah
 		$item->ShowInDropDown = FALSE;
 		$item->ShowInButtonGroup = FALSE;
 
+		// "sequence"
+		$item = &$this->ListOptions->add("sequence");
+		$item->CssClass = "text-nowrap";
+		$item->Visible = TRUE;
+		$item->OnLeft = TRUE; // Always on left
+		$item->ShowInDropDown = FALSE;
+		$item->ShowInButtonGroup = FALSE;
+
 		// Drop down button for ListOptions
 		$this->ListOptions->UseDropDownButton = FALSE;
 		$this->ListOptions->DropDownButtonPhrase = $Language->phrase("ButtonListOptions");
@@ -1484,6 +1492,10 @@ class t001_sekolah_list extends t001_sekolah
 
 		// Call ListOptions_Rendering event
 		$this->ListOptions_Rendering();
+
+		// "sequence"
+		$opt = $this->ListOptions["sequence"];
+		$opt->Body = FormatSequenceNumber($this->RecordCount);
 
 		// "view"
 		$opt = $this->ListOptions["view"];
@@ -1868,6 +1880,10 @@ class t001_sekolah_list extends t001_sekolah
 			$this->Nama->ViewValue = $this->Nama->CurrentValue;
 			$this->Nama->ViewCustomAttributes = "";
 
+			// Alamat
+			$this->Alamat->ViewValue = $this->Alamat->CurrentValue;
+			$this->Alamat->ViewCustomAttributes = "";
+
 			// KepalaSekolah
 			$this->KepalaSekolah->ViewValue = $this->KepalaSekolah->CurrentValue;
 			$this->KepalaSekolah->ViewCustomAttributes = "";
@@ -1876,15 +1892,15 @@ class t001_sekolah_list extends t001_sekolah
 			$this->NIPKepalaSekolah->ViewValue = $this->NIPKepalaSekolah->CurrentValue;
 			$this->NIPKepalaSekolah->ViewCustomAttributes = "";
 
-			// id
-			$this->id->LinkCustomAttributes = "";
-			$this->id->HrefValue = "";
-			$this->id->TooltipValue = "";
-
 			// Nama
 			$this->Nama->LinkCustomAttributes = "";
 			$this->Nama->HrefValue = "";
 			$this->Nama->TooltipValue = "";
+
+			// Alamat
+			$this->Alamat->LinkCustomAttributes = "";
+			$this->Alamat->HrefValue = "";
+			$this->Alamat->TooltipValue = "";
 
 			// KepalaSekolah
 			$this->KepalaSekolah->LinkCustomAttributes = "";
@@ -1973,7 +1989,7 @@ class t001_sekolah_list extends t001_sekolah
 		// Export to Pdf
 		$item = &$this->ExportOptions->add("pdf");
 		$item->Body = $this->getExportTag("pdf");
-		$item->Visible = FALSE;
+		$item->Visible = TRUE;
 
 		// Export to Email
 		$item = &$this->ExportOptions->add("email");

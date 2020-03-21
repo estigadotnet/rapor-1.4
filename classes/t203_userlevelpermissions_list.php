@@ -1939,7 +1939,7 @@ class t203_userlevelpermissions_list extends t203_userlevelpermissions
 		// Export to Pdf
 		$item = &$this->ExportOptions->add("pdf");
 		$item->Body = $this->getExportTag("pdf");
-		$item->Visible = FALSE;
+		$item->Visible = TRUE;
 
 		// Export to Email
 		$item = &$this->ExportOptions->add("email");

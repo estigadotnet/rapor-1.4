@@ -71,16 +71,6 @@ $t001_sekolah_view->showMessage();
 <input type="hidden" name="t" value="t001_sekolah">
 <input type="hidden" name="modal" value="<?php echo (int)$t001_sekolah_view->IsModal ?>">
 <table class="table table-striped table-sm ew-view-table">
-<?php if ($t001_sekolah_view->id->Visible) { // id ?>
-	<tr id="r_id">
-		<td class="<?php echo $t001_sekolah_view->TableLeftColumnClass ?>"><span id="elh_t001_sekolah_id"><?php echo $t001_sekolah_view->id->caption() ?></span></td>
-		<td data-name="id" <?php echo $t001_sekolah_view->id->cellAttributes() ?>>
-<span id="el_t001_sekolah_id">
-<span<?php echo $t001_sekolah_view->id->viewAttributes() ?>><?php echo $t001_sekolah_view->id->getViewValue() ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($t001_sekolah_view->Nama->Visible) { // Nama ?>
 	<tr id="r_Nama">
 		<td class="<?php echo $t001_sekolah_view->TableLeftColumnClass ?>"><span id="elh_t001_sekolah_Nama"><?php echo $t001_sekolah_view->Nama->caption() ?></span></td>

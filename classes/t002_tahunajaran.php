@@ -2,9 +2,9 @@
 <?php
 
 /**
- * Table class for t001_sekolah
+ * Table class for t002_tahunajaran
  */
-class t001_sekolah extends DbTable
+class t002_tahunajaran extends DbTable
 {
 	protected $SqlFrom = "";
 	protected $SqlSelect = "";
@@ -26,10 +26,8 @@ class t001_sekolah extends DbTable
 
 	// Fields
 	public $id;
-	public $Nama;
-	public $Alamat;
-	public $KepalaSekolah;
-	public $NIPKepalaSekolah;
+	public $Mulai;
+	public $Selesai;
 
 	// Constructor
 	public function __construct()
@@ -40,12 +38,12 @@ class t001_sekolah extends DbTable
 		// Language object
 		if (!isset($Language))
 			$Language = new Language();
-		$this->TableVar = 't001_sekolah';
-		$this->TableName = 't001_sekolah';
+		$this->TableVar = 't002_tahunajaran';
+		$this->TableName = 't002_tahunajaran';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`t001_sekolah`";
+		$this->UpdateTable = "`t002_tahunajaran`";
 		$this->Dbid = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -65,34 +63,26 @@ class t001_sekolah extends DbTable
 		$this->BasicSearch = new BasicSearch($this->TableVar);
 
 		// id
-		$this->id = new DbField('t001_sekolah', 't001_sekolah', 'x_id', 'id', '`id`', '`id`', 3, 11, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->id = new DbField('t002_tahunajaran', 't002_tahunajaran', 'x_id', 'id', '`id`', '`id`', 3, 11, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
 		$this->id->IsAutoIncrement = TRUE; // Autoincrement field
 		$this->id->IsPrimaryKey = TRUE; // Primary key field
 		$this->id->Sortable = TRUE; // Allow sort
 		$this->id->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
 		$this->fields['id'] = &$this->id;
 
-		// Nama
-		$this->Nama = new DbField('t001_sekolah', 't001_sekolah', 'x_Nama', 'Nama', '`Nama`', '`Nama`', 200, 50, -1, FALSE, '`Nama`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->Nama->Nullable = FALSE; // NOT NULL field
-		$this->Nama->Required = TRUE; // Required field
-		$this->Nama->Sortable = TRUE; // Allow sort
-		$this->fields['Nama'] = &$this->Nama;
+		// Mulai
+		$this->Mulai = new DbField('t002_tahunajaran', 't002_tahunajaran', 'x_Mulai', 'Mulai', '`Mulai`', '`Mulai`', 200, 4, -1, FALSE, '`Mulai`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->Mulai->Nullable = FALSE; // NOT NULL field
+		$this->Mulai->Required = TRUE; // Required field
+		$this->Mulai->Sortable = TRUE; // Allow sort
+		$this->fields['Mulai'] = &$this->Mulai;
 
-		// Alamat
-		$this->Alamat = new DbField('t001_sekolah', 't001_sekolah', 'x_Alamat', 'Alamat', '`Alamat`', '`Alamat`', 201, 65535, -1, FALSE, '`Alamat`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXTAREA');
-		$this->Alamat->Sortable = TRUE; // Allow sort
-		$this->fields['Alamat'] = &$this->Alamat;
-
-		// KepalaSekolah
-		$this->KepalaSekolah = new DbField('t001_sekolah', 't001_sekolah', 'x_KepalaSekolah', 'KepalaSekolah', '`KepalaSekolah`', '`KepalaSekolah`', 200, 50, -1, FALSE, '`KepalaSekolah`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->KepalaSekolah->Sortable = TRUE; // Allow sort
-		$this->fields['KepalaSekolah'] = &$this->KepalaSekolah;
-
-		// NIPKepalaSekolah
-		$this->NIPKepalaSekolah = new DbField('t001_sekolah', 't001_sekolah', 'x_NIPKepalaSekolah', 'NIPKepalaSekolah', '`NIPKepalaSekolah`', '`NIPKepalaSekolah`', 200, 50, -1, FALSE, '`NIPKepalaSekolah`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->NIPKepalaSekolah->Sortable = TRUE; // Allow sort
-		$this->fields['NIPKepalaSekolah'] = &$this->NIPKepalaSekolah;
+		// Selesai
+		$this->Selesai = new DbField('t002_tahunajaran', 't002_tahunajaran', 'x_Selesai', 'Selesai', '`Selesai`', '`Selesai`', 200, 4, -1, FALSE, '`Selesai`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->Selesai->Nullable = FALSE; // NOT NULL field
+		$this->Selesai->Required = TRUE; // Required field
+		$this->Selesai->Sortable = TRUE; // Allow sort
+		$this->fields['Selesai'] = &$this->Selesai;
 	}
 
 	// Field Visibility
@@ -147,7 +137,7 @@ class t001_sekolah extends DbTable
 	// Table level SQL
 	public function getSqlFrom() // From
 	{
-		return ($this->SqlFrom != "") ? $this->SqlFrom : "`t001_sekolah`";
+		return ($this->SqlFrom != "") ? $this->SqlFrom : "`t002_tahunajaran`";
 	}
 	public function sqlFrom() // For backward compatibility
 	{
@@ -460,10 +450,8 @@ class t001_sekolah extends DbTable
 			return;
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->id->DbValue = $row['id'];
-		$this->Nama->DbValue = $row['Nama'];
-		$this->Alamat->DbValue = $row['Alamat'];
-		$this->KepalaSekolah->DbValue = $row['KepalaSekolah'];
-		$this->NIPKepalaSekolah->DbValue = $row['NIPKepalaSekolah'];
+		$this->Mulai->DbValue = $row['Mulai'];
+		$this->Selesai->DbValue = $row['Selesai'];
 	}
 
 	// Delete uploaded files
@@ -506,7 +494,7 @@ class t001_sekolah extends DbTable
 		if (@$_SESSION[$name] != "") {
 			return $_SESSION[$name];
 		} else {
-			return "t001_sekolahlist.php";
+			return "t002_tahunajaranlist.php";
 		}
 	}
 	public function setReturnUrl($v)
@@ -518,11 +506,11 @@ class t001_sekolah extends DbTable
 	public function getModalCaption($pageName)
 	{
 		global $Language;
-		if ($pageName == "t001_sekolahview.php")
+		if ($pageName == "t002_tahunajaranview.php")
 			return $Language->phrase("View");
-		elseif ($pageName == "t001_sekolahedit.php")
+		elseif ($pageName == "t002_tahunajaranedit.php")
 			return $Language->phrase("Edit");
-		elseif ($pageName == "t001_sekolahadd.php")
+		elseif ($pageName == "t002_tahunajaranadd.php")
 			return $Language->phrase("Add");
 		else
 			return "";
@@ -531,16 +519,16 @@ class t001_sekolah extends DbTable
 	// List URL
 	public function getListUrl()
 	{
-		return "t001_sekolahlist.php";
+		return "t002_tahunajaranlist.php";
 	}
 
 	// View URL
 	public function getViewUrl($parm = "")
 	{
 		if ($parm != "")
-			$url = $this->keyUrl("t001_sekolahview.php", $this->getUrlParm($parm));
+			$url = $this->keyUrl("t002_tahunajaranview.php", $this->getUrlParm($parm));
 		else
-			$url = $this->keyUrl("t001_sekolahview.php", $this->getUrlParm(Config("TABLE_SHOW_DETAIL") . "="));
+			$url = $this->keyUrl("t002_tahunajaranview.php", $this->getUrlParm(Config("TABLE_SHOW_DETAIL") . "="));
 		return $this->addMasterUrl($url);
 	}
 
@@ -548,16 +536,16 @@ class t001_sekolah extends DbTable
 	public function getAddUrl($parm = "")
 	{
 		if ($parm != "")
-			$url = "t001_sekolahadd.php?" . $this->getUrlParm($parm);
+			$url = "t002_tahunajaranadd.php?" . $this->getUrlParm($parm);
 		else
-			$url = "t001_sekolahadd.php";
+			$url = "t002_tahunajaranadd.php";
 		return $this->addMasterUrl($url);
 	}
 
 	// Edit URL
 	public function getEditUrl($parm = "")
 	{
-		$url = $this->keyUrl("t001_sekolahedit.php", $this->getUrlParm($parm));
+		$url = $this->keyUrl("t002_tahunajaranedit.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -571,7 +559,7 @@ class t001_sekolah extends DbTable
 	// Copy URL
 	public function getCopyUrl($parm = "")
 	{
-		$url = $this->keyUrl("t001_sekolahadd.php", $this->getUrlParm($parm));
+		$url = $this->keyUrl("t002_tahunajaranadd.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -585,7 +573,7 @@ class t001_sekolah extends DbTable
 	// Delete URL
 	public function getDeleteUrl()
 	{
-		return $this->keyUrl("t001_sekolahdelete.php", $this->getUrlParm());
+		return $this->keyUrl("t002_tahunajarandelete.php", $this->getUrlParm());
 	}
 
 	// Add master url
@@ -695,10 +683,8 @@ class t001_sekolah extends DbTable
 	public function loadListRowValues(&$rs)
 	{
 		$this->id->setDbValue($rs->fields('id'));
-		$this->Nama->setDbValue($rs->fields('Nama'));
-		$this->Alamat->setDbValue($rs->fields('Alamat'));
-		$this->KepalaSekolah->setDbValue($rs->fields('KepalaSekolah'));
-		$this->NIPKepalaSekolah->setDbValue($rs->fields('NIPKepalaSekolah'));
+		$this->Mulai->setDbValue($rs->fields('Mulai'));
+		$this->Selesai->setDbValue($rs->fields('Selesai'));
 	}
 
 	// Render list row values
@@ -711,55 +697,35 @@ class t001_sekolah extends DbTable
 
 		// Common render codes
 		// id
-		// Nama
-		// Alamat
-		// KepalaSekolah
-		// NIPKepalaSekolah
+		// Mulai
+		// Selesai
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
 
-		// Nama
-		$this->Nama->ViewValue = $this->Nama->CurrentValue;
-		$this->Nama->ViewCustomAttributes = "";
+		// Mulai
+		$this->Mulai->ViewValue = $this->Mulai->CurrentValue;
+		$this->Mulai->ViewCustomAttributes = "";
 
-		// Alamat
-		$this->Alamat->ViewValue = $this->Alamat->CurrentValue;
-		$this->Alamat->ViewCustomAttributes = "";
-
-		// KepalaSekolah
-		$this->KepalaSekolah->ViewValue = $this->KepalaSekolah->CurrentValue;
-		$this->KepalaSekolah->ViewCustomAttributes = "";
-
-		// NIPKepalaSekolah
-		$this->NIPKepalaSekolah->ViewValue = $this->NIPKepalaSekolah->CurrentValue;
-		$this->NIPKepalaSekolah->ViewCustomAttributes = "";
+		// Selesai
+		$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
+		$this->Selesai->ViewCustomAttributes = "";
 
 		// id
 		$this->id->LinkCustomAttributes = "";
 		$this->id->HrefValue = "";
 		$this->id->TooltipValue = "";
 
-		// Nama
-		$this->Nama->LinkCustomAttributes = "";
-		$this->Nama->HrefValue = "";
-		$this->Nama->TooltipValue = "";
+		// Mulai
+		$this->Mulai->LinkCustomAttributes = "";
+		$this->Mulai->HrefValue = "";
+		$this->Mulai->TooltipValue = "";
 
-		// Alamat
-		$this->Alamat->LinkCustomAttributes = "";
-		$this->Alamat->HrefValue = "";
-		$this->Alamat->TooltipValue = "";
-
-		// KepalaSekolah
-		$this->KepalaSekolah->LinkCustomAttributes = "";
-		$this->KepalaSekolah->HrefValue = "";
-		$this->KepalaSekolah->TooltipValue = "";
-
-		// NIPKepalaSekolah
-		$this->NIPKepalaSekolah->LinkCustomAttributes = "";
-		$this->NIPKepalaSekolah->HrefValue = "";
-		$this->NIPKepalaSekolah->TooltipValue = "";
+		// Selesai
+		$this->Selesai->LinkCustomAttributes = "";
+		$this->Selesai->HrefValue = "";
+		$this->Selesai->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -782,35 +748,21 @@ class t001_sekolah extends DbTable
 		$this->id->EditValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
 
-		// Nama
-		$this->Nama->EditAttrs["class"] = "form-control";
-		$this->Nama->EditCustomAttributes = "";
-		if (!$this->Nama->Raw)
-			$this->Nama->CurrentValue = HtmlDecode($this->Nama->CurrentValue);
-		$this->Nama->EditValue = $this->Nama->CurrentValue;
-		$this->Nama->PlaceHolder = RemoveHtml($this->Nama->caption());
+		// Mulai
+		$this->Mulai->EditAttrs["class"] = "form-control";
+		$this->Mulai->EditCustomAttributes = "";
+		if (!$this->Mulai->Raw)
+			$this->Mulai->CurrentValue = HtmlDecode($this->Mulai->CurrentValue);
+		$this->Mulai->EditValue = $this->Mulai->CurrentValue;
+		$this->Mulai->PlaceHolder = RemoveHtml($this->Mulai->caption());
 
-		// Alamat
-		$this->Alamat->EditAttrs["class"] = "form-control";
-		$this->Alamat->EditCustomAttributes = "";
-		$this->Alamat->EditValue = $this->Alamat->CurrentValue;
-		$this->Alamat->PlaceHolder = RemoveHtml($this->Alamat->caption());
-
-		// KepalaSekolah
-		$this->KepalaSekolah->EditAttrs["class"] = "form-control";
-		$this->KepalaSekolah->EditCustomAttributes = "";
-		if (!$this->KepalaSekolah->Raw)
-			$this->KepalaSekolah->CurrentValue = HtmlDecode($this->KepalaSekolah->CurrentValue);
-		$this->KepalaSekolah->EditValue = $this->KepalaSekolah->CurrentValue;
-		$this->KepalaSekolah->PlaceHolder = RemoveHtml($this->KepalaSekolah->caption());
-
-		// NIPKepalaSekolah
-		$this->NIPKepalaSekolah->EditAttrs["class"] = "form-control";
-		$this->NIPKepalaSekolah->EditCustomAttributes = "";
-		if (!$this->NIPKepalaSekolah->Raw)
-			$this->NIPKepalaSekolah->CurrentValue = HtmlDecode($this->NIPKepalaSekolah->CurrentValue);
-		$this->NIPKepalaSekolah->EditValue = $this->NIPKepalaSekolah->CurrentValue;
-		$this->NIPKepalaSekolah->PlaceHolder = RemoveHtml($this->NIPKepalaSekolah->caption());
+		// Selesai
+		$this->Selesai->EditAttrs["class"] = "form-control";
+		$this->Selesai->EditCustomAttributes = "";
+		if (!$this->Selesai->Raw)
+			$this->Selesai->CurrentValue = HtmlDecode($this->Selesai->CurrentValue);
+		$this->Selesai->EditValue = $this->Selesai->CurrentValue;
+		$this->Selesai->PlaceHolder = RemoveHtml($this->Selesai->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -841,16 +793,12 @@ class t001_sekolah extends DbTable
 			if ($doc->Horizontal) { // Horizontal format, write header
 				$doc->beginExportRow();
 				if ($exportPageType == "view") {
-					$doc->exportCaption($this->Nama);
-					$doc->exportCaption($this->Alamat);
-					$doc->exportCaption($this->KepalaSekolah);
-					$doc->exportCaption($this->NIPKepalaSekolah);
+					$doc->exportCaption($this->Mulai);
+					$doc->exportCaption($this->Selesai);
 				} else {
 					$doc->exportCaption($this->id);
-					$doc->exportCaption($this->Nama);
-					$doc->exportCaption($this->Alamat);
-					$doc->exportCaption($this->KepalaSekolah);
-					$doc->exportCaption($this->NIPKepalaSekolah);
+					$doc->exportCaption($this->Mulai);
+					$doc->exportCaption($this->Selesai);
 				}
 				$doc->endExportRow();
 			}
@@ -882,16 +830,12 @@ class t001_sekolah extends DbTable
 				if (!$doc->ExportCustom) {
 					$doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
 					if ($exportPageType == "view") {
-						$doc->exportField($this->Nama);
-						$doc->exportField($this->Alamat);
-						$doc->exportField($this->KepalaSekolah);
-						$doc->exportField($this->NIPKepalaSekolah);
+						$doc->exportField($this->Mulai);
+						$doc->exportField($this->Selesai);
 					} else {
 						$doc->exportField($this->id);
-						$doc->exportField($this->Nama);
-						$doc->exportField($this->Alamat);
-						$doc->exportField($this->KepalaSekolah);
-						$doc->exportField($this->NIPKepalaSekolah);
+						$doc->exportField($this->Mulai);
+						$doc->exportField($this->Selesai);
 					}
 					$doc->endExportRow($rowCnt);
 				}

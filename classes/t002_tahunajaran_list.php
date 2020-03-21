@@ -4,7 +4,7 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t204_audittrail_list extends t204_audittrail
+class t002_tahunajaran_list extends t002_tahunajaran
 {
 
 	// Page ID
@@ -14,13 +14,13 @@ class t204_audittrail_list extends t204_audittrail
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't204_audittrail';
+	public $TableName = 't002_tahunajaran';
 
 	// Page object name
-	public $PageObjName = "t204_audittrail_list";
+	public $PageObjName = "t002_tahunajaran_list";
 
 	// Grid form hidden field names
-	public $FormName = "ft204_audittraillist";
+	public $FormName = "ft002_tahunajaranlist";
 	public $FormActionName = "k_action";
 	public $FormKeyName = "k_key";
 	public $FormOldKeyName = "k_oldkey";
@@ -381,10 +381,10 @@ class t204_audittrail_list extends t204_audittrail
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t204_audittrail)
-		if (!isset($GLOBALS["t204_audittrail"]) || get_class($GLOBALS["t204_audittrail"]) == PROJECT_NAMESPACE . "t204_audittrail") {
-			$GLOBALS["t204_audittrail"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t204_audittrail"];
+		// Table object (t002_tahunajaran)
+		if (!isset($GLOBALS["t002_tahunajaran"]) || get_class($GLOBALS["t002_tahunajaran"]) == PROJECT_NAMESPACE . "t002_tahunajaran") {
+			$GLOBALS["t002_tahunajaran"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t002_tahunajaran"];
 		}
 
 		// Initialize URLs
@@ -395,12 +395,12 @@ class t204_audittrail_list extends t204_audittrail
 		$this->ExportHtmlUrl = $this->pageUrl() . "export=html";
 		$this->ExportXmlUrl = $this->pageUrl() . "export=xml";
 		$this->ExportCsvUrl = $this->pageUrl() . "export=csv";
-		$this->AddUrl = "t204_audittrailadd.php";
+		$this->AddUrl = "t002_tahunajaranadd.php";
 		$this->InlineAddUrl = $this->pageUrl() . "action=add";
 		$this->GridAddUrl = $this->pageUrl() . "action=gridadd";
 		$this->GridEditUrl = $this->pageUrl() . "action=gridedit";
-		$this->MultiDeleteUrl = "t204_audittraildelete.php";
-		$this->MultiUpdateUrl = "t204_audittrailupdate.php";
+		$this->MultiDeleteUrl = "t002_tahunajarandelete.php";
+		$this->MultiUpdateUrl = "t002_tahunajaranupdate.php";
 
 		// Table object (t201_employees)
 		if (!isset($GLOBALS['t201_employees']))
@@ -412,7 +412,7 @@ class t204_audittrail_list extends t204_audittrail
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't204_audittrail');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't002_tahunajaran');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -452,7 +452,7 @@ class t204_audittrail_list extends t204_audittrail
 
 		// Filter options
 		$this->FilterOptions = new ListOptions("div");
-		$this->FilterOptions->TagClassName = "ew-filter-option ft204_audittraillistsrch";
+		$this->FilterOptions->TagClassName = "ew-filter-option ft002_tahunajaranlistsrch";
 
 		// List actions
 		$this->ListActions = new ListActions();
@@ -470,14 +470,14 @@ class t204_audittrail_list extends t204_audittrail
 		Page_Unloaded();
 
 		// Export
-		global $t204_audittrail;
+		global $t002_tahunajaran;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t204_audittrail);
+				$doc = new $class($t002_tahunajaran);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -812,16 +812,9 @@ class t204_audittrail_list extends t204_audittrail
 
 		// Setup export options
 		$this->setupExportOptions();
-		$this->id->setVisibility();
-		$this->datetime->setVisibility();
-		$this->script->setVisibility();
-		$this->user->setVisibility();
-		$this->_action->setVisibility();
-		$this->_table->setVisibility();
-		$this->field->setVisibility();
-		$this->keyvalue->Visible = FALSE;
-		$this->oldvalue->Visible = FALSE;
-		$this->newvalue->Visible = FALSE;
+		$this->id->Visible = FALSE;
+		$this->Mulai->setVisibility();
+		$this->Selesai->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -1108,15 +1101,8 @@ class t204_audittrail_list extends t204_audittrail
 		$filterList = "";
 		$savedFilterList = "";
 		$filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
-		$filterList = Concat($filterList, $this->datetime->AdvancedSearch->toJson(), ","); // Field datetime
-		$filterList = Concat($filterList, $this->script->AdvancedSearch->toJson(), ","); // Field script
-		$filterList = Concat($filterList, $this->user->AdvancedSearch->toJson(), ","); // Field user
-		$filterList = Concat($filterList, $this->_action->AdvancedSearch->toJson(), ","); // Field action
-		$filterList = Concat($filterList, $this->_table->AdvancedSearch->toJson(), ","); // Field table
-		$filterList = Concat($filterList, $this->field->AdvancedSearch->toJson(), ","); // Field field
-		$filterList = Concat($filterList, $this->keyvalue->AdvancedSearch->toJson(), ","); // Field keyvalue
-		$filterList = Concat($filterList, $this->oldvalue->AdvancedSearch->toJson(), ","); // Field oldvalue
-		$filterList = Concat($filterList, $this->newvalue->AdvancedSearch->toJson(), ","); // Field newvalue
+		$filterList = Concat($filterList, $this->Mulai->AdvancedSearch->toJson(), ","); // Field Mulai
+		$filterList = Concat($filterList, $this->Selesai->AdvancedSearch->toJson(), ","); // Field Selesai
 		if ($this->BasicSearch->Keyword != "") {
 			$wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
 			$filterList = Concat($filterList, $wrk, ",");
@@ -1136,7 +1122,7 @@ class t204_audittrail_list extends t204_audittrail
 		global $UserProfile;
 		if (Post("ajax") == "savefilters") { // Save filter request (Ajax)
 			$filters = Post("filters");
-			$UserProfile->setSearchFilters(CurrentUserName(), "ft204_audittraillistsrch", $filters);
+			$UserProfile->setSearchFilters(CurrentUserName(), "ft002_tahunajaranlistsrch", $filters);
 			WriteJson([["success" => TRUE]]); // Success
 			return TRUE;
 		} elseif (Post("cmd") == "resetfilter") {
@@ -1163,77 +1149,21 @@ class t204_audittrail_list extends t204_audittrail
 		$this->id->AdvancedSearch->SearchOperator2 = @$filter["w_id"];
 		$this->id->AdvancedSearch->save();
 
-		// Field datetime
-		$this->datetime->AdvancedSearch->SearchValue = @$filter["x_datetime"];
-		$this->datetime->AdvancedSearch->SearchOperator = @$filter["z_datetime"];
-		$this->datetime->AdvancedSearch->SearchCondition = @$filter["v_datetime"];
-		$this->datetime->AdvancedSearch->SearchValue2 = @$filter["y_datetime"];
-		$this->datetime->AdvancedSearch->SearchOperator2 = @$filter["w_datetime"];
-		$this->datetime->AdvancedSearch->save();
+		// Field Mulai
+		$this->Mulai->AdvancedSearch->SearchValue = @$filter["x_Mulai"];
+		$this->Mulai->AdvancedSearch->SearchOperator = @$filter["z_Mulai"];
+		$this->Mulai->AdvancedSearch->SearchCondition = @$filter["v_Mulai"];
+		$this->Mulai->AdvancedSearch->SearchValue2 = @$filter["y_Mulai"];
+		$this->Mulai->AdvancedSearch->SearchOperator2 = @$filter["w_Mulai"];
+		$this->Mulai->AdvancedSearch->save();
 
-		// Field script
-		$this->script->AdvancedSearch->SearchValue = @$filter["x_script"];
-		$this->script->AdvancedSearch->SearchOperator = @$filter["z_script"];
-		$this->script->AdvancedSearch->SearchCondition = @$filter["v_script"];
-		$this->script->AdvancedSearch->SearchValue2 = @$filter["y_script"];
-		$this->script->AdvancedSearch->SearchOperator2 = @$filter["w_script"];
-		$this->script->AdvancedSearch->save();
-
-		// Field user
-		$this->user->AdvancedSearch->SearchValue = @$filter["x_user"];
-		$this->user->AdvancedSearch->SearchOperator = @$filter["z_user"];
-		$this->user->AdvancedSearch->SearchCondition = @$filter["v_user"];
-		$this->user->AdvancedSearch->SearchValue2 = @$filter["y_user"];
-		$this->user->AdvancedSearch->SearchOperator2 = @$filter["w_user"];
-		$this->user->AdvancedSearch->save();
-
-		// Field action
-		$this->_action->AdvancedSearch->SearchValue = @$filter["x__action"];
-		$this->_action->AdvancedSearch->SearchOperator = @$filter["z__action"];
-		$this->_action->AdvancedSearch->SearchCondition = @$filter["v__action"];
-		$this->_action->AdvancedSearch->SearchValue2 = @$filter["y__action"];
-		$this->_action->AdvancedSearch->SearchOperator2 = @$filter["w__action"];
-		$this->_action->AdvancedSearch->save();
-
-		// Field table
-		$this->_table->AdvancedSearch->SearchValue = @$filter["x__table"];
-		$this->_table->AdvancedSearch->SearchOperator = @$filter["z__table"];
-		$this->_table->AdvancedSearch->SearchCondition = @$filter["v__table"];
-		$this->_table->AdvancedSearch->SearchValue2 = @$filter["y__table"];
-		$this->_table->AdvancedSearch->SearchOperator2 = @$filter["w__table"];
-		$this->_table->AdvancedSearch->save();
-
-		// Field field
-		$this->field->AdvancedSearch->SearchValue = @$filter["x_field"];
-		$this->field->AdvancedSearch->SearchOperator = @$filter["z_field"];
-		$this->field->AdvancedSearch->SearchCondition = @$filter["v_field"];
-		$this->field->AdvancedSearch->SearchValue2 = @$filter["y_field"];
-		$this->field->AdvancedSearch->SearchOperator2 = @$filter["w_field"];
-		$this->field->AdvancedSearch->save();
-
-		// Field keyvalue
-		$this->keyvalue->AdvancedSearch->SearchValue = @$filter["x_keyvalue"];
-		$this->keyvalue->AdvancedSearch->SearchOperator = @$filter["z_keyvalue"];
-		$this->keyvalue->AdvancedSearch->SearchCondition = @$filter["v_keyvalue"];
-		$this->keyvalue->AdvancedSearch->SearchValue2 = @$filter["y_keyvalue"];
-		$this->keyvalue->AdvancedSearch->SearchOperator2 = @$filter["w_keyvalue"];
-		$this->keyvalue->AdvancedSearch->save();
-
-		// Field oldvalue
-		$this->oldvalue->AdvancedSearch->SearchValue = @$filter["x_oldvalue"];
-		$this->oldvalue->AdvancedSearch->SearchOperator = @$filter["z_oldvalue"];
-		$this->oldvalue->AdvancedSearch->SearchCondition = @$filter["v_oldvalue"];
-		$this->oldvalue->AdvancedSearch->SearchValue2 = @$filter["y_oldvalue"];
-		$this->oldvalue->AdvancedSearch->SearchOperator2 = @$filter["w_oldvalue"];
-		$this->oldvalue->AdvancedSearch->save();
-
-		// Field newvalue
-		$this->newvalue->AdvancedSearch->SearchValue = @$filter["x_newvalue"];
-		$this->newvalue->AdvancedSearch->SearchOperator = @$filter["z_newvalue"];
-		$this->newvalue->AdvancedSearch->SearchCondition = @$filter["v_newvalue"];
-		$this->newvalue->AdvancedSearch->SearchValue2 = @$filter["y_newvalue"];
-		$this->newvalue->AdvancedSearch->SearchOperator2 = @$filter["w_newvalue"];
-		$this->newvalue->AdvancedSearch->save();
+		// Field Selesai
+		$this->Selesai->AdvancedSearch->SearchValue = @$filter["x_Selesai"];
+		$this->Selesai->AdvancedSearch->SearchOperator = @$filter["z_Selesai"];
+		$this->Selesai->AdvancedSearch->SearchCondition = @$filter["v_Selesai"];
+		$this->Selesai->AdvancedSearch->SearchValue2 = @$filter["y_Selesai"];
+		$this->Selesai->AdvancedSearch->SearchOperator2 = @$filter["w_Selesai"];
+		$this->Selesai->AdvancedSearch->save();
 		$this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
 		$this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
 	}
@@ -1242,14 +1172,8 @@ class t204_audittrail_list extends t204_audittrail
 	protected function basicSearchSql($arKeywords, $type)
 	{
 		$where = "";
-		$this->buildBasicSearchSql($where, $this->script, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->user, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->_action, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->_table, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->field, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->keyvalue, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->oldvalue, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->newvalue, $arKeywords, $type);
+		$this->buildBasicSearchSql($where, $this->Mulai, $arKeywords, $type);
+		$this->buildBasicSearchSql($where, $this->Selesai, $arKeywords, $type);
 		return $where;
 	}
 
@@ -1411,13 +1335,8 @@ class t204_audittrail_list extends t204_audittrail
 		if (Get("order") !== NULL) {
 			$this->CurrentOrder = Get("order");
 			$this->CurrentOrderType = Get("ordertype", "");
-			$this->updateSort($this->id, $ctrl); // id
-			$this->updateSort($this->datetime, $ctrl); // datetime
-			$this->updateSort($this->script, $ctrl); // script
-			$this->updateSort($this->user, $ctrl); // user
-			$this->updateSort($this->_action, $ctrl); // action
-			$this->updateSort($this->_table, $ctrl); // table
-			$this->updateSort($this->field, $ctrl); // field
+			$this->updateSort($this->Mulai, $ctrl); // Mulai
+			$this->updateSort($this->Selesai, $ctrl); // Selesai
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1453,13 +1372,8 @@ class t204_audittrail_list extends t204_audittrail
 			if ($this->Command == "resetsort") {
 				$orderBy = "";
 				$this->setSessionOrderBy($orderBy);
-				$this->id->setSort("");
-				$this->datetime->setSort("");
-				$this->script->setSort("");
-				$this->user->setSort("");
-				$this->_action->setSort("");
-				$this->_table->setSort("");
-				$this->field->setSort("");
+				$this->Mulai->setSort("");
+				$this->Selesai->setSort("");
 			}
 
 			// Reset start position
@@ -1520,6 +1434,14 @@ class t204_audittrail_list extends t204_audittrail
 		$item->ShowInDropDown = FALSE;
 		$item->ShowInButtonGroup = FALSE;
 
+		// "sequence"
+		$item = &$this->ListOptions->add("sequence");
+		$item->CssClass = "text-nowrap";
+		$item->Visible = TRUE;
+		$item->OnLeft = TRUE; // Always on left
+		$item->ShowInDropDown = FALSE;
+		$item->ShowInButtonGroup = FALSE;
+
 		// Drop down button for ListOptions
 		$this->ListOptions->UseDropDownButton = FALSE;
 		$this->ListOptions->DropDownButtonPhrase = $Language->phrase("ButtonListOptions");
@@ -1544,6 +1466,10 @@ class t204_audittrail_list extends t204_audittrail
 
 		// Call ListOptions_Rendering event
 		$this->ListOptions_Rendering();
+
+		// "sequence"
+		$opt = $this->ListOptions["sequence"];
+		$opt->Body = FormatSequenceNumber($this->RecordCount);
 
 		// "view"
 		$opt = $this->ListOptions["view"];
@@ -1647,10 +1573,10 @@ class t204_audittrail_list extends t204_audittrail
 
 		// Filter button
 		$item = &$this->FilterOptions->add("savecurrentfilter");
-		$item->Body = "<a class=\"ew-save-filter\" data-form=\"ft204_audittraillistsrch\" href=\"#\" onclick=\"return false;\">" . $Language->phrase("SaveCurrentFilter") . "</a>";
+		$item->Body = "<a class=\"ew-save-filter\" data-form=\"ft002_tahunajaranlistsrch\" href=\"#\" onclick=\"return false;\">" . $Language->phrase("SaveCurrentFilter") . "</a>";
 		$item->Visible = TRUE;
 		$item = &$this->FilterOptions->add("deletefilter");
-		$item->Body = "<a class=\"ew-delete-filter\" data-form=\"ft204_audittraillistsrch\" href=\"#\" onclick=\"return false;\">" . $Language->phrase("DeleteFilter") . "</a>";
+		$item->Body = "<a class=\"ew-delete-filter\" data-form=\"ft002_tahunajaranlistsrch\" href=\"#\" onclick=\"return false;\">" . $Language->phrase("DeleteFilter") . "</a>";
 		$item->Visible = TRUE;
 		$this->FilterOptions->UseDropDownButton = TRUE;
 		$this->FilterOptions->UseButtonGroup = !$this->FilterOptions->UseDropDownButton;
@@ -1675,7 +1601,7 @@ class t204_audittrail_list extends t204_audittrail
 					$item = &$option->add("custom_" . $listaction->Action);
 					$caption = $listaction->Caption;
 					$icon = ($listaction->Icon != "") ? "<i class=\"" . HtmlEncode($listaction->Icon) . "\" data-caption=\"" . HtmlEncode($caption) . "\"></i> " . $caption : $caption;
-					$item->Body = "<a class=\"ew-action ew-list-action\" title=\"" . HtmlEncode($caption) . "\" data-caption=\"" . HtmlEncode($caption) . "\" href=\"#\" onclick=\"return ew.submitAction(event,jQuery.extend({f:document.ft204_audittraillist}," . $listaction->toJson(TRUE) . "));\">" . $icon . "</a>";
+					$item->Body = "<a class=\"ew-action ew-list-action\" title=\"" . HtmlEncode($caption) . "\" data-caption=\"" . HtmlEncode($caption) . "\" href=\"#\" onclick=\"return ew.submitAction(event,jQuery.extend({f:document.ft002_tahunajaranlist}," . $listaction->toJson(TRUE) . "));\">" . $icon . "</a>";
 					$item->Visible = $listaction->Allow;
 				}
 			}
@@ -1854,15 +1780,8 @@ class t204_audittrail_list extends t204_audittrail
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->datetime->setDbValue($row['datetime']);
-		$this->script->setDbValue($row['script']);
-		$this->user->setDbValue($row['user']);
-		$this->_action->setDbValue($row['action']);
-		$this->_table->setDbValue($row['table']);
-		$this->field->setDbValue($row['field']);
-		$this->keyvalue->setDbValue($row['keyvalue']);
-		$this->oldvalue->setDbValue($row['oldvalue']);
-		$this->newvalue->setDbValue($row['newvalue']);
+		$this->Mulai->setDbValue($row['Mulai']);
+		$this->Selesai->setDbValue($row['Selesai']);
 	}
 
 	// Return a row with default values
@@ -1870,15 +1789,8 @@ class t204_audittrail_list extends t204_audittrail
 	{
 		$row = [];
 		$row['id'] = NULL;
-		$row['datetime'] = NULL;
-		$row['script'] = NULL;
-		$row['user'] = NULL;
-		$row['action'] = NULL;
-		$row['table'] = NULL;
-		$row['field'] = NULL;
-		$row['keyvalue'] = NULL;
-		$row['oldvalue'] = NULL;
-		$row['newvalue'] = NULL;
+		$row['Mulai'] = NULL;
+		$row['Selesai'] = NULL;
 		return $row;
 	}
 
@@ -1923,15 +1835,8 @@ class t204_audittrail_list extends t204_audittrail
 
 		// Common render codes for all row types
 		// id
-		// datetime
-		// script
-		// user
-		// action
-		// table
-		// field
-		// keyvalue
-		// oldvalue
-		// newvalue
+		// Mulai
+		// Selesai
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1939,65 +1844,23 @@ class t204_audittrail_list extends t204_audittrail
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// datetime
-			$this->datetime->ViewValue = $this->datetime->CurrentValue;
-			$this->datetime->ViewValue = FormatDateTime($this->datetime->ViewValue, 0);
-			$this->datetime->ViewCustomAttributes = "";
+			// Mulai
+			$this->Mulai->ViewValue = $this->Mulai->CurrentValue;
+			$this->Mulai->ViewCustomAttributes = "";
 
-			// script
-			$this->script->ViewValue = $this->script->CurrentValue;
-			$this->script->ViewCustomAttributes = "";
+			// Selesai
+			$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
+			$this->Selesai->ViewCustomAttributes = "";
 
-			// user
-			$this->user->ViewValue = $this->user->CurrentValue;
-			$this->user->ViewCustomAttributes = "";
+			// Mulai
+			$this->Mulai->LinkCustomAttributes = "";
+			$this->Mulai->HrefValue = "";
+			$this->Mulai->TooltipValue = "";
 
-			// action
-			$this->_action->ViewValue = $this->_action->CurrentValue;
-			$this->_action->ViewCustomAttributes = "";
-
-			// table
-			$this->_table->ViewValue = $this->_table->CurrentValue;
-			$this->_table->ViewCustomAttributes = "";
-
-			// field
-			$this->field->ViewValue = $this->field->CurrentValue;
-			$this->field->ViewCustomAttributes = "";
-
-			// id
-			$this->id->LinkCustomAttributes = "";
-			$this->id->HrefValue = "";
-			$this->id->TooltipValue = "";
-
-			// datetime
-			$this->datetime->LinkCustomAttributes = "";
-			$this->datetime->HrefValue = "";
-			$this->datetime->TooltipValue = "";
-
-			// script
-			$this->script->LinkCustomAttributes = "";
-			$this->script->HrefValue = "";
-			$this->script->TooltipValue = "";
-
-			// user
-			$this->user->LinkCustomAttributes = "";
-			$this->user->HrefValue = "";
-			$this->user->TooltipValue = "";
-
-			// action
-			$this->_action->LinkCustomAttributes = "";
-			$this->_action->HrefValue = "";
-			$this->_action->TooltipValue = "";
-
-			// table
-			$this->_table->LinkCustomAttributes = "";
-			$this->_table->HrefValue = "";
-			$this->_table->TooltipValue = "";
-
-			// field
-			$this->field->LinkCustomAttributes = "";
-			$this->field->HrefValue = "";
-			$this->field->TooltipValue = "";
+			// Selesai
+			$this->Selesai->LinkCustomAttributes = "";
+			$this->Selesai->HrefValue = "";
+			$this->Selesai->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2011,17 +1874,17 @@ class t204_audittrail_list extends t204_audittrail
 		global $Language;
 		if (SameText($type, "excel")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft204_audittraillist, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft002_tahunajaranlist, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportExcelUrl . "\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\">" . $Language->phrase("ExportToExcel") . "</a>";
 		} elseif (SameText($type, "word")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft204_audittraillist, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft002_tahunajaranlist, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportWordUrl . "\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\">" . $Language->phrase("ExportToWord") . "</a>";
 		} elseif (SameText($type, "pdf")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft204_audittraillist, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft002_tahunajaranlist, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportPdfUrl . "\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\">" . $Language->phrase("ExportToPDF") . "</a>";
 		} elseif (SameText($type, "html")) {
@@ -2032,7 +1895,7 @@ class t204_audittrail_list extends t204_audittrail
 			return "<a href=\"" . $this->ExportCsvUrl . "\" class=\"ew-export-link ew-csv\" title=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\">" . $Language->phrase("ExportToCsv") . "</a>";
 		} elseif (SameText($type, "email")) {
 			$url = $custom ? ",url:'" . $this->pageUrl() . "export=email&amp;custom=1'" : "";
-			return '<button id="emf_t204_audittrail" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t204_audittrail\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft204_audittraillist, sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
+			return '<button id="emf_t002_tahunajaran" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t002_tahunajaran\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft002_tahunajaranlist, sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
 		} elseif (SameText($type, "print")) {
 			return "<a href=\"" . $this->ExportPrintUrl . "\" class=\"ew-export-link ew-print\" title=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\">" . $Language->phrase("PrinterFriendly") . "</a>";
 		}
@@ -2106,7 +1969,7 @@ class t204_audittrail_list extends t204_audittrail
 		// Search button
 		$item = &$this->SearchOptions->add("searchtoggle");
 		$searchToggleClass = ($this->SearchWhere != "") ? " active" : " active";
-		$item->Body = "<a class=\"btn btn-default ew-search-toggle" . $searchToggleClass . "\" href=\"#\" role=\"button\" title=\"" . $Language->phrase("SearchPanel") . "\" data-caption=\"" . $Language->phrase("SearchPanel") . "\" data-toggle=\"button\" data-form=\"ft204_audittraillistsrch\" aria-pressed=\"" . ($searchToggleClass == " active" ? "true" : "false") . "\">" . $Language->phrase("SearchLink") . "</a>";
+		$item->Body = "<a class=\"btn btn-default ew-search-toggle" . $searchToggleClass . "\" href=\"#\" role=\"button\" title=\"" . $Language->phrase("SearchPanel") . "\" data-caption=\"" . $Language->phrase("SearchPanel") . "\" data-toggle=\"button\" data-form=\"ft002_tahunajaranlistsrch\" aria-pressed=\"" . ($searchToggleClass == " active" ? "true" : "false") . "\">" . $Language->phrase("SearchLink") . "</a>";
 		$item->Visible = TRUE;
 
 		// Show all button

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Mar 20, 2020 at 12:32 PM
+-- Generation Time: Mar 21, 2020 at 10:05 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -43,6 +43,26 @@ CREATE TABLE `t001_sekolah` (
 INSERT INTO `t001_sekolah` (`id`, `Nama`, `Alamat`, `KepalaSekolah`, `NIPKepalaSekolah`) VALUES
 (1, 'MINU Karakter Bojonegoro', NULL, NULL, NULL),
 (2, 'MINU Unggulan Bojonegoro', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `t002_tahunajaran`
+--
+
+CREATE TABLE `t002_tahunajaran` (
+  `id` int(11) NOT NULL,
+  `Mulai` varchar(4) NOT NULL,
+  `Selesai` varchar(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t002_tahunajaran`
+--
+
+INSERT INTO `t002_tahunajaran` (`id`, `Mulai`, `Selesai`) VALUES
+(1, '2019', '2020'),
+(2, '2020', '2021');
 
 -- --------------------------------------------------------
 
@@ -297,7 +317,16 @@ INSERT INTO `t204_audittrail` (`id`, `datetime`, `script`, `user`, `action`, `ta
 (114, '2020-03-20 09:30:21', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
 (115, '2020-03-20 09:30:25', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
 (116, '2020-03-20 09:36:11', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
-(117, '2020-03-20 09:36:16', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
+(117, '2020-03-20 09:36:16', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(118, '2020-03-21 06:28:01', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(119, '2020-03-21 06:28:14', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(120, '2020-03-21 06:28:18', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(121, '2020-03-21 08:24:49', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(122, '2020-03-21 08:39:08', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(123, '2020-03-21 08:39:33', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(124, '2020-03-21 08:39:38', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(125, '2020-03-21 09:00:48', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(126, '2020-03-21 09:00:59', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 --
 -- Indexes for dumped tables
@@ -307,6 +336,12 @@ INSERT INTO `t204_audittrail` (`id`, `datetime`, `script`, `user`, `action`, `ta
 -- Indexes for table `t001_sekolah`
 --
 ALTER TABLE `t001_sekolah`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `t002_tahunajaran`
+--
+ALTER TABLE `t002_tahunajaran`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -351,6 +386,12 @@ ALTER TABLE `t001_sekolah`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `t002_tahunajaran`
+--
+ALTER TABLE `t002_tahunajaran`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `t101_session`
 --
 ALTER TABLE `t101_session`
@@ -366,7 +407,7 @@ ALTER TABLE `t201_employees`
 -- AUTO_INCREMENT for table `t204_audittrail`
 --
 ALTER TABLE `t204_audittrail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
