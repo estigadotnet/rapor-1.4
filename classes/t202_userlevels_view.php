@@ -740,13 +740,13 @@ class t202_userlevels_view extends t202_userlevels
 			if (Get("userlevelid") !== NULL) {
 				$this->userlevelid->setQueryStringValue(Get("userlevelid"));
 				$this->RecKey["userlevelid"] = $this->userlevelid->QueryStringValue;
-			} elseif (IsApi() && Key(0) != NULL) {
+			} elseif (IsApi() && Key(0) !== NULL) {
 				$this->userlevelid->setQueryStringValue(Key(0));
 				$this->RecKey["userlevelid"] = $this->userlevelid->QueryStringValue;
 			} elseif (Post("userlevelid") !== NULL) {
 				$this->userlevelid->setFormValue(Post("userlevelid"));
 				$this->RecKey["userlevelid"] = $this->userlevelid->FormValue;
-			} elseif (IsApi() && Route(2) != NULL) {
+			} elseif (IsApi() && Route(2) !== NULL) {
 				$this->userlevelid->setFormValue(Route(2));
 				$this->RecKey["userlevelid"] = $this->userlevelid->FormValue;
 			} else {

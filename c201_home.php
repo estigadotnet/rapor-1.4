@@ -56,6 +56,29 @@ $show_combo = 0;
 
 if (IsLoggedIn()) {
 
+	// check data default setting pada tabel t205_default
+	// berdasarkan userid yang login
+	$user_id = CurrentUserInfo("EmployeeID");
+	$q = "select count(User_ID) from t205_default where User_ID = ".$user_id."";
+	$data_count = ExecuteScalar($q); //echo "data_count: " . $data_count;
+	if ($data_count == 0) {
+	}
+	else {
+		$q = "select * from t205_default where User_ID = ".$user_id.""; //echo $q;
+		$r_user = ExecuteRows($q);
+		foreach($r_user as $r2) {
+			foreach($r2 as $key => $value) {
+				if ($r2["Keterangan"] == "Sekolah") {
+					$_SESSION["sekolah_id"] = $r2["Nilai"];
+				}
+				if ($r2["Keterangan"] == "Tahun Ajaran") {
+					$_SESSION["tahunajaran_id"] = $r2["Nilai"];
+				}
+			}
+		}
+	}
+	
+
 	// checking session
 	if (!isset($_SESSION["sekolah_id"])) {
 		$_SESSION["sekolah_id"] = "0";

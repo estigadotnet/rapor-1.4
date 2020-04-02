@@ -711,32 +711,64 @@ class t002_tahunajaran_edit extends t002_tahunajaran
 
 		// Set up current action and primary key
 		if (IsApi()) {
-			$this->CurrentAction = "update"; // Update record directly
-			$postBack = TRUE;
-		} elseif (Post("action") !== NULL) {
-			$this->CurrentAction = Post("action"); // Get action code
-			if (!$this->isShow()) // Not reload record, handle as postback
-				$postBack = TRUE;
 
-			// Load key from Form
-			if ($CurrentForm->hasValue("x_id")) {
-				$this->id->setFormValue($CurrentForm->getValue("x_id"));
-			}
-		} else {
-			$this->CurrentAction = "show"; // Default action is display
-
-			// Load key from QueryString
-			$loadByQuery = FALSE;
+			// Load key values
+			$loaded = TRUE;
 			if (Get("id") !== NULL) {
 				$this->id->setQueryStringValue(Get("id"));
-				$loadByQuery = TRUE;
+				$this->id->setOldValue($this->id->QueryStringValue);
+			} elseif (Key(0) !== NULL) {
+				$this->id->setQueryStringValue(Key(0));
+				$this->id->setOldValue($this->id->QueryStringValue);
+			} elseif (Post("id") !== NULL) {
+				$this->id->setFormValue(Post("id"));
+				$this->id->setOldValue($this->id->FormValue);
+			} elseif (Route(2) !== NULL) {
+				$this->id->setQueryStringValue(Route(2));
+				$this->id->setOldValue($this->id->QueryStringValue);
 			} else {
-				$this->id->CurrentValue = NULL;
+				$loaded = FALSE; // Unable to load key
 			}
-		}
 
-		// Load current record
-		$loaded = $this->loadRow();
+			// Load record
+			if ($loaded)
+				$loaded = $this->loadRow();
+			if (!$loaded) {
+				$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
+				$this->terminate();
+				return;
+			}
+			$this->CurrentAction = "update"; // Update record directly
+			$postBack = TRUE;
+		} else {
+			if (Post("action") !== NULL) {
+				$this->CurrentAction = Post("action"); // Get action code
+				if (!$this->isShow()) // Not reload record, handle as postback
+					$postBack = TRUE;
+
+				// Load key from Form
+				if ($CurrentForm->hasValue("x_id")) {
+					$this->id->setFormValue($CurrentForm->getValue("x_id"));
+				}
+			} else {
+				$this->CurrentAction = "show"; // Default action is display
+
+				// Load key from QueryString / Route
+				$loadByQuery = FALSE;
+				if (Get("id") !== NULL) {
+					$this->id->setQueryStringValue(Get("id"));
+					$loadByQuery = TRUE;
+				} elseif (Route(2) !== NULL) {
+					$this->id->setQueryStringValue(Route(2));
+					$loadByQuery = TRUE;
+				} else {
+					$this->id->CurrentValue = NULL;
+				}
+			}
+
+			// Load current record
+			$loaded = $this->loadRow();
+		}
 
 		// Process form if post back
 		if ($postBack) {

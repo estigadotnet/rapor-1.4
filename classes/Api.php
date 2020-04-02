@@ -8,7 +8,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
  */
 class Api
 {
-	protected $SecretKey = 'vILqFtTjau4nhVUy';
+	protected $SecretKey = 'bzA5AAkDfS383Dxj';
 	protected $Algorithm = 'HS512';
 
 	// For some reason, the "Authorization" header is removed by IIS, changed to "X-Authorization"
@@ -94,10 +94,14 @@ class Api
 		global $UserProfile, $Security; // Security related
 		$UserProfile = new UserProfile(); // Create user profile object
 		$Security = new AdvancedSecurity(); // Create security object
-		$validPwd = $Security->validateUser($username, $password, FALSE);
-		if ($validPwd)
-			return $this->createJWT();
-		return FALSE;
+		if (!$username && !$password) {
+			return $this->createJWT(); // Anonymous user
+		} else {
+			$validPwd = $Security->validateUser($username, $password, FALSE);
+			if ($validPwd)
+				return $this->createJWT();
+			return FALSE;
+		}
 	}
 
 	// Create JWT
@@ -110,6 +114,13 @@ class Api
 		$expire = $notBefore + $this->ExpireTime; // Adding expire time (seconds)
 		$serverName = ServerVar("SERVER_NAME");
 		$userLevelID = $Security->CurrentUserLevelID;
+		$isLoggedIn = $Security->isLoggedIn();
+		$security = $isLoggedIn ? [
+				"username" => $Security->currentUserName(), // User name
+				"userid" => $Security->CurrentUserID, // User ID
+				"parentuserid" => $Security->CurrentParentUserID, // Parent user ID
+				"userlevelid" => $userLevelID // User Level ID
+			] : [ "userlevelid" => $userLevelID ];
 
 		// Create the token as an array
 		$ar = [
@@ -118,18 +129,13 @@ class Api
 			"iss" => $serverName, // Issuer
 			"nbf" => $notBefore, // Not before
 			"exp" => $expire, // Expire
-			"security" => [ // Data related to the signer user
-				"username" => $Security->currentUserName(), // User name
-				"userid" => $Security->CurrentUserID, // User ID
-				"parentuserid" => $Security->CurrentParentUserID, // Parent user ID
-				"userlevelid" => $userLevelID // User Level ID
-			]
+			"security" => $security // Data related to the signer user
 		];
-		$jwt = \Firebase\JWT\JWT::encode(
-			$ar, // Data to be encoded in the JWT
-			$this->SecretKey, // The signing key
-			$this->Algorithm // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
-		);
+		$jwt = $isLoggedIn ? $jwt = \Firebase\JWT\JWT::encode(
+				$ar, // Data to be encoded in the JWT
+				$this->SecretKey, // The signing key
+				$this->Algorithm // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
+			) : NULL;
 		$privs = []; // User Level permissions
 		if ($userLevelID != -1) { // Not administrator
 			foreach ($Security->UserLevelPriv as $priv) {
@@ -138,10 +144,11 @@ class Api
 				}, ARRAY_FILTER_USE_KEY);
 
 				// Keys: t = Table name, l = User Level ID, p = Permission
-				$privs[] = ["t" => ConvertToUtf8(str_replace(Config("PROJECT_ID"), "", $arr[0])), "l" => intval($arr[1]), "p" => intval($arr[2])];
+				if (intval($arr[2]) > 0)
+					$privs[] = ["t" => ConvertToUtf8(str_replace(Config("PROJECT_ID"), "", $arr[0])), "l" => intval($arr[1]), "p" => intval($arr[2])];
 			}
 		}
-		return array_merge(["success" => TRUE, "version" => PRODUCT_VERSION, "JWT" => $jwt, "permissions" => $privs], ConvertToUtf8($ar["security"]));
+		return array_merge(["success" => $isLoggedIn, "version" => PRODUCT_VERSION, "JWT" => $jwt, "permissions" => $privs], ConvertToUtf8($security));
 	}
 
 	// Decode JWT

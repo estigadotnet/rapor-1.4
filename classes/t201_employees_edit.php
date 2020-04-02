@@ -733,32 +733,64 @@ class t201_employees_edit extends t201_employees
 
 		// Set up current action and primary key
 		if (IsApi()) {
-			$this->CurrentAction = "update"; // Update record directly
-			$postBack = TRUE;
-		} elseif (Post("action") !== NULL) {
-			$this->CurrentAction = Post("action"); // Get action code
-			if (!$this->isShow()) // Not reload record, handle as postback
-				$postBack = TRUE;
 
-			// Load key from Form
-			if ($CurrentForm->hasValue("x_EmployeeID")) {
-				$this->EmployeeID->setFormValue($CurrentForm->getValue("x_EmployeeID"));
-			}
-		} else {
-			$this->CurrentAction = "show"; // Default action is display
-
-			// Load key from QueryString
-			$loadByQuery = FALSE;
+			// Load key values
+			$loaded = TRUE;
 			if (Get("EmployeeID") !== NULL) {
 				$this->EmployeeID->setQueryStringValue(Get("EmployeeID"));
-				$loadByQuery = TRUE;
+				$this->EmployeeID->setOldValue($this->EmployeeID->QueryStringValue);
+			} elseif (Key(0) !== NULL) {
+				$this->EmployeeID->setQueryStringValue(Key(0));
+				$this->EmployeeID->setOldValue($this->EmployeeID->QueryStringValue);
+			} elseif (Post("EmployeeID") !== NULL) {
+				$this->EmployeeID->setFormValue(Post("EmployeeID"));
+				$this->EmployeeID->setOldValue($this->EmployeeID->FormValue);
+			} elseif (Route(2) !== NULL) {
+				$this->EmployeeID->setQueryStringValue(Route(2));
+				$this->EmployeeID->setOldValue($this->EmployeeID->QueryStringValue);
 			} else {
-				$this->EmployeeID->CurrentValue = NULL;
+				$loaded = FALSE; // Unable to load key
 			}
-		}
 
-		// Load current record
-		$loaded = $this->loadRow();
+			// Load record
+			if ($loaded)
+				$loaded = $this->loadRow();
+			if (!$loaded) {
+				$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
+				$this->terminate();
+				return;
+			}
+			$this->CurrentAction = "update"; // Update record directly
+			$postBack = TRUE;
+		} else {
+			if (Post("action") !== NULL) {
+				$this->CurrentAction = Post("action"); // Get action code
+				if (!$this->isShow()) // Not reload record, handle as postback
+					$postBack = TRUE;
+
+				// Load key from Form
+				if ($CurrentForm->hasValue("x_EmployeeID")) {
+					$this->EmployeeID->setFormValue($CurrentForm->getValue("x_EmployeeID"));
+				}
+			} else {
+				$this->CurrentAction = "show"; // Default action is display
+
+				// Load key from QueryString / Route
+				$loadByQuery = FALSE;
+				if (Get("EmployeeID") !== NULL) {
+					$this->EmployeeID->setQueryStringValue(Get("EmployeeID"));
+					$loadByQuery = TRUE;
+				} elseif (Route(2) !== NULL) {
+					$this->EmployeeID->setQueryStringValue(Route(2));
+					$loadByQuery = TRUE;
+				} else {
+					$this->EmployeeID->CurrentValue = NULL;
+				}
+			}
+
+			// Load current record
+			$loaded = $this->loadRow();
+		}
 
 		// Process form if post back
 		if ($postBack) {

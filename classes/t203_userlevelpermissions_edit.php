@@ -710,41 +710,91 @@ class t203_userlevelpermissions_edit extends t203_userlevelpermissions
 
 		// Set up current action and primary key
 		if (IsApi()) {
-			$this->CurrentAction = "update"; // Update record directly
-			$postBack = TRUE;
-		} elseif (Post("action") !== NULL) {
-			$this->CurrentAction = Post("action"); // Get action code
-			if (!$this->isShow()) // Not reload record, handle as postback
-				$postBack = TRUE;
 
-			// Load key from Form
-			if ($CurrentForm->hasValue("x_userlevelid")) {
-				$this->userlevelid->setFormValue($CurrentForm->getValue("x_userlevelid"));
-			}
-			if ($CurrentForm->hasValue("x__tablename")) {
-				$this->_tablename->setFormValue($CurrentForm->getValue("x__tablename"));
-			}
-		} else {
-			$this->CurrentAction = "show"; // Default action is display
-
-			// Load key from QueryString
-			$loadByQuery = FALSE;
+			// Load key values
+			$loaded = TRUE;
 			if (Get("userlevelid") !== NULL) {
 				$this->userlevelid->setQueryStringValue(Get("userlevelid"));
-				$loadByQuery = TRUE;
+				$this->userlevelid->setOldValue($this->userlevelid->QueryStringValue);
+			} elseif (Key(0) !== NULL) {
+				$this->userlevelid->setQueryStringValue(Key(0));
+				$this->userlevelid->setOldValue($this->userlevelid->QueryStringValue);
+			} elseif (Post("userlevelid") !== NULL) {
+				$this->userlevelid->setFormValue(Post("userlevelid"));
+				$this->userlevelid->setOldValue($this->userlevelid->FormValue);
+			} elseif (Route(2) !== NULL) {
+				$this->userlevelid->setQueryStringValue(Route(2));
+				$this->userlevelid->setOldValue($this->userlevelid->QueryStringValue);
 			} else {
-				$this->userlevelid->CurrentValue = NULL;
+				$loaded = FALSE; // Unable to load key
 			}
 			if (Get("_tablename") !== NULL) {
 				$this->_tablename->setQueryStringValue(Get("_tablename"));
-				$loadByQuery = TRUE;
+				$this->_tablename->setOldValue($this->_tablename->QueryStringValue);
+			} elseif (Key(1) !== NULL) {
+				$this->_tablename->setQueryStringValue(Key(1));
+				$this->_tablename->setOldValue($this->_tablename->QueryStringValue);
+			} elseif (Post("_tablename") !== NULL) {
+				$this->_tablename->setFormValue(Post("_tablename"));
+				$this->_tablename->setOldValue($this->_tablename->FormValue);
+			} elseif (Route(3) !== NULL) {
+				$this->_tablename->setQueryStringValue(Route(3));
+				$this->_tablename->setOldValue($this->_tablename->QueryStringValue);
 			} else {
-				$this->_tablename->CurrentValue = NULL;
+				$loaded = FALSE; // Unable to load key
 			}
-		}
 
-		// Load current record
-		$loaded = $this->loadRow();
+			// Load record
+			if ($loaded)
+				$loaded = $this->loadRow();
+			if (!$loaded) {
+				$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
+				$this->terminate();
+				return;
+			}
+			$this->CurrentAction = "update"; // Update record directly
+			$postBack = TRUE;
+		} else {
+			if (Post("action") !== NULL) {
+				$this->CurrentAction = Post("action"); // Get action code
+				if (!$this->isShow()) // Not reload record, handle as postback
+					$postBack = TRUE;
+
+				// Load key from Form
+				if ($CurrentForm->hasValue("x_userlevelid")) {
+					$this->userlevelid->setFormValue($CurrentForm->getValue("x_userlevelid"));
+				}
+				if ($CurrentForm->hasValue("x__tablename")) {
+					$this->_tablename->setFormValue($CurrentForm->getValue("x__tablename"));
+				}
+			} else {
+				$this->CurrentAction = "show"; // Default action is display
+
+				// Load key from QueryString / Route
+				$loadByQuery = FALSE;
+				if (Get("userlevelid") !== NULL) {
+					$this->userlevelid->setQueryStringValue(Get("userlevelid"));
+					$loadByQuery = TRUE;
+				} elseif (Route(2) !== NULL) {
+					$this->userlevelid->setQueryStringValue(Route(2));
+					$loadByQuery = TRUE;
+				} else {
+					$this->userlevelid->CurrentValue = NULL;
+				}
+				if (Get("_tablename") !== NULL) {
+					$this->_tablename->setQueryStringValue(Get("_tablename"));
+					$loadByQuery = TRUE;
+				} elseif (Route(3) !== NULL) {
+					$this->_tablename->setQueryStringValue(Route(3));
+					$loadByQuery = TRUE;
+				} else {
+					$this->_tablename->CurrentValue = NULL;
+				}
+			}
+
+			// Load current record
+			$loaded = $this->loadRow();
+		}
 
 		// Process form if post back
 		if ($postBack) {
@@ -830,7 +880,8 @@ class t203_userlevelpermissions_edit extends t203_userlevelpermissions
 			else
 				$this->userlevelid->setFormValue($val);
 		}
-		$this->userlevelid->setOldValue($CurrentForm->getValue("o_userlevelid"));
+		if ($CurrentForm->hasValue("o_userlevelid"))
+			$this->userlevelid->setOldValue($CurrentForm->getValue("o_userlevelid"));
 
 		// Check field name 'tablename' first before field var 'x__tablename'
 		$val = $CurrentForm->hasValue("tablename") ? $CurrentForm->getValue("tablename") : $CurrentForm->getValue("x__tablename");
@@ -840,7 +891,8 @@ class t203_userlevelpermissions_edit extends t203_userlevelpermissions
 			else
 				$this->_tablename->setFormValue($val);
 		}
-		$this->_tablename->setOldValue($CurrentForm->getValue("o__tablename"));
+		if ($CurrentForm->hasValue("o__tablename"))
+			$this->_tablename->setOldValue($CurrentForm->getValue("o__tablename"));
 
 		// Check field name 'permission' first before field var 'x_permission'
 		$val = $CurrentForm->hasValue("permission") ? $CurrentForm->getValue("permission") : $CurrentForm->getValue("x_permission");

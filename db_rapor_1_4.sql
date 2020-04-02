@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Mar 21, 2020 at 10:05 AM
+-- Generation Time: Apr 02, 2020 at 02:12 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -155,22 +155,30 @@ CREATE TABLE `t203_userlevelpermissions` (
 
 INSERT INTO `t203_userlevelpermissions` (`userlevelid`, `tablename`, `permission`) VALUES
 (-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c201_home.php', 72),
+(-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c202_home.php', 72),
 (-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t001_sekolah', 0),
+(-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t002_tahunajaran', 0),
+(-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t101_session', 0),
 (-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t201_employees', 0),
 (-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t202_userlevels', 0),
 (-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t203_userlevelpermissions', 0),
 (-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t204_audittrail', 0),
+(-2, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t205_default', 0),
 (-2, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t001_sekolah', 0),
 (-2, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t201_employees', 0),
 (-2, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t202_userlevels', 0),
 (-2, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t203_userlevelpermissions', 0),
 (-2, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t204_audittrail', 0),
 (0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c201_home.php', 0),
+(0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c202_home.php', 0),
 (0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t001_sekolah', 0),
+(0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t002_tahunajaran', 0),
+(0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t101_session', 0),
 (0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t201_employees', 0),
 (0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t202_userlevels', 0),
 (0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t203_userlevelpermissions', 0),
 (0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t204_audittrail', 0),
+(0, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t205_default', 0),
 (0, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t001_sekolah', 0),
 (0, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t201_employees', 0),
 (0, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t202_userlevels', 0),
@@ -326,7 +334,47 @@ INSERT INTO `t204_audittrail` (`id`, `datetime`, `script`, `user`, `action`, `ta
 (123, '2020-03-21 08:39:33', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
 (124, '2020-03-21 08:39:38', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
 (125, '2020-03-21 09:00:48', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
-(126, '2020-03-21 09:00:59', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
+(126, '2020-03-21 09:00:59', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(127, '2020-03-23 06:53:19', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(128, '2020-03-23 07:40:05', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(129, '2020-03-23 07:40:09', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(130, '2020-03-24 04:18:05', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(131, '2020-03-24 04:18:13', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(132, '2020-03-24 04:22:11', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(133, '2020-03-24 04:22:16', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(134, '2020-03-24 04:24:01', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(135, '2020-03-24 04:24:04', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(136, '2020-03-24 04:27:02', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(137, '2020-03-24 04:27:05', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(138, '2020-04-02 07:29:55', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(139, '2020-04-02 07:30:33', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(140, '2020-04-02 07:30:38', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(141, '2020-04-02 11:52:43', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(142, '2020-04-02 11:52:56', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(143, '2020-04-02 11:54:41', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(144, '2020-04-02 11:54:56', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `t205_default`
+--
+
+CREATE TABLE `t205_default` (
+  `id` int(11) NOT NULL,
+  `User_ID` int(11) NOT NULL,
+  `Field_ID` varchar(25) NOT NULL,
+  `Keterangan` varchar(255) NOT NULL,
+  `Nilai` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t205_default`
+--
+
+INSERT INTO `t205_default` (`id`, `User_ID`, `Field_ID`, `Keterangan`, `Nilai`) VALUES
+(1, 1, 'sekolah_id', 'Sekolah', '1'),
+(2, 1, 'tahunajaran_id', 'Tahun Ajaran', '1');
 
 --
 -- Indexes for dumped tables
@@ -376,6 +424,12 @@ ALTER TABLE `t204_audittrail`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `t205_default`
+--
+ALTER TABLE `t205_default`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -407,7 +461,13 @@ ALTER TABLE `t201_employees`
 -- AUTO_INCREMENT for table `t204_audittrail`
 --
 ALTER TABLE `t204_audittrail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+
+--
+-- AUTO_INCREMENT for table `t205_default`
+--
+ALTER TABLE `t205_default`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -323,7 +323,9 @@ function CanTrackCookie() {
  * @return string
  */
 function CreateConsentCookie() {
-	return PROJECT_NAME . '[' . Config("CONSENT_COOKIE_NAME") . ']=1';
+	$date = new \DateTime;
+	$date->setTimestamp(Config("COOKIE_EXPIRY_TIME"));
+	return PROJECT_NAME . "[" . Config("CONSENT_COOKIE_NAME") . "]=1;path=/;expires=" . $date->format(\DateTime::COOKIE);
 }
 
 /**
@@ -2073,7 +2075,7 @@ class Breadcrumb
 	public function __construct()
 	{
 		global $Language;
-		$this->Links[] = ["home", "HomePage", "c201_home.php", "ew-home", "", FALSE]; // Home
+		$this->Links[] = ["home", "HomePage", "c202_home.php", "ew-home", "", FALSE]; // Home
 	}
 
 	// Check if an item exists
@@ -7758,7 +7760,6 @@ class AdvancedSecurity
 // Valid API request
 function ValidApiRequest() {
 	global $Security, $RequestSecurity, $UserProfile;
-	$validRequest = FALSE;
 	if (IsApi()) {
 
 		// User profile
@@ -7775,18 +7776,20 @@ function ValidApiRequest() {
 				if (!isset($Security))
 					$Security = new AdvancedSecurity();
 			}
+			return $validRequest;
+		}
 
 		// Login user for API request
-		} elseif (is_array($RequestSecurity) && @$RequestSecurity["username"] != "") {
+		if (is_array($RequestSecurity) && @$RequestSecurity["username"] != "") {
 			if (session_status() !== PHP_SESSION_ACTIVE)
 				session_start(); // Init session data
 			if (!isset($Security))
 				$Security = new AdvancedSecurity();
 			$Security->loginUser(@$RequestSecurity["username"], @$RequestSecurity["userid"], @$RequestSecurity["parentuserid"], @$RequestSecurity["userlevelid"]);
-			$validRequest = TRUE;
+			return TRUE;
 		}
 	}
-	return $validRequest;
+	return FALSE;
 }
 
 // Connection/Query error handler
@@ -8069,12 +8072,8 @@ function ConnectDb($info) {
 	}
 
 	//$conn->raiseErrorFn = "";
-	// Let ADOdb outputs connection errors by echo(), set output function after connection
-
-	if (!isset($GLOBALS["ADODB_OUTP"]))
-		$GLOBALS["ADODB_OUTP"] = PROJECT_NAMESPACE . "SetDebugMessage";
-
 	// Database connected event
+
 	Database_Connected($conn);
 	$GLOBALS["CONNECTIONS"][$dbid] = $conn;
 	return $conn;
@@ -10824,12 +10823,6 @@ function SetDebugMessage($v, $newline = TRUE) {
 	});
 	$v = implode("; ", $ar);
 	$DebugMessage .= "<p><samp>" . (isset($DebugTimer) ? number_format($DebugTimer->getElapsedTime(), 6) . ": " : "") . $v . "</samp></p>";
-}
-
-// Show debug message
-function ShowDebugMessage() {
-	global $DebugMessage;
-	return Config("DEBUG") ? $DebugMessage : "";
 }
 
 // Save global debug message

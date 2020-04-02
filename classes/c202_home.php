@@ -2,13 +2,68 @@
 namespace PHPMaker2020\p_rapor_1_4;
 
 /**
- * Class for index
+ * Page class
  */
-class index
+class c202_home
 {
+
+	// Page ID
+	public $PageID = "custom";
 
 	// Project ID
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
+
+	// Table name
+	public $TableName = 'c202_home.php';
+
+	// Page object name
+	public $PageObjName = "c202_home";
+
+	// CSS
+	public $ReportTableClass = "";
+	public $ReportTableStyle = "";
+
+	// Page headings
+	public $Heading = "";
+	public $Subheading = "";
+
+	// Token
+	public $Token = "";
+	public $TokenTimeout = 0;
+	public $CheckToken;
+
+	// Page heading
+	public function pageHeading()
+	{
+		global $Language;
+		if ($this->Heading != "")
+			return $this->Heading;
+		if (method_exists($this, "tableCaption"))
+			return $this->tableCaption();
+		return "";
+	}
+
+	// Page subheading
+	public function pageSubheading()
+	{
+		global $Language;
+		if ($this->Subheading != "")
+			return $this->Subheading;
+		return "";
+	}
+
+	// Page name
+	public function pageName()
+	{
+		return CurrentPageName();
+	}
+
+	// Page URL
+	public function pageUrl()
+	{
+		$url = CurrentPageName() . "?";
+		return $url;
+	}
 
 	// Messages
 	private $_message = "";
@@ -208,44 +263,37 @@ class index
 		return $ar;
 	}
 
-	// Token
-	public $Token = "";
-	public $TokenTimeout = 0;
-	public $CheckToken;
+	// Valid Post
+	protected function validPost()
+	{
+		if (!$this->CheckToken || !IsPost() || IsApi())
+			return TRUE;
+		if (Post(Config("TOKEN_NAME")) === NULL)
+			return FALSE;
+		$fn = Config("CHECK_TOKEN_FUNC");
+		if (is_callable($fn))
+			return $fn(Post(Config("TOKEN_NAME")), $this->TokenTimeout);
+		return FALSE;
+	}
+
+	// Create Token
+	public function createToken()
+	{
+		global $CurrentToken;
+		$fn = Config("CREATE_TOKEN_FUNC"); // Always create token, required by API file/lookup request
+		if ($this->Token == "" && is_callable($fn)) // Create token
+			$this->Token = $fn();
+		$CurrentToken = $this->Token; // Save to global variable
+	}
 
 	// Constructor
-	public function __construct() {
+	public function __construct()
+	{
+		global $Language, $DashboardReport;
+		global $UserTable;
+
+		// Check token
 		$this->CheckToken = Config("CHECK_TOKEN");
-	}
-
-	// Terminate page
-	public function terminate($url = "")
-	{
-
-		// Page Unload event
-		$this->Page_Unload();
-
-		// Global Page Unloaded event (in userfn*.php)
-		Page_Unloaded();
-
-		// Page Redirecting event
-		$this->Page_Redirecting($url);
-
-		// Go to URL if specified
-		if ($url != "") {
-			SaveDebugMessage();
-			AddHeader("Location", $url);
-		}
-		exit();
-	}
-
-	//
-	// Page run
-	//
-
-	public function run()
-	{
-		global $Language, $UserProfile, $Security, $Breadcrumb;
 
 		// Initialize
 		$GLOBALS["Page"] = &$this;
@@ -255,88 +303,138 @@ class index
 		if (!isset($Language))
 			$Language = new Language();
 
+		// Page ID (for backward compatibility only)
+		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
+			define(PROJECT_NAMESPACE . "PAGE_ID", 'custom');
+
+		// Table name (for backward compatibility only)
+		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 'c202_home.php');
+
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
 			$GLOBALS["DebugTimer"] = new Timer();
 
+		// Debug message
+		LoadDebugMessage();
+
+		// Open connection
+		if (!isset($GLOBALS["Conn"]))
+			$GLOBALS["Conn"] = GetConnection();
+
+		// User table object (t201_employees)
+		$UserTable = $UserTable ?: new t201_employees();
+	}
+
+	// Terminate page
+	public function terminate($url = "")
+	{
+		global $ExportFileName, $TempImages, $DashboardReport;
+
+		// Global Page Unloaded event (in userfn*.php)
+		Page_Unloaded();
+
+		// Export
+		// Close connection
+
+		CloseConnections();
+
+		// Return for API
+		if (IsApi()) {
+			$res = $url === TRUE;
+			if (!$res) // Show error
+				WriteJson(array_merge(["success" => FALSE], $this->getMessages()));
+			return;
+		}
+
+		// Go to URL if specified
+		if ($url != "") {
+			if (!Config("DEBUG") && ob_get_length())
+				ob_end_clean();
+			SaveDebugMessage();
+			AddHeader("Location", $url);
+		}
+		exit();
+	}
+
+	// Set up API request
+	public function setupApiRequest()
+	{
+		global $Security;
+
+		// Check security for API request
+		If (ValidApiRequest()) {
+			if ($Security->isLoggedIn()) $Security->TablePermission_Loading();
+			$Security->loadCurrentUserLevel(Config("PROJECT_ID") . $this->TableName);
+			if ($Security->isLoggedIn()) $Security->TablePermission_Loaded();
+			$Security->UserID_Loading();
+			$Security->loadUserID();
+			$Security->UserID_Loaded();
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	//
+	// Page run
+	//
+
+	public function run()
+	{
+		global $ExportType, $CustomExportType, $ExportFileName, $UserProfile, $Language, $Security, $CurrentForm;
+
 		// User profile
 		$UserProfile = new UserProfile();
 
-		// Security object
-		$Security = new AdvancedSecurity();
-		if (!$Security->isLoggedIn())
-			$Security->autoLogin();
-		$Security->loadUserLevel(); // Load User Level
+		// Security
+		if (!$this->setupApiRequest()) {
+			$Security = new AdvancedSecurity();
+			if (!$Security->isLoggedIn())
+				$Security->autoLogin();
+			if ($Security->isLoggedIn())
+				$Security->TablePermission_Loading();
+			$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName);
+			if ($Security->isLoggedIn())
+				$Security->TablePermission_Loaded();
+			if (!$Security->canReport()) {
+				$Security->saveLastUrl();
+				$this->setFailureMessage(DeniedMessage()); // Set no permission
+				$this->terminate(GetUrl("index.php"));
+				return;
+			}
+			if ($Security->isLoggedIn()) {
+				$Security->UserID_Loading();
+				$Security->loadUserID();
+				$Security->UserID_Loaded();
+			}
+		}
+		if (Get("export") !== NULL)
+			$ExportType = Get("export"); // Get export parameter, used in header
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
 
-		// Page Load event
-		$this->Page_Load();
-
-		// Breadcrumb
-		$Breadcrumb = new Breadcrumb();
-
-		// If session expired, show session expired message
-		if (Get("expired") == "1")
-			$this->setFailureMessage($Language->phrase("SessionExpired"));
-		if (!$Security->isLoggedIn())
-			$Security->autoLogin();
-		$Security->loadUserLevel(); // Load User Level
-		if ($Security->allowList(CurrentProjectID() . 'c202_home.php'))
-			$this->terminate("c202_home.php"); // Exit and go to default page
-		if ($Security->allowList(CurrentProjectID() . 'c201_home.php'))
-			$this->terminate("c201_home.php");
-		if ($Security->allowList(CurrentProjectID() . 't001_sekolah'))
-			$this->terminate("t001_sekolahlist.php");
-		if ($Security->allowList(CurrentProjectID() . 't002_tahunajaran'))
-			$this->terminate("t002_tahunajaranlist.php");
-		if ($Security->allowList(CurrentProjectID() . 't101_session'))
-			$this->terminate("t101_sessionlist.php");
-		if ($Security->allowList(CurrentProjectID() . 't201_employees'))
-			$this->terminate("t201_employeeslist.php");
-		if ($Security->allowList(CurrentProjectID() . 't202_userlevels'))
-			$this->terminate("t202_userlevelslist.php");
-		if ($Security->allowList(CurrentProjectID() . 't203_userlevelpermissions'))
-			$this->terminate("t203_userlevelpermissionslist.php");
-		if ($Security->allowList(CurrentProjectID() . 't204_audittrail'))
-			$this->terminate("t204_audittraillist.php");
-		if ($Security->allowList(CurrentProjectID() . 't205_default'))
-			$this->terminate("t205_defaultlist.php");
-		if ($Security->isLoggedIn()) {
-			$this->setFailureMessage(DeniedMessage() . "<br><br><a href=\"logout.php\">" . $Language->phrase("BackToLogin") . "</a>");
-		} else {
-			$this->terminate("login.php"); // Exit and go to login page
+		// Check token
+		if (!$this->validPost()) {
+			Write($Language->phrase("InvalidPostRequest"));
+			$this->terminate();
 		}
+
+		// Create Token
+		$this->createToken();
+
+		// Set up Breadcrumb
+		$this->setupBreadcrumb();
 	}
 
-	// Page Load event
-	function Page_Load() {
-
-		//echo "Page Load";
+	// Set up Breadcrumb
+	protected function setupBreadcrumb()
+	{
+		global $Breadcrumb, $Language;
+		$Breadcrumb = new Breadcrumb();
+		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
+		$Breadcrumb->add("custom", "c202_home", $url, "", "c202_home", TRUE);
+		$this->Heading = $Language->TablePhrase("c202_home", "TblCaption"); 
 	}
-
-	// Page Unload event
-	function Page_Unload() {
-
-		//echo "Page Unload";
-	}
-
-	// Page Redirecting event
-	function Page_Redirecting(&$url) {
-
-		// Example:
-		//$url = "your URL";
-
-	}
-
-	// Message Showing event
-	// $type = ''|'success'|'failure'
-	function Message_Showing(&$msg, $type) {
-
-		// Example:
-		//if ($type == 'success') $msg = "your success message";
-
-	}
-}
+} // End class
 ?>

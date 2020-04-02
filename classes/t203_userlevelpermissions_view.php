@@ -751,13 +751,13 @@ class t203_userlevelpermissions_view extends t203_userlevelpermissions
 			if (Get("userlevelid") !== NULL) {
 				$this->userlevelid->setQueryStringValue(Get("userlevelid"));
 				$this->RecKey["userlevelid"] = $this->userlevelid->QueryStringValue;
-			} elseif (IsApi() && Key(0) != NULL) {
+			} elseif (IsApi() && Key(0) !== NULL) {
 				$this->userlevelid->setQueryStringValue(Key(0));
 				$this->RecKey["userlevelid"] = $this->userlevelid->QueryStringValue;
 			} elseif (Post("userlevelid") !== NULL) {
 				$this->userlevelid->setFormValue(Post("userlevelid"));
 				$this->RecKey["userlevelid"] = $this->userlevelid->FormValue;
-			} elseif (IsApi() && Route(2) != NULL) {
+			} elseif (IsApi() && Route(2) !== NULL) {
 				$this->userlevelid->setFormValue(Route(2));
 				$this->RecKey["userlevelid"] = $this->userlevelid->FormValue;
 			} else {
@@ -766,13 +766,13 @@ class t203_userlevelpermissions_view extends t203_userlevelpermissions
 			if (Get("_tablename") !== NULL) {
 				$this->_tablename->setQueryStringValue(Get("_tablename"));
 				$this->RecKey["_tablename"] = $this->_tablename->QueryStringValue;
-			} elseif (IsApi() && Key(1) != NULL) {
+			} elseif (IsApi() && Key(1) !== NULL) {
 				$this->_tablename->setQueryStringValue(Key(1));
 				$this->RecKey["_tablename"] = $this->_tablename->QueryStringValue;
 			} elseif (Post("_tablename") !== NULL) {
 				$this->_tablename->setFormValue(Post("_tablename"));
 				$this->RecKey["_tablename"] = $this->_tablename->FormValue;
-			} elseif (IsApi() && Route(3) != NULL) {
+			} elseif (IsApi() && Route(3) !== NULL) {
 				$this->_tablename->setFormValue(Route(3));
 				$this->RecKey["_tablename"] = $this->_tablename->FormValue;
 			} else {

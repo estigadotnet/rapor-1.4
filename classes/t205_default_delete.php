@@ -4,20 +4,20 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t202_userlevels_edit extends t202_userlevels
+class t205_default_delete extends t205_default
 {
 
 	// Page ID
-	public $PageID = "edit";
+	public $PageID = "delete";
 
 	// Project ID
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't202_userlevels';
+	public $TableName = 't205_default';
 
 	// Page object name
-	public $PageObjName = "t202_userlevels_edit";
+	public $PageObjName = "t205_default_delete";
 
 	// Page headings
 	public $Heading = "";
@@ -341,10 +341,10 @@ class t202_userlevels_edit extends t202_userlevels
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t202_userlevels)
-		if (!isset($GLOBALS["t202_userlevels"]) || get_class($GLOBALS["t202_userlevels"]) == PROJECT_NAMESPACE . "t202_userlevels") {
-			$GLOBALS["t202_userlevels"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t202_userlevels"];
+		// Table object (t205_default)
+		if (!isset($GLOBALS["t205_default"]) || get_class($GLOBALS["t205_default"]) == PROJECT_NAMESPACE . "t205_default") {
+			$GLOBALS["t205_default"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t205_default"];
 		}
 
 		// Table object (t201_employees)
@@ -353,11 +353,11 @@ class t202_userlevels_edit extends t202_userlevels
 
 		// Page ID (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
-			define(PROJECT_NAMESPACE . "PAGE_ID", 'edit');
+			define(PROJECT_NAMESPACE . "PAGE_ID", 'delete');
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't202_userlevels');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't205_default');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -386,14 +386,14 @@ class t202_userlevels_edit extends t202_userlevels
 		Page_Unloaded();
 
 		// Export
-		global $t202_userlevels;
+		global $t205_default;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t202_userlevels);
+				$doc = new $class($t205_default);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -421,24 +421,8 @@ class t202_userlevels_edit extends t202_userlevels
 		if ($url != "") {
 			if (!Config("DEBUG") && ob_get_length())
 				ob_end_clean();
-
-			// Handle modal response
-			if ($this->IsModal) { // Show as modal
-				$row = ["url" => $url, "modal" => "1"];
-				$pageName = GetPageName($url);
-				if ($pageName != $this->getListUrl()) { // Not List page
-					$row["caption"] = $this->getModalCaption($pageName);
-					if ($pageName == "t202_userlevelsview.php")
-						$row["view"] = "1";
-				} else { // List page should not be shown as modal => error
-					$row["error"] = $this->getFailureMessage();
-					$this->clearFailureMessage();
-				}
-				WriteJson($row);
-			} else {
-				SaveDebugMessage();
-				AddHeader("Location", $url);
-			}
+			SaveDebugMessage();
+			AddHeader("Location", $url);
 		}
 		exit();
 	}
@@ -513,7 +497,7 @@ class t202_userlevels_edit extends t202_userlevels
 	{
 		$key = "";
 		if (is_array($ar)) {
-			$key .= @$ar['userlevelid'];
+			$key .= @$ar['id'];
 		}
 		return $key;
 	}
@@ -525,79 +509,8 @@ class t202_userlevels_edit extends t202_userlevels
 	 */
 	protected function hideFieldsForAddEdit()
 	{
-	}
-
-	// Lookup data
-	public function lookup()
-	{
-		global $Language, $Security;
-		if (!isset($Language))
-			$Language = new Language(Config("LANGUAGE_FOLDER"), Post("language", ""));
-
-		// Set up API request
-		if (!$this->setupApiRequest())
-			return FALSE;
-
-		// Get lookup object
-		$fieldName = Post("field");
-		if (!array_key_exists($fieldName, $this->fields))
-			return FALSE;
-		$lookupField = $this->fields[$fieldName];
-		$lookup = $lookupField->Lookup;
-		if ($lookup === NULL)
-			return FALSE;
-		$tbl = $lookup->getTable();
-		if (!$Security->allowLookup(Config("PROJECT_ID") . $tbl->TableName)) // Lookup permission
-			return FALSE;
-
-		// Get lookup parameters
-		$lookupType = Post("ajax", "unknown");
-		$pageSize = -1;
-		$offset = -1;
-		$searchValue = "";
-		if (SameText($lookupType, "modal")) {
-			$searchValue = Post("sv", "");
-			$pageSize = Post("recperpage", 10);
-			$offset = Post("start", 0);
-		} elseif (SameText($lookupType, "autosuggest")) {
-			$searchValue = Get("q", "");
-			$pageSize = Param("n", -1);
-			$pageSize = is_numeric($pageSize) ? (int)$pageSize : -1;
-			if ($pageSize <= 0)
-				$pageSize = Config("AUTO_SUGGEST_MAX_ENTRIES");
-			$start = Param("start", -1);
-			$start = is_numeric($start) ? (int)$start : -1;
-			$page = Param("page", -1);
-			$page = is_numeric($page) ? (int)$page : -1;
-			$offset = $start >= 0 ? $start : ($page > 0 && $pageSize > 0 ? ($page - 1) * $pageSize : 0);
-		}
-		$userSelect = Decrypt(Post("s", ""));
-		$userFilter = Decrypt(Post("f", ""));
-		$userOrderBy = Decrypt(Post("o", ""));
-		$keys = Post("keys");
-		$lookup->LookupType = $lookupType; // Lookup type
-		if ($keys !== NULL) { // Selected records from modal
-			if (is_array($keys))
-				$keys = implode(Config("MULTIPLE_OPTION_SEPARATOR"), $keys);
-			$lookup->FilterFields = []; // Skip parent fields if any
-			$lookup->FilterValues[] = $keys; // Lookup values
-			$pageSize = -1; // Show all records
-		} else { // Lookup values
-			$lookup->FilterValues[] = Post("v0", Post("lookupValue", ""));
-		}
-		$cnt = is_array($lookup->FilterFields) ? count($lookup->FilterFields) : 0;
-		for ($i = 1; $i <= $cnt; $i++)
-			$lookup->FilterValues[] = Post("v" . $i, "");
-		$lookup->SearchValue = $searchValue;
-		$lookup->PageSize = $pageSize;
-		$lookup->Offset = $offset;
-		if ($userSelect != "")
-			$lookup->UserSelect = $userSelect;
-		if ($userFilter != "")
-			$lookup->UserFilter = $userFilter;
-		if ($userOrderBy != "")
-			$lookup->UserOrderBy = $userOrderBy;
-		$lookup->toJson($this); // Use settings from current page
+		if ($this->isAdd() || $this->isCopy() || $this->isGridAdd())
+			$this->id->Visible = FALSE;
 	}
 
 	// Set up API request
@@ -617,11 +530,14 @@ class t202_userlevels_edit extends t202_userlevels
 		}
 		return FALSE;
 	}
-	public $FormClassName = "ew-horizontal ew-form ew-edit-form";
-	public $IsModal = FALSE;
-	public $IsMobileOrModal = FALSE;
-	public $DbMasterFilter;
-	public $DbDetailFilter;
+	public $DbMasterFilter = "";
+	public $DbDetailFilter = "";
+	public $StartRecord;
+	public $TotalRecords = 0;
+	public $RecordCount;
+	public $RecKeys = [];
+	public $StartRowCount = 1;
+	public $RowCount = 0;
 
 	//
 	// Page run
@@ -629,11 +545,7 @@ class t202_userlevels_edit extends t202_userlevels
 
 	public function run()
 	{
-		global $ExportType, $CustomExportType, $ExportFileName, $UserProfile, $Language, $Security, $CurrentForm,
-			$FormError, $SkipHeaderFooter;
-
-		// Is modal
-		$this->IsModal = (Param("modal") == "1");
+		global $ExportType, $CustomExportType, $ExportFileName, $UserProfile, $Language, $Security, $CurrentForm;
 
 		// User profile
 		$UserProfile = new UserProfile();
@@ -648,11 +560,11 @@ class t202_userlevels_edit extends t202_userlevels
 			$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName);
 			if ($Security->isLoggedIn())
 				$Security->TablePermission_Loaded();
-			if (!$Security->canEdit()) {
+			if (!$Security->canDelete()) {
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t202_userlevelslist.php"));
+					$this->terminate(GetUrl("t205_defaultlist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -663,12 +575,12 @@ class t202_userlevels_edit extends t202_userlevels
 				$Security->UserID_Loaded();
 			}
 		}
-
-		// Create form object
-		$CurrentForm = new HttpForm();
 		$this->CurrentAction = Param("action"); // Set up current action
-		$this->userlevelid->setVisibility();
-		$this->userlevelname->setVisibility();
+		$this->id->Visible = FALSE;
+		$this->User_ID->setVisibility();
+		$this->Keterangan->setVisibility();
+		$this->Nilai->setVisibility();
+		$this->Field_ID->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -690,186 +602,94 @@ class t202_userlevels_edit extends t202_userlevels
 		$this->createToken();
 
 		// Set up lookup cache
+		$this->setupLookupOptions($this->User_ID);
+
 		// Check permission
-
-		if (!$Security->canEdit()) {
+		if (!$Security->canDelete()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t202_userlevelslist.php");
+			$this->terminate("t205_defaultlist.php");
 			return;
-		}
-
-		// Check modal
-		if ($this->IsModal)
-			$SkipHeaderFooter = TRUE;
-		$this->IsMobileOrModal = IsMobile() || $this->IsModal;
-		$this->FormClassName = "ew-form ew-edit-form ew-horizontal";
-		$loaded = FALSE;
-		$postBack = FALSE;
-
-		// Set up current action and primary key
-		if (IsApi()) {
-
-			// Load key values
-			$loaded = TRUE;
-			if (Get("userlevelid") !== NULL) {
-				$this->userlevelid->setQueryStringValue(Get("userlevelid"));
-				$this->userlevelid->setOldValue($this->userlevelid->QueryStringValue);
-			} elseif (Key(0) !== NULL) {
-				$this->userlevelid->setQueryStringValue(Key(0));
-				$this->userlevelid->setOldValue($this->userlevelid->QueryStringValue);
-			} elseif (Post("userlevelid") !== NULL) {
-				$this->userlevelid->setFormValue(Post("userlevelid"));
-				$this->userlevelid->setOldValue($this->userlevelid->FormValue);
-			} elseif (Route(2) !== NULL) {
-				$this->userlevelid->setQueryStringValue(Route(2));
-				$this->userlevelid->setOldValue($this->userlevelid->QueryStringValue);
-			} else {
-				$loaded = FALSE; // Unable to load key
-			}
-
-			// Load record
-			if ($loaded)
-				$loaded = $this->loadRow();
-			if (!$loaded) {
-				$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
-				$this->terminate();
-				return;
-			}
-			$this->CurrentAction = "update"; // Update record directly
-			$postBack = TRUE;
-		} else {
-			if (Post("action") !== NULL) {
-				$this->CurrentAction = Post("action"); // Get action code
-				if (!$this->isShow()) // Not reload record, handle as postback
-					$postBack = TRUE;
-
-				// Load key from Form
-				if ($CurrentForm->hasValue("x_userlevelid")) {
-					$this->userlevelid->setFormValue($CurrentForm->getValue("x_userlevelid"));
-				}
-			} else {
-				$this->CurrentAction = "show"; // Default action is display
-
-				// Load key from QueryString / Route
-				$loadByQuery = FALSE;
-				if (Get("userlevelid") !== NULL) {
-					$this->userlevelid->setQueryStringValue(Get("userlevelid"));
-					$loadByQuery = TRUE;
-				} elseif (Route(2) !== NULL) {
-					$this->userlevelid->setQueryStringValue(Route(2));
-					$loadByQuery = TRUE;
-				} else {
-					$this->userlevelid->CurrentValue = NULL;
-				}
-			}
-
-			// Load current record
-			$loaded = $this->loadRow();
-		}
-
-		// Process form if post back
-		if ($postBack) {
-			$this->loadFormValues(); // Get form values
-		}
-
-		// Validate form if post back
-		if ($postBack) {
-			if (!$this->validateForm()) {
-				$this->setFailureMessage($FormError);
-				$this->EventCancelled = TRUE; // Event cancelled
-				$this->restoreFormValues();
-				if (IsApi()) {
-					$this->terminate();
-					return;
-				} else {
-					$this->CurrentAction = ""; // Form error, reset action
-				}
-			}
-		}
-
-		// Perform current action
-		switch ($this->CurrentAction) {
-			case "show": // Get a record to display
-				if (!$loaded) { // Load record based on key
-					if ($this->getFailureMessage() == "")
-						$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
-					$this->terminate("t202_userlevelslist.php"); // No matching record, return to list
-				}
-				break;
-			case "update": // Update
-				$returnUrl = $this->getReturnUrl();
-				if (GetPageName($returnUrl) == "t202_userlevelslist.php")
-					$returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
-				$this->SendEmail = TRUE; // Send email on update success
-				if ($this->editRow()) { // Update record based on key
-					if ($this->getSuccessMessage() == "")
-						$this->setSuccessMessage($Language->phrase("UpdateSuccess")); // Update success
-					if (IsApi()) {
-						$this->terminate(TRUE);
-						return;
-					} else {
-						$this->terminate($returnUrl); // Return to caller
-					}
-				} elseif (IsApi()) { // API request, return
-					$this->terminate();
-					return;
-				} elseif ($this->getFailureMessage() == $Language->phrase("NoRecord")) {
-					$this->terminate($returnUrl); // Return to caller
-				} else {
-					$this->EventCancelled = TRUE; // Event cancelled
-					$this->restoreFormValues(); // Restore form values if update failed
-				}
 		}
 
 		// Set up Breadcrumb
 		$this->setupBreadcrumb();
 
-		// Render the record
-		$this->RowType = ROWTYPE_EDIT; // Render as Edit
-		$this->resetAttributes();
-		$this->renderRow();
-	}
-
-	// Get upload files
-	protected function getUploadFiles()
-	{
-		global $CurrentForm, $Language;
-	}
-
-	// Load form values
-	protected function loadFormValues()
-	{
-
-		// Load from form
-		global $CurrentForm;
-
-		// Check field name 'userlevelid' first before field var 'x_userlevelid'
-		$val = $CurrentForm->hasValue("userlevelid") ? $CurrentForm->getValue("userlevelid") : $CurrentForm->getValue("x_userlevelid");
-		if (!$this->userlevelid->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->userlevelid->Visible = FALSE; // Disable update for API request
-			else
-				$this->userlevelid->setFormValue($val);
+		// Load key parameters
+		$this->RecKeys = $this->getRecordKeys(); // Load record keys
+		$filter = $this->getFilterFromRecordKeys();
+		if ($filter == "") {
+			$this->terminate("t205_defaultlist.php"); // Prevent SQL injection, return to list
+			return;
 		}
-		if ($CurrentForm->hasValue("o_userlevelid"))
-			$this->userlevelid->setOldValue($CurrentForm->getValue("o_userlevelid"));
 
-		// Check field name 'userlevelname' first before field var 'x_userlevelname'
-		$val = $CurrentForm->hasValue("userlevelname") ? $CurrentForm->getValue("userlevelname") : $CurrentForm->getValue("x_userlevelname");
-		if (!$this->userlevelname->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->userlevelname->Visible = FALSE; // Disable update for API request
-			else
-				$this->userlevelname->setFormValue($val);
+		// Set up filter (WHERE Clause)
+		$this->CurrentFilter = $filter;
+
+		// Get action
+		if (IsApi()) {
+			$this->CurrentAction = "delete"; // Delete record directly
+		} elseif (Post("action") !== NULL) {
+			$this->CurrentAction = Post("action");
+		} elseif (Get("action") == "1") {
+			$this->CurrentAction = "delete"; // Delete record directly
+		} else {
+			$this->CurrentAction = "show"; // Display record
+		}
+		if ($this->isDelete()) {
+			$this->SendEmail = TRUE; // Send email on delete success
+			if ($this->deleteRows()) { // Delete rows
+				if ($this->getSuccessMessage() == "")
+					$this->setSuccessMessage($Language->phrase("DeleteSuccess")); // Set up success message
+				if (IsApi()) {
+					$this->terminate(TRUE);
+					return;
+				} else {
+					$this->terminate($this->getReturnUrl()); // Return to caller
+				}
+			} else { // Delete failed
+				if (IsApi()) {
+					$this->terminate();
+					return;
+				}
+				$this->CurrentAction = "show"; // Display record
+			}
+		}
+		if ($this->isShow()) { // Load records for display
+			if ($this->Recordset = $this->loadRecordset())
+				$this->TotalRecords = $this->Recordset->RecordCount(); // Get record count
+			if ($this->TotalRecords <= 0) { // No record found, exit
+				if ($this->Recordset)
+					$this->Recordset->close();
+				$this->terminate("t205_defaultlist.php"); // Return to list
+			}
 		}
 	}
 
-	// Restore form values
-	public function restoreFormValues()
+	// Load recordset
+	public function loadRecordset($offset = -1, $rowcnt = -1)
 	{
-		global $CurrentForm;
-		$this->userlevelid->CurrentValue = $this->userlevelid->FormValue;
-		$this->userlevelname->CurrentValue = $this->userlevelname->FormValue;
+
+		// Load List page SQL
+		$sql = $this->getListSql();
+		$conn = $this->getConnection();
+
+		// Load recordset
+		$dbtype = GetConnectionType($this->Dbid);
+		if ($this->UseSelectLimit) {
+			$conn->raiseErrorFn = Config("ERROR_FUNC");
+			if ($dbtype == "MSSQL") {
+				$rs = $conn->selectLimit($sql, $rowcnt, $offset, ["_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())]);
+			} else {
+				$rs = $conn->selectLimit($sql, $rowcnt, $offset);
+			}
+			$conn->raiseErrorFn = "";
+		} else {
+			$rs = LoadRecordset($sql, $conn);
+		}
+
+		// Call Recordset Selected event
+		$this->Recordset_Selected($rs);
+		return $rs;
 	}
 
 	// Load row based on key values
@@ -907,41 +727,23 @@ class t202_userlevels_edit extends t202_userlevels
 		$this->Row_Selected($row);
 		if (!$rs || $rs->EOF)
 			return;
-		$this->userlevelid->setDbValue($row['userlevelid']);
-		$this->userlevelid->CurrentValue = (int)$this->userlevelid->CurrentValue;
-		$this->userlevelname->setDbValue($row['userlevelname']);
+		$this->id->setDbValue($row['id']);
+		$this->User_ID->setDbValue($row['User_ID']);
+		$this->Keterangan->setDbValue($row['Keterangan']);
+		$this->Nilai->setDbValue($row['Nilai']);
+		$this->Field_ID->setDbValue($row['Field_ID']);
 	}
 
 	// Return a row with default values
 	protected function newRow()
 	{
 		$row = [];
-		$row['userlevelid'] = NULL;
-		$row['userlevelname'] = NULL;
+		$row['id'] = NULL;
+		$row['User_ID'] = NULL;
+		$row['Keterangan'] = NULL;
+		$row['Nilai'] = NULL;
+		$row['Field_ID'] = NULL;
 		return $row;
-	}
-
-	// Load old record
-	protected function loadOldRecord()
-	{
-
-		// Load key values from Session
-		$validKey = TRUE;
-		if (strval($this->getKey("userlevelid")) != "")
-			$this->userlevelid->OldValue = $this->getKey("userlevelid"); // userlevelid
-		else
-			$validKey = FALSE;
-
-		// Load old record
-		$this->OldRecordset = NULL;
-		if ($validKey) {
-			$this->CurrentFilter = $this->getRecordFilter();
-			$sql = $this->getCurrentSql();
-			$conn = $this->getConnection();
-			$this->OldRecordset = LoadRecordset($sql, $conn);
-		}
-		$this->loadRowValues($this->OldRecordset); // Load row values
-		return $validKey;
 	}
 
 	// Render row values based on field settings
@@ -955,192 +757,166 @@ class t202_userlevels_edit extends t202_userlevels
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// userlevelid
-		// userlevelname
+		// id
+		// User_ID
+		// Keterangan
+		// Nilai
+		// Field_ID
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
-			// userlevelid
-			$this->userlevelid->ViewValue = $this->userlevelid->CurrentValue;
-			$this->userlevelid->ViewValue = FormatNumber($this->userlevelid->ViewValue, 0, -2, -2, -2);
-			$this->userlevelid->ViewCustomAttributes = "";
+			// id
+			$this->id->ViewValue = $this->id->CurrentValue;
+			$this->id->ViewCustomAttributes = "";
 
-			// userlevelname
-			$this->userlevelname->ViewValue = $this->userlevelname->CurrentValue;
-			if ($Security->getUserLevelName($this->userlevelid->CurrentValue) != "")
-				$this->userlevelname->ViewValue = $Security->getUserLevelName($this->userlevelid->CurrentValue);
-			$this->userlevelname->ViewCustomAttributes = "";
+			// User_ID
+			$curVal = strval($this->User_ID->CurrentValue);
+			if ($curVal != "") {
+				$this->User_ID->ViewValue = $this->User_ID->lookupCacheOption($curVal);
+				if ($this->User_ID->ViewValue === NULL) { // Lookup from database
+					$filterWrk = "`EmployeeID`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+					$sqlWrk = $this->User_ID->Lookup->getSql(FALSE, $filterWrk, '', $this);
+					$rswrk = Conn()->execute($sqlWrk);
+					if ($rswrk && !$rswrk->EOF) { // Lookup values found
+						$arwrk = [];
+						$arwrk[1] = $rswrk->fields('df');
+						$this->User_ID->ViewValue = $this->User_ID->displayValue($arwrk);
+						$rswrk->Close();
+					} else {
+						$this->User_ID->ViewValue = $this->User_ID->CurrentValue;
+					}
+				}
+			} else {
+				$this->User_ID->ViewValue = NULL;
+			}
+			$this->User_ID->ViewCustomAttributes = "";
 
-			// userlevelid
-			$this->userlevelid->LinkCustomAttributes = "";
-			$this->userlevelid->HrefValue = "";
-			$this->userlevelid->TooltipValue = "";
+			// Keterangan
+			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
+			$this->Keterangan->ViewCustomAttributes = "";
 
-			// userlevelname
-			$this->userlevelname->LinkCustomAttributes = "";
-			$this->userlevelname->HrefValue = "";
-			$this->userlevelname->TooltipValue = "";
-		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
+			// Nilai
+			$this->Nilai->ViewValue = $this->Nilai->CurrentValue;
+			$this->Nilai->ViewCustomAttributes = "";
 
-			// userlevelid
-			$this->userlevelid->EditAttrs["class"] = "form-control";
-			$this->userlevelid->EditCustomAttributes = "";
-			$this->userlevelid->EditValue = HtmlEncode($this->userlevelid->CurrentValue);
-			$this->userlevelid->PlaceHolder = RemoveHtml($this->userlevelid->caption());
+			// Field_ID
+			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
+			$this->Field_ID->ViewCustomAttributes = "";
 
-			// userlevelname
-			$this->userlevelname->EditAttrs["class"] = "form-control";
-			$this->userlevelname->EditCustomAttributes = "";
-			if (!$this->userlevelname->Raw)
-				$this->userlevelname->CurrentValue = HtmlDecode($this->userlevelname->CurrentValue);
-			$this->userlevelname->EditValue = HtmlEncode($this->userlevelname->CurrentValue);
-			if (in_array($this->userlevelid->CurrentValue, [-2, -1, 0]))
-				$this->userlevelname->ReadOnly = TRUE;
-			$this->userlevelname->PlaceHolder = RemoveHtml($this->userlevelname->caption());
+			// User_ID
+			$this->User_ID->LinkCustomAttributes = "";
+			$this->User_ID->HrefValue = "";
+			$this->User_ID->TooltipValue = "";
 
-			// Edit refer script
-			// userlevelid
+			// Keterangan
+			$this->Keterangan->LinkCustomAttributes = "";
+			$this->Keterangan->HrefValue = "";
+			$this->Keterangan->TooltipValue = "";
 
-			$this->userlevelid->LinkCustomAttributes = "";
-			$this->userlevelid->HrefValue = "";
+			// Nilai
+			$this->Nilai->LinkCustomAttributes = "";
+			$this->Nilai->HrefValue = "";
+			$this->Nilai->TooltipValue = "";
 
-			// userlevelname
-			$this->userlevelname->LinkCustomAttributes = "";
-			$this->userlevelname->HrefValue = "";
+			// Field_ID
+			$this->Field_ID->LinkCustomAttributes = "";
+			$this->Field_ID->HrefValue = "";
+			$this->Field_ID->TooltipValue = "";
 		}
-		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
-			$this->setupFieldTitles();
 
 		// Call Row Rendered event
 		if ($this->RowType != ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
 	}
 
-	// Validate form
-	protected function validateForm()
+	// Delete records based on current filter
+	protected function deleteRows()
 	{
-		global $Language, $FormError;
-
-		// Initialize form error message
-		$FormError = "";
-
-		// Check if validation required
-		if (!Config("SERVER_VALIDATE"))
-			return ($FormError == "");
-		if ($this->userlevelid->Required) {
-			if (!$this->userlevelid->IsDetailKey && $this->userlevelid->FormValue != NULL && $this->userlevelid->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->userlevelid->caption(), $this->userlevelid->RequiredErrorMessage));
-			}
+		global $Language, $Security;
+		if (!$Security->canDelete()) {
+			$this->setFailureMessage($Language->phrase("NoDeletePermission")); // No delete permission
+			return FALSE;
 		}
-		if (!CheckInteger($this->userlevelid->FormValue)) {
-			AddMessage($FormError, $this->userlevelid->errorMessage());
-		}
-		if ($this->userlevelname->Required) {
-			if (!$this->userlevelname->IsDetailKey && $this->userlevelname->FormValue != NULL && $this->userlevelname->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->userlevelname->caption(), $this->userlevelname->RequiredErrorMessage));
-			}
-		}
-
-		// Return validate result
-		$validateForm = ($FormError == "");
-
-		// Call Form_CustomValidate event
-		$formCustomError = "";
-		$validateForm = $validateForm && $this->Form_CustomValidate($formCustomError);
-		if ($formCustomError != "") {
-			AddMessage($FormError, $formCustomError);
-		}
-		return $validateForm;
-	}
-
-	// Update record based on key values
-	protected function editRow()
-	{
-		global $Security, $Language;
-		$oldKeyFilter = $this->getRecordFilter();
-		$filter = $this->applyUserIDFilters($oldKeyFilter);
-		$conn = $this->getConnection();
-		$this->CurrentFilter = $filter;
+		$deleteRows = TRUE;
 		$sql = $this->getCurrentSql();
+		$conn = $this->getConnection();
 		$conn->raiseErrorFn = Config("ERROR_FUNC");
 		$rs = $conn->execute($sql);
 		$conn->raiseErrorFn = "";
-		if ($rs === FALSE)
+		if ($rs === FALSE) {
 			return FALSE;
-		if ($rs->EOF) {
-			$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
-			$editRow = FALSE; // Update Failed
-		} else {
+		} elseif ($rs->EOF) {
+			$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
+			$rs->close();
+			return FALSE;
+		}
+		$rows = ($rs) ? $rs->getRows() : [];
+		$conn->beginTrans();
 
-			// Save old values
-			$rsold = &$rs->fields;
-			$this->loadDbValues($rsold);
-			$rsnew = [];
+		// Clone old rows
+		$rsold = $rows;
+		if ($rs)
+			$rs->close();
 
-			// userlevelid
-			$this->userlevelid->setDbValueDef($rsnew, $this->userlevelid->CurrentValue, 0, $this->userlevelid->ReadOnly);
-
-			// userlevelname
-			$this->userlevelname->setDbValueDef($rsnew, $this->userlevelname->CurrentValue, "", $this->userlevelname->ReadOnly);
-
-			// Call Row Updating event
-			$updateRow = $this->Row_Updating($rsold, $rsnew);
-
-			// Check for duplicate key when key changed
-			if ($updateRow) {
-				$newKeyFilter = $this->getRecordFilter($rsnew);
-				if ($newKeyFilter != $oldKeyFilter) {
-					$rsChk = $this->loadRs($newKeyFilter);
-					if ($rsChk && !$rsChk->EOF) {
-						$keyErrMsg = str_replace("%f", $newKeyFilter, $Language->phrase("DupKey"));
-						$this->setFailureMessage($keyErrMsg);
-						$rsChk->close();
-						$updateRow = FALSE;
-					}
-				}
+		// Call row deleting event
+		if ($deleteRows) {
+			foreach ($rsold as $row) {
+				$deleteRows = $this->Row_Deleting($row);
+				if (!$deleteRows)
+					break;
 			}
-			if ($updateRow) {
+		}
+		if ($deleteRows) {
+			$key = "";
+			foreach ($rsold as $row) {
+				$thisKey = "";
+				if ($thisKey != "")
+					$thisKey .= Config("COMPOSITE_KEY_SEPARATOR");
+				$thisKey .= $row['id'];
+				if (Config("DELETE_UPLOADED_FILES")) // Delete old files
+					$this->deleteUploadedFiles($row);
 				$conn->raiseErrorFn = Config("ERROR_FUNC");
-				if (count($rsnew) > 0)
-					$editRow = $this->update($rsnew, "", $rsold);
-				else
-					$editRow = TRUE; // No field to update
+				$deleteRows = $this->delete($row); // Delete
 				$conn->raiseErrorFn = "";
-				if ($editRow) {
-				}
-			} else {
-				if ($this->getSuccessMessage() != "" || $this->getFailureMessage() != "") {
+				if ($deleteRows === FALSE)
+					break;
+				if ($key != "")
+					$key .= ", ";
+				$key .= $thisKey;
+			}
+		}
+		if (!$deleteRows) {
 
-					// Use the message, do nothing
-				} elseif ($this->CancelMessage != "") {
-					$this->setFailureMessage($this->CancelMessage);
-					$this->CancelMessage = "";
-				} else {
-					$this->setFailureMessage($Language->phrase("UpdateCancelled"));
-				}
-				$editRow = FALSE;
+			// Set up error message
+			if ($this->getSuccessMessage() != "" || $this->getFailureMessage() != "") {
+
+				// Use the message, do nothing
+			} elseif ($this->CancelMessage != "") {
+				$this->setFailureMessage($this->CancelMessage);
+				$this->CancelMessage = "";
+			} else {
+				$this->setFailureMessage($Language->phrase("DeleteCancelled"));
+			}
+		}
+		if ($deleteRows) {
+			$conn->commitTrans(); // Commit the changes
+		} else {
+			$conn->rollbackTrans(); // Rollback changes
+		}
+
+		// Call Row Deleted event
+		if ($deleteRows) {
+			foreach ($rsold as $row) {
+				$this->Row_Deleted($row);
 			}
 		}
 
-		// Call Row_Updated event
-		if ($editRow)
-			$this->Row_Updated($rsold, $rsnew);
-
-		// Load user level information again
-		if ($editRow)
-			$Security->setupUserLevel();
-		$rs->close();
-
-		// Clean upload path if any
-		if ($editRow) {
-		}
-
-		// Write JSON for API request
-		if (IsApi() && $editRow) {
-			$row = $this->getRecordsFromRecordset([$rsnew], TRUE);
+		// Write JSON for API request (Support single row only)
+		if (IsApi() && $deleteRows) {
+			$row = $this->getRecordsFromRecordset($rsold, TRUE);
 			WriteJson(["success" => TRUE, $this->TableVar => $row]);
 		}
-		return $editRow;
+		return $deleteRows;
 	}
 
 	// Set up Breadcrumb
@@ -1149,9 +925,9 @@ class t202_userlevels_edit extends t202_userlevels
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t202_userlevelslist.php"), "", $this->TableVar, TRUE);
-		$pageId = "edit";
-		$Breadcrumb->add("edit", $pageId, $url);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t205_defaultlist.php"), "", $this->TableVar, TRUE);
+		$pageId = "delete";
+		$Breadcrumb->add("delete", $pageId, $url);
 	}
 
 	// Setup lookup options
@@ -1168,6 +944,8 @@ class t202_userlevels_edit extends t202_userlevels
 
 			// Set up lookup SQL and connection
 			switch ($fld->FieldVar) {
+				case "x_User_ID":
+					break;
 				default:
 					$lookupFilter = "";
 					break;
@@ -1188,6 +966,8 @@ class t202_userlevels_edit extends t202_userlevels
 
 					// Format the field values
 					switch ($fld->FieldVar) {
+						case "x_User_ID":
+							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();
@@ -1196,44 +976,6 @@ class t202_userlevels_edit extends t202_userlevels
 					$rs->close();
 				$fld->Lookup->Options = $ar;
 			}
-		}
-	}
-
-	// Set up starting record parameters
-	public function setupStartRecord()
-	{
-		if ($this->DisplayRecords == 0)
-			return;
-		if ($this->isPageRequest()) { // Validate request
-			$startRec = Get(Config("TABLE_START_REC"));
-			$pageNo = Get(Config("TABLE_PAGE_NO"));
-			if ($pageNo !== NULL) { // Check for "pageno" parameter first
-				if (is_numeric($pageNo)) {
-					$this->StartRecord = ($pageNo - 1) * $this->DisplayRecords + 1;
-					if ($this->StartRecord <= 0) {
-						$this->StartRecord = 1;
-					} elseif ($this->StartRecord >= (int)(($this->TotalRecords - 1)/$this->DisplayRecords) * $this->DisplayRecords + 1) {
-						$this->StartRecord = (int)(($this->TotalRecords - 1)/$this->DisplayRecords) * $this->DisplayRecords + 1;
-					}
-					$this->setStartRecordNumber($this->StartRecord);
-				}
-			} elseif ($startRec !== NULL) { // Check for "start" parameter
-				$this->StartRecord = $startRec;
-				$this->setStartRecordNumber($this->StartRecord);
-			}
-		}
-		$this->StartRecord = $this->getStartRecordNumber();
-
-		// Check if correct start record counter
-		if (!is_numeric($this->StartRecord) || $this->StartRecord == "") { // Avoid invalid start record counter
-			$this->StartRecord = 1; // Reset start record counter
-			$this->setStartRecordNumber($this->StartRecord);
-		} elseif ($this->StartRecord > $this->TotalRecords) { // Avoid starting record > total records
-			$this->StartRecord = (int)(($this->TotalRecords - 1)/$this->DisplayRecords) * $this->DisplayRecords + 1; // Point to last page first record
-			$this->setStartRecordNumber($this->StartRecord);
-		} elseif (($this->StartRecord - 1) % $this->DisplayRecords != 0) {
-			$this->StartRecord = (int)(($this->StartRecord - 1)/$this->DisplayRecords) * $this->DisplayRecords + 1; // Point to page boundary
-			$this->setStartRecordNumber($this->StartRecord);
 		}
 	}
 
@@ -1295,13 +1037,6 @@ class t202_userlevels_edit extends t202_userlevels
 		// Example:
 		//$footer = "your footer";
 
-	}
-
-	// Form Custom Validate event
-	function Form_CustomValidate(&$customError) {
-
-		// Return error message in CustomError
-		return TRUE;
 	}
 } // End class
 ?>

@@ -25,7 +25,11 @@ $USER_LEVEL_PRIVS = [["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c201_home.php","-2"
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t203_userlevelpermissions","-2","0"],
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t203_userlevelpermissions","0","0"],
 	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t204_audittrail","-2","0"],
-	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t204_audittrail","0","0"]];
+	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t204_audittrail","0","0"],
+	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t205_default","-2","0"],
+	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t205_default","0","0"],
+	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c202_home.php","-2","72"],
+	["{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c202_home.php","0","0"]];
 
 // User level table info
 $USER_LEVEL_TABLES = [["c201_home.php","c201_home","Home",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
@@ -35,4 +39,6 @@ $USER_LEVEL_TABLES = [["c201_home.php","c201_home","Home",true,"{3C5552E0-8BEE-4
 	["t201_employees","t201_employees","t 201 employees",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
 	["t202_userlevels","t202_userlevels","t 202 userlevels",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
 	["t203_userlevelpermissions","t203_userlevelpermissions","t 203 userlevelpermissions",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
-	["t204_audittrail","t204_audittrail","t 204 audittrail",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"]];
+	["t204_audittrail","t204_audittrail","t 204 audittrail",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
+	["t205_default","t205_default","Default",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"],
+	["c202_home.php","c202_home","Home",true,"{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}"]];

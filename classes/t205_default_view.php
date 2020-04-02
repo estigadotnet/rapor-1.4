@@ -4,7 +4,7 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t204_audittrail_view extends t204_audittrail
+class t205_default_view extends t205_default
 {
 
 	// Page ID
@@ -14,10 +14,10 @@ class t204_audittrail_view extends t204_audittrail
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't204_audittrail';
+	public $TableName = 't205_default';
 
 	// Page object name
-	public $PageObjName = "t204_audittrail_view";
+	public $PageObjName = "t205_default_view";
 
 	// Page URLs
 	public $AddUrl;
@@ -373,10 +373,10 @@ class t204_audittrail_view extends t204_audittrail
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t204_audittrail)
-		if (!isset($GLOBALS["t204_audittrail"]) || get_class($GLOBALS["t204_audittrail"]) == PROJECT_NAMESPACE . "t204_audittrail") {
-			$GLOBALS["t204_audittrail"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t204_audittrail"];
+		// Table object (t205_default)
+		if (!isset($GLOBALS["t205_default"]) || get_class($GLOBALS["t205_default"]) == PROJECT_NAMESPACE . "t205_default") {
+			$GLOBALS["t205_default"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t205_default"];
 		}
 		$keyUrl = "";
 		if (Get("id") !== NULL) {
@@ -401,7 +401,7 @@ class t204_audittrail_view extends t204_audittrail
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't204_audittrail');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't205_default');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -442,14 +442,14 @@ class t204_audittrail_view extends t204_audittrail
 		Page_Unloaded();
 
 		// Export
-		global $t204_audittrail;
+		global $t205_default;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t204_audittrail);
+				$doc = new $class($t205_default);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -484,7 +484,7 @@ class t204_audittrail_view extends t204_audittrail
 				$pageName = GetPageName($url);
 				if ($pageName != $this->getListUrl()) { // Not List page
 					$row["caption"] = $this->getModalCaption($pageName);
-					if ($pageName == "t204_audittrailview.php")
+					if ($pageName == "t205_defaultview.php")
 						$row["view"] = "1";
 				} else { // List page should not be shown as modal => error
 					$row["error"] = $this->getFailureMessage();
@@ -643,7 +643,7 @@ class t204_audittrail_view extends t204_audittrail
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t204_audittraillist.php"));
+					$this->terminate(GetUrl("t205_defaultlist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -700,15 +700,10 @@ class t204_audittrail_view extends t204_audittrail
 		// Setup export options
 		$this->setupExportOptions();
 		$this->id->setVisibility();
-		$this->datetime->setVisibility();
-		$this->script->setVisibility();
-		$this->user->setVisibility();
-		$this->_action->setVisibility();
-		$this->_table->setVisibility();
-		$this->field->setVisibility();
-		$this->keyvalue->setVisibility();
-		$this->oldvalue->setVisibility();
-		$this->newvalue->setVisibility();
+		$this->User_ID->setVisibility();
+		$this->Keterangan->setVisibility();
+		$this->Nilai->setVisibility();
+		$this->Field_ID->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -730,11 +725,12 @@ class t204_audittrail_view extends t204_audittrail
 		$this->createToken();
 
 		// Set up lookup cache
-		// Check permission
+		$this->setupLookupOptions($this->User_ID);
 
+		// Check permission
 		if (!$Security->canView()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t204_audittraillist.php");
+			$this->terminate("t205_defaultlist.php");
 			return;
 		}
 
@@ -760,7 +756,7 @@ class t204_audittrail_view extends t204_audittrail
 				$this->id->setFormValue(Route(2));
 				$this->RecKey["id"] = $this->id->FormValue;
 			} else {
-				$returnUrl = "t204_audittraillist.php"; // Return to list
+				$returnUrl = "t205_defaultlist.php"; // Return to list
 			}
 
 			// Get action
@@ -782,7 +778,7 @@ class t204_audittrail_view extends t204_audittrail
 					if (!$res) { // Load record based on key
 						if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 							$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
-						$returnUrl = "t204_audittraillist.php"; // No matching record, return to list
+						$returnUrl = "t205_defaultlist.php"; // No matching record, return to list
 					}
 			}
 
@@ -792,7 +788,7 @@ class t204_audittrail_view extends t204_audittrail
 				$this->terminate();
 			}
 		} else {
-			$returnUrl = "t204_audittraillist.php"; // Not page request, return to list
+			$returnUrl = "t205_defaultlist.php"; // Not page request, return to list
 		}
 		if ($returnUrl != "") {
 			$this->terminate($returnUrl);
@@ -932,15 +928,10 @@ class t204_audittrail_view extends t204_audittrail
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->datetime->setDbValue($row['datetime']);
-		$this->script->setDbValue($row['script']);
-		$this->user->setDbValue($row['user']);
-		$this->_action->setDbValue($row['action']);
-		$this->_table->setDbValue($row['table']);
-		$this->field->setDbValue($row['field']);
-		$this->keyvalue->setDbValue($row['keyvalue']);
-		$this->oldvalue->setDbValue($row['oldvalue']);
-		$this->newvalue->setDbValue($row['newvalue']);
+		$this->User_ID->setDbValue($row['User_ID']);
+		$this->Keterangan->setDbValue($row['Keterangan']);
+		$this->Nilai->setDbValue($row['Nilai']);
+		$this->Field_ID->setDbValue($row['Field_ID']);
 	}
 
 	// Return a row with default values
@@ -948,15 +939,10 @@ class t204_audittrail_view extends t204_audittrail
 	{
 		$row = [];
 		$row['id'] = NULL;
-		$row['datetime'] = NULL;
-		$row['script'] = NULL;
-		$row['user'] = NULL;
-		$row['action'] = NULL;
-		$row['table'] = NULL;
-		$row['field'] = NULL;
-		$row['keyvalue'] = NULL;
-		$row['oldvalue'] = NULL;
-		$row['newvalue'] = NULL;
+		$row['User_ID'] = NULL;
+		$row['Keterangan'] = NULL;
+		$row['Nilai'] = NULL;
+		$row['Field_ID'] = NULL;
 		return $row;
 	}
 
@@ -978,15 +964,10 @@ class t204_audittrail_view extends t204_audittrail
 
 		// Common render codes for all row types
 		// id
-		// datetime
-		// script
-		// user
-		// action
-		// table
-		// field
-		// keyvalue
-		// oldvalue
-		// newvalue
+		// User_ID
+		// Keterangan
+		// Nilai
+		// Field_ID
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -994,92 +975,59 @@ class t204_audittrail_view extends t204_audittrail
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// datetime
-			$this->datetime->ViewValue = $this->datetime->CurrentValue;
-			$this->datetime->ViewValue = FormatDateTime($this->datetime->ViewValue, 0);
-			$this->datetime->ViewCustomAttributes = "";
+			// User_ID
+			$curVal = strval($this->User_ID->CurrentValue);
+			if ($curVal != "") {
+				$this->User_ID->ViewValue = $this->User_ID->lookupCacheOption($curVal);
+				if ($this->User_ID->ViewValue === NULL) { // Lookup from database
+					$filterWrk = "`EmployeeID`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+					$sqlWrk = $this->User_ID->Lookup->getSql(FALSE, $filterWrk, '', $this);
+					$rswrk = Conn()->execute($sqlWrk);
+					if ($rswrk && !$rswrk->EOF) { // Lookup values found
+						$arwrk = [];
+						$arwrk[1] = $rswrk->fields('df');
+						$this->User_ID->ViewValue = $this->User_ID->displayValue($arwrk);
+						$rswrk->Close();
+					} else {
+						$this->User_ID->ViewValue = $this->User_ID->CurrentValue;
+					}
+				}
+			} else {
+				$this->User_ID->ViewValue = NULL;
+			}
+			$this->User_ID->ViewCustomAttributes = "";
 
-			// script
-			$this->script->ViewValue = $this->script->CurrentValue;
-			$this->script->ViewCustomAttributes = "";
+			// Keterangan
+			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
+			$this->Keterangan->ViewCustomAttributes = "";
 
-			// user
-			$this->user->ViewValue = $this->user->CurrentValue;
-			$this->user->ViewCustomAttributes = "";
+			// Nilai
+			$this->Nilai->ViewValue = $this->Nilai->CurrentValue;
+			$this->Nilai->ViewCustomAttributes = "";
 
-			// action
-			$this->_action->ViewValue = $this->_action->CurrentValue;
-			$this->_action->ViewCustomAttributes = "";
+			// Field_ID
+			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
+			$this->Field_ID->ViewCustomAttributes = "";
 
-			// table
-			$this->_table->ViewValue = $this->_table->CurrentValue;
-			$this->_table->ViewCustomAttributes = "";
+			// User_ID
+			$this->User_ID->LinkCustomAttributes = "";
+			$this->User_ID->HrefValue = "";
+			$this->User_ID->TooltipValue = "";
 
-			// field
-			$this->field->ViewValue = $this->field->CurrentValue;
-			$this->field->ViewCustomAttributes = "";
+			// Keterangan
+			$this->Keterangan->LinkCustomAttributes = "";
+			$this->Keterangan->HrefValue = "";
+			$this->Keterangan->TooltipValue = "";
 
-			// keyvalue
-			$this->keyvalue->ViewValue = $this->keyvalue->CurrentValue;
-			$this->keyvalue->ViewCustomAttributes = "";
+			// Nilai
+			$this->Nilai->LinkCustomAttributes = "";
+			$this->Nilai->HrefValue = "";
+			$this->Nilai->TooltipValue = "";
 
-			// oldvalue
-			$this->oldvalue->ViewValue = $this->oldvalue->CurrentValue;
-			$this->oldvalue->ViewCustomAttributes = "";
-
-			// newvalue
-			$this->newvalue->ViewValue = $this->newvalue->CurrentValue;
-			$this->newvalue->ViewCustomAttributes = "";
-
-			// id
-			$this->id->LinkCustomAttributes = "";
-			$this->id->HrefValue = "";
-			$this->id->TooltipValue = "";
-
-			// datetime
-			$this->datetime->LinkCustomAttributes = "";
-			$this->datetime->HrefValue = "";
-			$this->datetime->TooltipValue = "";
-
-			// script
-			$this->script->LinkCustomAttributes = "";
-			$this->script->HrefValue = "";
-			$this->script->TooltipValue = "";
-
-			// user
-			$this->user->LinkCustomAttributes = "";
-			$this->user->HrefValue = "";
-			$this->user->TooltipValue = "";
-
-			// action
-			$this->_action->LinkCustomAttributes = "";
-			$this->_action->HrefValue = "";
-			$this->_action->TooltipValue = "";
-
-			// table
-			$this->_table->LinkCustomAttributes = "";
-			$this->_table->HrefValue = "";
-			$this->_table->TooltipValue = "";
-
-			// field
-			$this->field->LinkCustomAttributes = "";
-			$this->field->HrefValue = "";
-			$this->field->TooltipValue = "";
-
-			// keyvalue
-			$this->keyvalue->LinkCustomAttributes = "";
-			$this->keyvalue->HrefValue = "";
-			$this->keyvalue->TooltipValue = "";
-
-			// oldvalue
-			$this->oldvalue->LinkCustomAttributes = "";
-			$this->oldvalue->HrefValue = "";
-			$this->oldvalue->TooltipValue = "";
-
-			// newvalue
-			$this->newvalue->LinkCustomAttributes = "";
-			$this->newvalue->HrefValue = "";
-			$this->newvalue->TooltipValue = "";
+			// Field_ID
+			$this->Field_ID->LinkCustomAttributes = "";
+			$this->Field_ID->HrefValue = "";
+			$this->Field_ID->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1093,17 +1041,17 @@ class t204_audittrail_view extends t204_audittrail
 		global $Language;
 		if (SameText($type, "excel")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft204_audittrailview, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft205_defaultview, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportExcelUrl . "\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\">" . $Language->phrase("ExportToExcel") . "</a>";
 		} elseif (SameText($type, "word")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft204_audittrailview, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft205_defaultview, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportWordUrl . "\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\">" . $Language->phrase("ExportToWord") . "</a>";
 		} elseif (SameText($type, "pdf")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft204_audittrailview, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft205_defaultview, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportPdfUrl . "\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\">" . $Language->phrase("ExportToPDF") . "</a>";
 		} elseif (SameText($type, "html")) {
@@ -1114,7 +1062,7 @@ class t204_audittrail_view extends t204_audittrail
 			return "<a href=\"" . $this->ExportCsvUrl . "\" class=\"ew-export-link ew-csv\" title=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\">" . $Language->phrase("ExportToCsv") . "</a>";
 		} elseif (SameText($type, "email")) {
 			$url = $custom ? ",url:'" . $this->pageUrl() . "export=email&amp;custom=1'" : "";
-			return '<button id="emf_t204_audittrail" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t204_audittrail\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft204_audittrailview, key:' . ArrayToJsonAttribute($this->RecKey) . ', sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
+			return '<button id="emf_t205_default" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t205_default\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft205_defaultview, key:' . ArrayToJsonAttribute($this->RecKey) . ', sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
 		} elseif (SameText($type, "print")) {
 			return "<a href=\"" . $this->ExportPrintUrl . "\" class=\"ew-export-link ew-print\" title=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\">" . $Language->phrase("PrinterFriendly") . "</a>";
 		}
@@ -1281,7 +1229,7 @@ class t204_audittrail_view extends t204_audittrail
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t204_audittraillist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t205_defaultlist.php"), "", $this->TableVar, TRUE);
 		$pageId = "view";
 		$Breadcrumb->add("view", $pageId, $url);
 	}
@@ -1300,6 +1248,8 @@ class t204_audittrail_view extends t204_audittrail
 
 			// Set up lookup SQL and connection
 			switch ($fld->FieldVar) {
+				case "x_User_ID":
+					break;
 				default:
 					$lookupFilter = "";
 					break;
@@ -1320,6 +1270,8 @@ class t204_audittrail_view extends t204_audittrail
 
 					// Format the field values
 					switch ($fld->FieldVar) {
+						case "x_User_ID":
+							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

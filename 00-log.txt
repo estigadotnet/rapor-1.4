@@ -25,9 +25,37 @@ membuat form ini memang susah, tapi gpp, untuk berikutnya bisa digunakan untuk a
 pemilihan data sebelum semua menu dijalankan
 
 
+
 4:02 PM 3/21/2020
 buat setting di file txt, untuk setting yang tidak perlu setiap saat diubah pada saat login;
 baca setting default di file txt;
 buat juga button untuk mengubah setting defaultnya, dan simpan di file txt tadi;
 
 
+6:10 PM 4/2/2020
+1. skenario ::
+   skenario database dan tabel
+   ---------------------------
+   1. tabel t205_default harus sudah terisi data default sesuai user yang login
+   2. data minimal yang harus terisi adalah ::
+	id	User_ID	Field_ID	Keterangan	Nilai
+	1	1	sekolah_id	Sekolah		1
+	2	1	tahunajaran_id	Tahun Ajaran	1
+      penjelasan :
+	field id	: bawaan tabel
+	field User_ID	: EmployeeID bawaan tabel t201_employees
+			  biasanya berisi nilai 1, karena default username adalah admin
+	field Field_ID	: sekolah_id adalah id dari tabel t001_sekolah
+			: tahunajaran_id adalah id dari tabel t002_tahunajaran
+	field Keterangan: nilai label untuk field sekolah_id
+			: nilai label untuk field tahunajaran_id
+	field Nilai	: sesuai dengan data di masing2 tabel
+   
+   skenario aplikasi
+   -----------------
+   1. login, username: admin, password: admin
+   2. ambil nilai user_id dengan function CurrentUserID()
+   3. langsung query ke tabel t205_default sesuai user_id
+   4. 
+
+   

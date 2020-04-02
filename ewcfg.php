@@ -148,6 +148,8 @@ define(PROJECT_NAMESPACE . "SESSION_LANGUAGE_ID", PROJECT_NAME . "_LanguageId");
 
 // ADOdb
 define(PROJECT_NAMESPACE . "USE_ADODB", FALSE); // Use ADOdb
+if (!isset($GLOBALS["ADODB_OUTP"]))
+	$GLOBALS["ADODB_OUTP"] = PROJECT_NAMESPACE . "SetDebugMessage";
 
 /**
  * Config
@@ -159,7 +161,7 @@ $CONFIG = [
 
 	// General
 	"UNFORMAT_YEAR" => 50, // Unformat year
-	"RANDOM_KEY" => 'por2cAPD438c2Gev', // Random key for encryption
+	"RANDOM_KEY" => 'byr1qG2i8VO74i1a', // Random key for encryption
 	"ENCRYPTION_KEY" => '', // Encryption key for data protection
 	"PROJECT_STYLESHEET_FILENAME" => "css/p_rapor_1_4.css", // Project stylesheet file name
 	"PROJECT_CHARSET" => "utf-8", // Project charset

@@ -746,13 +746,13 @@ class t101_session_view extends t101_session
 			if (Get("id") !== NULL) {
 				$this->id->setQueryStringValue(Get("id"));
 				$this->RecKey["id"] = $this->id->QueryStringValue;
-			} elseif (IsApi() && Key(0) != NULL) {
+			} elseif (IsApi() && Key(0) !== NULL) {
 				$this->id->setQueryStringValue(Key(0));
 				$this->RecKey["id"] = $this->id->QueryStringValue;
 			} elseif (Post("id") !== NULL) {
 				$this->id->setFormValue(Post("id"));
 				$this->RecKey["id"] = $this->id->FormValue;
-			} elseif (IsApi() && Route(2) != NULL) {
+			} elseif (IsApi() && Route(2) !== NULL) {
 				$this->id->setFormValue(Route(2));
 				$this->RecKey["id"] = $this->id->FormValue;
 			} else {

@@ -765,13 +765,13 @@ class t201_employees_view extends t201_employees
 			if (Get("EmployeeID") !== NULL) {
 				$this->EmployeeID->setQueryStringValue(Get("EmployeeID"));
 				$this->RecKey["EmployeeID"] = $this->EmployeeID->QueryStringValue;
-			} elseif (IsApi() && Key(0) != NULL) {
+			} elseif (IsApi() && Key(0) !== NULL) {
 				$this->EmployeeID->setQueryStringValue(Key(0));
 				$this->RecKey["EmployeeID"] = $this->EmployeeID->QueryStringValue;
 			} elseif (Post("EmployeeID") !== NULL) {
 				$this->EmployeeID->setFormValue(Post("EmployeeID"));
 				$this->RecKey["EmployeeID"] = $this->EmployeeID->FormValue;
-			} elseif (IsApi() && Route(2) != NULL) {
+			} elseif (IsApi() && Route(2) !== NULL) {
 				$this->EmployeeID->setFormValue(Route(2));
 				$this->RecKey["EmployeeID"] = $this->EmployeeID->FormValue;
 			} else {
