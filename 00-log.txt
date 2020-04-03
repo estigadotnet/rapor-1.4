@@ -54,8 +54,8 @@ buat juga button untuk mengubah setting defaultnya, dan simpan di file txt tadi;
    skenario aplikasi
    -----------------
    1. login, username: admin, password: admin
-   2. ambil nilai user_id dengan function CurrentUserID()
-   3. langsung query ke tabel t205_default sesuai user_id
-   4. 
-
-   
+   2. $user_id = CurrentUserID();
+   3. check ketersediaan data berdasarkan User_ID = $user_id di t205_default
+   4. jika data ada maka ?
+      jika data tidak ada maka ?
+   ?. query ke tabel t205_default sesuai user_id, ExecuteRows($q)
