@@ -4,7 +4,7 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t205_default_list extends t205_default
+class t004_semester_list extends t004_semester
 {
 
 	// Page ID
@@ -14,13 +14,13 @@ class t205_default_list extends t205_default
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't205_default';
+	public $TableName = 't004_semester';
 
 	// Page object name
-	public $PageObjName = "t205_default_list";
+	public $PageObjName = "t004_semester_list";
 
 	// Grid form hidden field names
-	public $FormName = "ft205_defaultlist";
+	public $FormName = "ft004_semesterlist";
 	public $FormActionName = "k_action";
 	public $FormKeyName = "k_key";
 	public $FormOldKeyName = "k_oldkey";
@@ -381,10 +381,10 @@ class t205_default_list extends t205_default
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t205_default)
-		if (!isset($GLOBALS["t205_default"]) || get_class($GLOBALS["t205_default"]) == PROJECT_NAMESPACE . "t205_default") {
-			$GLOBALS["t205_default"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t205_default"];
+		// Table object (t004_semester)
+		if (!isset($GLOBALS["t004_semester"]) || get_class($GLOBALS["t004_semester"]) == PROJECT_NAMESPACE . "t004_semester") {
+			$GLOBALS["t004_semester"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t004_semester"];
 		}
 
 		// Initialize URLs
@@ -395,12 +395,12 @@ class t205_default_list extends t205_default
 		$this->ExportHtmlUrl = $this->pageUrl() . "export=html";
 		$this->ExportXmlUrl = $this->pageUrl() . "export=xml";
 		$this->ExportCsvUrl = $this->pageUrl() . "export=csv";
-		$this->AddUrl = "t205_defaultadd.php";
+		$this->AddUrl = "t004_semesteradd.php";
 		$this->InlineAddUrl = $this->pageUrl() . "action=add";
 		$this->GridAddUrl = $this->pageUrl() . "action=gridadd";
 		$this->GridEditUrl = $this->pageUrl() . "action=gridedit";
-		$this->MultiDeleteUrl = "t205_defaultdelete.php";
-		$this->MultiUpdateUrl = "t205_defaultupdate.php";
+		$this->MultiDeleteUrl = "t004_semesterdelete.php";
+		$this->MultiUpdateUrl = "t004_semesterupdate.php";
 
 		// Table object (t201_employees)
 		if (!isset($GLOBALS['t201_employees']))
@@ -412,7 +412,7 @@ class t205_default_list extends t205_default
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't205_default');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't004_semester');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -452,7 +452,7 @@ class t205_default_list extends t205_default
 
 		// Filter options
 		$this->FilterOptions = new ListOptions("div");
-		$this->FilterOptions->TagClassName = "ew-filter-option ft205_defaultlistsrch";
+		$this->FilterOptions->TagClassName = "ew-filter-option ft004_semesterlistsrch";
 
 		// List actions
 		$this->ListActions = new ListActions();
@@ -470,14 +470,14 @@ class t205_default_list extends t205_default
 		Page_Unloaded();
 
 		// Export
-		global $t205_default;
+		global $t004_semester;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t205_default);
+				$doc = new $class($t004_semester);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -812,11 +812,8 @@ class t205_default_list extends t205_default
 
 		// Setup export options
 		$this->setupExportOptions();
-		$this->id->Visible = FALSE;
-		$this->User_ID->setVisibility();
-		$this->Field_ID->setVisibility();
-		$this->Nilai->setVisibility();
-		$this->Keterangan->setVisibility();
+		$this->id->setVisibility();
+		$this->Semester->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -850,9 +847,8 @@ class t205_default_list extends t205_default
 		}
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->User_ID);
-
 		// Search filters
+
 		$srchAdvanced = ""; // Advanced search filter
 		$srchBasic = ""; // Basic search filter
 		$filter = "";
@@ -1104,10 +1100,7 @@ class t205_default_list extends t205_default
 		$filterList = "";
 		$savedFilterList = "";
 		$filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
-		$filterList = Concat($filterList, $this->User_ID->AdvancedSearch->toJson(), ","); // Field User_ID
-		$filterList = Concat($filterList, $this->Field_ID->AdvancedSearch->toJson(), ","); // Field Field_ID
-		$filterList = Concat($filterList, $this->Nilai->AdvancedSearch->toJson(), ","); // Field Nilai
-		$filterList = Concat($filterList, $this->Keterangan->AdvancedSearch->toJson(), ","); // Field Keterangan
+		$filterList = Concat($filterList, $this->Semester->AdvancedSearch->toJson(), ","); // Field Semester
 		if ($this->BasicSearch->Keyword != "") {
 			$wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
 			$filterList = Concat($filterList, $wrk, ",");
@@ -1127,7 +1120,7 @@ class t205_default_list extends t205_default
 		global $UserProfile;
 		if (Post("ajax") == "savefilters") { // Save filter request (Ajax)
 			$filters = Post("filters");
-			$UserProfile->setSearchFilters(CurrentUserName(), "ft205_defaultlistsrch", $filters);
+			$UserProfile->setSearchFilters(CurrentUserName(), "ft004_semesterlistsrch", $filters);
 			WriteJson([["success" => TRUE]]); // Success
 			return TRUE;
 		} elseif (Post("cmd") == "resetfilter") {
@@ -1154,37 +1147,13 @@ class t205_default_list extends t205_default
 		$this->id->AdvancedSearch->SearchOperator2 = @$filter["w_id"];
 		$this->id->AdvancedSearch->save();
 
-		// Field User_ID
-		$this->User_ID->AdvancedSearch->SearchValue = @$filter["x_User_ID"];
-		$this->User_ID->AdvancedSearch->SearchOperator = @$filter["z_User_ID"];
-		$this->User_ID->AdvancedSearch->SearchCondition = @$filter["v_User_ID"];
-		$this->User_ID->AdvancedSearch->SearchValue2 = @$filter["y_User_ID"];
-		$this->User_ID->AdvancedSearch->SearchOperator2 = @$filter["w_User_ID"];
-		$this->User_ID->AdvancedSearch->save();
-
-		// Field Field_ID
-		$this->Field_ID->AdvancedSearch->SearchValue = @$filter["x_Field_ID"];
-		$this->Field_ID->AdvancedSearch->SearchOperator = @$filter["z_Field_ID"];
-		$this->Field_ID->AdvancedSearch->SearchCondition = @$filter["v_Field_ID"];
-		$this->Field_ID->AdvancedSearch->SearchValue2 = @$filter["y_Field_ID"];
-		$this->Field_ID->AdvancedSearch->SearchOperator2 = @$filter["w_Field_ID"];
-		$this->Field_ID->AdvancedSearch->save();
-
-		// Field Nilai
-		$this->Nilai->AdvancedSearch->SearchValue = @$filter["x_Nilai"];
-		$this->Nilai->AdvancedSearch->SearchOperator = @$filter["z_Nilai"];
-		$this->Nilai->AdvancedSearch->SearchCondition = @$filter["v_Nilai"];
-		$this->Nilai->AdvancedSearch->SearchValue2 = @$filter["y_Nilai"];
-		$this->Nilai->AdvancedSearch->SearchOperator2 = @$filter["w_Nilai"];
-		$this->Nilai->AdvancedSearch->save();
-
-		// Field Keterangan
-		$this->Keterangan->AdvancedSearch->SearchValue = @$filter["x_Keterangan"];
-		$this->Keterangan->AdvancedSearch->SearchOperator = @$filter["z_Keterangan"];
-		$this->Keterangan->AdvancedSearch->SearchCondition = @$filter["v_Keterangan"];
-		$this->Keterangan->AdvancedSearch->SearchValue2 = @$filter["y_Keterangan"];
-		$this->Keterangan->AdvancedSearch->SearchOperator2 = @$filter["w_Keterangan"];
-		$this->Keterangan->AdvancedSearch->save();
+		// Field Semester
+		$this->Semester->AdvancedSearch->SearchValue = @$filter["x_Semester"];
+		$this->Semester->AdvancedSearch->SearchOperator = @$filter["z_Semester"];
+		$this->Semester->AdvancedSearch->SearchCondition = @$filter["v_Semester"];
+		$this->Semester->AdvancedSearch->SearchValue2 = @$filter["y_Semester"];
+		$this->Semester->AdvancedSearch->SearchOperator2 = @$filter["w_Semester"];
+		$this->Semester->AdvancedSearch->save();
 		$this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
 		$this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
 	}
@@ -1193,9 +1162,7 @@ class t205_default_list extends t205_default
 	protected function basicSearchSql($arKeywords, $type)
 	{
 		$where = "";
-		$this->buildBasicSearchSql($where, $this->Field_ID, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->Nilai, $arKeywords, $type);
-		$this->buildBasicSearchSql($where, $this->Keterangan, $arKeywords, $type);
+		$this->buildBasicSearchSql($where, $this->Semester, $arKeywords, $type);
 		return $where;
 	}
 
@@ -1357,10 +1324,8 @@ class t205_default_list extends t205_default
 		if (Get("order") !== NULL) {
 			$this->CurrentOrder = Get("order");
 			$this->CurrentOrderType = Get("ordertype", "");
-			$this->updateSort($this->User_ID, $ctrl); // User_ID
-			$this->updateSort($this->Field_ID, $ctrl); // Field_ID
-			$this->updateSort($this->Nilai, $ctrl); // Nilai
-			$this->updateSort($this->Keterangan, $ctrl); // Keterangan
+			$this->updateSort($this->id, $ctrl); // id
+			$this->updateSort($this->Semester, $ctrl); // Semester
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1396,10 +1361,8 @@ class t205_default_list extends t205_default
 			if ($this->Command == "resetsort") {
 				$orderBy = "";
 				$this->setSessionOrderBy($orderBy);
-				$this->User_ID->setSort("");
-				$this->Field_ID->setSort("");
-				$this->Nilai->setSort("");
-				$this->Keterangan->setSort("");
+				$this->id->setSort("");
+				$this->Semester->setSort("");
 			}
 
 			// Reset start position
@@ -1599,10 +1562,10 @@ class t205_default_list extends t205_default
 
 		// Filter button
 		$item = &$this->FilterOptions->add("savecurrentfilter");
-		$item->Body = "<a class=\"ew-save-filter\" data-form=\"ft205_defaultlistsrch\" href=\"#\" onclick=\"return false;\">" . $Language->phrase("SaveCurrentFilter") . "</a>";
+		$item->Body = "<a class=\"ew-save-filter\" data-form=\"ft004_semesterlistsrch\" href=\"#\" onclick=\"return false;\">" . $Language->phrase("SaveCurrentFilter") . "</a>";
 		$item->Visible = TRUE;
 		$item = &$this->FilterOptions->add("deletefilter");
-		$item->Body = "<a class=\"ew-delete-filter\" data-form=\"ft205_defaultlistsrch\" href=\"#\" onclick=\"return false;\">" . $Language->phrase("DeleteFilter") . "</a>";
+		$item->Body = "<a class=\"ew-delete-filter\" data-form=\"ft004_semesterlistsrch\" href=\"#\" onclick=\"return false;\">" . $Language->phrase("DeleteFilter") . "</a>";
 		$item->Visible = TRUE;
 		$this->FilterOptions->UseDropDownButton = TRUE;
 		$this->FilterOptions->UseButtonGroup = !$this->FilterOptions->UseDropDownButton;
@@ -1627,7 +1590,7 @@ class t205_default_list extends t205_default
 					$item = &$option->add("custom_" . $listaction->Action);
 					$caption = $listaction->Caption;
 					$icon = ($listaction->Icon != "") ? "<i class=\"" . HtmlEncode($listaction->Icon) . "\" data-caption=\"" . HtmlEncode($caption) . "\"></i> " . $caption : $caption;
-					$item->Body = "<a class=\"ew-action ew-list-action\" title=\"" . HtmlEncode($caption) . "\" data-caption=\"" . HtmlEncode($caption) . "\" href=\"#\" onclick=\"return ew.submitAction(event,jQuery.extend({f:document.ft205_defaultlist}," . $listaction->toJson(TRUE) . "));\">" . $icon . "</a>";
+					$item->Body = "<a class=\"ew-action ew-list-action\" title=\"" . HtmlEncode($caption) . "\" data-caption=\"" . HtmlEncode($caption) . "\" href=\"#\" onclick=\"return ew.submitAction(event,jQuery.extend({f:document.ft004_semesterlist}," . $listaction->toJson(TRUE) . "));\">" . $icon . "</a>";
 					$item->Visible = $listaction->Allow;
 				}
 			}
@@ -1806,10 +1769,7 @@ class t205_default_list extends t205_default
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->User_ID->setDbValue($row['User_ID']);
-		$this->Field_ID->setDbValue($row['Field_ID']);
-		$this->Nilai->setDbValue($row['Nilai']);
-		$this->Keterangan->setDbValue($row['Keterangan']);
+		$this->Semester->setDbValue($row['Semester']);
 	}
 
 	// Return a row with default values
@@ -1817,10 +1777,7 @@ class t205_default_list extends t205_default
 	{
 		$row = [];
 		$row['id'] = NULL;
-		$row['User_ID'] = NULL;
-		$row['Field_ID'] = NULL;
-		$row['Nilai'] = NULL;
-		$row['Keterangan'] = NULL;
+		$row['Semester'] = NULL;
 		return $row;
 	}
 
@@ -1865,10 +1822,7 @@ class t205_default_list extends t205_default
 
 		// Common render codes for all row types
 		// id
-		// User_ID
-		// Field_ID
-		// Nilai
-		// Keterangan
+		// Semester
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1876,59 +1830,19 @@ class t205_default_list extends t205_default
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// User_ID
-			$curVal = strval($this->User_ID->CurrentValue);
-			if ($curVal != "") {
-				$this->User_ID->ViewValue = $this->User_ID->lookupCacheOption($curVal);
-				if ($this->User_ID->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`EmployeeID`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->User_ID->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = [];
-						$arwrk[1] = $rswrk->fields('df');
-						$this->User_ID->ViewValue = $this->User_ID->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->User_ID->ViewValue = $this->User_ID->CurrentValue;
-					}
-				}
-			} else {
-				$this->User_ID->ViewValue = NULL;
-			}
-			$this->User_ID->ViewCustomAttributes = "";
+			// Semester
+			$this->Semester->ViewValue = $this->Semester->CurrentValue;
+			$this->Semester->ViewCustomAttributes = "";
 
-			// Field_ID
-			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
-			$this->Field_ID->ViewCustomAttributes = "";
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
 
-			// Nilai
-			$this->Nilai->ViewValue = $this->Nilai->CurrentValue;
-			$this->Nilai->ViewCustomAttributes = "";
-
-			// Keterangan
-			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
-			$this->Keterangan->ViewCustomAttributes = "";
-
-			// User_ID
-			$this->User_ID->LinkCustomAttributes = "";
-			$this->User_ID->HrefValue = "";
-			$this->User_ID->TooltipValue = "";
-
-			// Field_ID
-			$this->Field_ID->LinkCustomAttributes = "";
-			$this->Field_ID->HrefValue = "";
-			$this->Field_ID->TooltipValue = "";
-
-			// Nilai
-			$this->Nilai->LinkCustomAttributes = "";
-			$this->Nilai->HrefValue = "";
-			$this->Nilai->TooltipValue = "";
-
-			// Keterangan
-			$this->Keterangan->LinkCustomAttributes = "";
-			$this->Keterangan->HrefValue = "";
-			$this->Keterangan->TooltipValue = "";
+			// Semester
+			$this->Semester->LinkCustomAttributes = "";
+			$this->Semester->HrefValue = "";
+			$this->Semester->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1942,17 +1856,17 @@ class t205_default_list extends t205_default
 		global $Language;
 		if (SameText($type, "excel")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft205_defaultlist, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft004_semesterlist, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportExcelUrl . "\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\">" . $Language->phrase("ExportToExcel") . "</a>";
 		} elseif (SameText($type, "word")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft205_defaultlist, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft004_semesterlist, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportWordUrl . "\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\">" . $Language->phrase("ExportToWord") . "</a>";
 		} elseif (SameText($type, "pdf")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft205_defaultlist, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft004_semesterlist, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportPdfUrl . "\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\">" . $Language->phrase("ExportToPDF") . "</a>";
 		} elseif (SameText($type, "html")) {
@@ -1963,7 +1877,7 @@ class t205_default_list extends t205_default
 			return "<a href=\"" . $this->ExportCsvUrl . "\" class=\"ew-export-link ew-csv\" title=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\">" . $Language->phrase("ExportToCsv") . "</a>";
 		} elseif (SameText($type, "email")) {
 			$url = $custom ? ",url:'" . $this->pageUrl() . "export=email&amp;custom=1'" : "";
-			return '<button id="emf_t205_default" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t205_default\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft205_defaultlist, sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
+			return '<button id="emf_t004_semester" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t004_semester\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft004_semesterlist, sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
 		} elseif (SameText($type, "print")) {
 			return "<a href=\"" . $this->ExportPrintUrl . "\" class=\"ew-export-link ew-print\" title=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\">" . $Language->phrase("PrinterFriendly") . "</a>";
 		}
@@ -2037,7 +1951,7 @@ class t205_default_list extends t205_default
 		// Search button
 		$item = &$this->SearchOptions->add("searchtoggle");
 		$searchToggleClass = ($this->SearchWhere != "") ? " active" : " active";
-		$item->Body = "<a class=\"btn btn-default ew-search-toggle" . $searchToggleClass . "\" href=\"#\" role=\"button\" title=\"" . $Language->phrase("SearchPanel") . "\" data-caption=\"" . $Language->phrase("SearchPanel") . "\" data-toggle=\"button\" data-form=\"ft205_defaultlistsrch\" aria-pressed=\"" . ($searchToggleClass == " active" ? "true" : "false") . "\">" . $Language->phrase("SearchLink") . "</a>";
+		$item->Body = "<a class=\"btn btn-default ew-search-toggle" . $searchToggleClass . "\" href=\"#\" role=\"button\" title=\"" . $Language->phrase("SearchPanel") . "\" data-caption=\"" . $Language->phrase("SearchPanel") . "\" data-toggle=\"button\" data-form=\"ft004_semesterlistsrch\" aria-pressed=\"" . ($searchToggleClass == " active" ? "true" : "false") . "\">" . $Language->phrase("SearchLink") . "</a>";
 		$item->Visible = TRUE;
 
 		// Show all button
@@ -2192,8 +2106,6 @@ class t205_default_list extends t205_default
 
 			// Set up lookup SQL and connection
 			switch ($fld->FieldVar) {
-				case "x_User_ID":
-					break;
 				default:
 					$lookupFilter = "";
 					break;
@@ -2214,8 +2126,6 @@ class t205_default_list extends t205_default
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x_User_ID":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

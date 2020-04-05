@@ -73,14 +73,14 @@ $t205_default_delete->showMessage();
 <?php if ($t205_default_delete->User_ID->Visible) { // User_ID ?>
 		<th class="<?php echo $t205_default_delete->User_ID->headerCellClass() ?>"><span id="elh_t205_default_User_ID" class="t205_default_User_ID"><?php echo $t205_default_delete->User_ID->caption() ?></span></th>
 <?php } ?>
-<?php if ($t205_default_delete->Keterangan->Visible) { // Keterangan ?>
-		<th class="<?php echo $t205_default_delete->Keterangan->headerCellClass() ?>"><span id="elh_t205_default_Keterangan" class="t205_default_Keterangan"><?php echo $t205_default_delete->Keterangan->caption() ?></span></th>
+<?php if ($t205_default_delete->Field_ID->Visible) { // Field_ID ?>
+		<th class="<?php echo $t205_default_delete->Field_ID->headerCellClass() ?>"><span id="elh_t205_default_Field_ID" class="t205_default_Field_ID"><?php echo $t205_default_delete->Field_ID->caption() ?></span></th>
 <?php } ?>
 <?php if ($t205_default_delete->Nilai->Visible) { // Nilai ?>
 		<th class="<?php echo $t205_default_delete->Nilai->headerCellClass() ?>"><span id="elh_t205_default_Nilai" class="t205_default_Nilai"><?php echo $t205_default_delete->Nilai->caption() ?></span></th>
 <?php } ?>
-<?php if ($t205_default_delete->Field_ID->Visible) { // Field_ID ?>
-		<th class="<?php echo $t205_default_delete->Field_ID->headerCellClass() ?>"><span id="elh_t205_default_Field_ID" class="t205_default_Field_ID"><?php echo $t205_default_delete->Field_ID->caption() ?></span></th>
+<?php if ($t205_default_delete->Keterangan->Visible) { // Keterangan ?>
+		<th class="<?php echo $t205_default_delete->Keterangan->headerCellClass() ?>"><span id="elh_t205_default_Keterangan" class="t205_default_Keterangan"><?php echo $t205_default_delete->Keterangan->caption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -110,10 +110,10 @@ while (!$t205_default_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($t205_default_delete->Keterangan->Visible) { // Keterangan ?>
-		<td <?php echo $t205_default_delete->Keterangan->cellAttributes() ?>>
-<span id="el<?php echo $t205_default_delete->RowCount ?>_t205_default_Keterangan" class="t205_default_Keterangan">
-<span<?php echo $t205_default_delete->Keterangan->viewAttributes() ?>><?php echo $t205_default_delete->Keterangan->getViewValue() ?></span>
+<?php if ($t205_default_delete->Field_ID->Visible) { // Field_ID ?>
+		<td <?php echo $t205_default_delete->Field_ID->cellAttributes() ?>>
+<span id="el<?php echo $t205_default_delete->RowCount ?>_t205_default_Field_ID" class="t205_default_Field_ID">
+<span<?php echo $t205_default_delete->Field_ID->viewAttributes() ?>><?php echo $t205_default_delete->Field_ID->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
@@ -124,10 +124,10 @@ while (!$t205_default_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($t205_default_delete->Field_ID->Visible) { // Field_ID ?>
-		<td <?php echo $t205_default_delete->Field_ID->cellAttributes() ?>>
-<span id="el<?php echo $t205_default_delete->RowCount ?>_t205_default_Field_ID" class="t205_default_Field_ID">
-<span<?php echo $t205_default_delete->Field_ID->viewAttributes() ?>><?php echo $t205_default_delete->Field_ID->getViewValue() ?></span>
+<?php if ($t205_default_delete->Keterangan->Visible) { // Keterangan ?>
+		<td <?php echo $t205_default_delete->Keterangan->cellAttributes() ?>>
+<span id="el<?php echo $t205_default_delete->RowCount ?>_t205_default_Keterangan" class="t205_default_Keterangan">
+<span<?php echo $t205_default_delete->Keterangan->viewAttributes() ?>><?php echo $t205_default_delete->Keterangan->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

@@ -4,20 +4,20 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t205_default_add extends t205_default
+class t003_kelas_delete extends t003_kelas
 {
 
 	// Page ID
-	public $PageID = "add";
+	public $PageID = "delete";
 
 	// Project ID
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't205_default';
+	public $TableName = 't003_kelas';
 
 	// Page object name
-	public $PageObjName = "t205_default_add";
+	public $PageObjName = "t003_kelas_delete";
 
 	// Page headings
 	public $Heading = "";
@@ -341,10 +341,10 @@ class t205_default_add extends t205_default
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t205_default)
-		if (!isset($GLOBALS["t205_default"]) || get_class($GLOBALS["t205_default"]) == PROJECT_NAMESPACE . "t205_default") {
-			$GLOBALS["t205_default"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t205_default"];
+		// Table object (t003_kelas)
+		if (!isset($GLOBALS["t003_kelas"]) || get_class($GLOBALS["t003_kelas"]) == PROJECT_NAMESPACE . "t003_kelas") {
+			$GLOBALS["t003_kelas"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t003_kelas"];
 		}
 
 		// Table object (t201_employees)
@@ -353,11 +353,11 @@ class t205_default_add extends t205_default
 
 		// Page ID (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
-			define(PROJECT_NAMESPACE . "PAGE_ID", 'add');
+			define(PROJECT_NAMESPACE . "PAGE_ID", 'delete');
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't205_default');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't003_kelas');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -386,14 +386,14 @@ class t205_default_add extends t205_default
 		Page_Unloaded();
 
 		// Export
-		global $t205_default;
+		global $t003_kelas;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t205_default);
+				$doc = new $class($t003_kelas);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -421,24 +421,8 @@ class t205_default_add extends t205_default
 		if ($url != "") {
 			if (!Config("DEBUG") && ob_get_length())
 				ob_end_clean();
-
-			// Handle modal response
-			if ($this->IsModal) { // Show as modal
-				$row = ["url" => $url, "modal" => "1"];
-				$pageName = GetPageName($url);
-				if ($pageName != $this->getListUrl()) { // Not List page
-					$row["caption"] = $this->getModalCaption($pageName);
-					if ($pageName == "t205_defaultview.php")
-						$row["view"] = "1";
-				} else { // List page should not be shown as modal => error
-					$row["error"] = $this->getFailureMessage();
-					$this->clearFailureMessage();
-				}
-				WriteJson($row);
-			} else {
-				SaveDebugMessage();
-				AddHeader("Location", $url);
-			}
+			SaveDebugMessage();
+			AddHeader("Location", $url);
 		}
 		exit();
 	}
@@ -529,79 +513,6 @@ class t205_default_add extends t205_default
 			$this->id->Visible = FALSE;
 	}
 
-	// Lookup data
-	public function lookup()
-	{
-		global $Language, $Security;
-		if (!isset($Language))
-			$Language = new Language(Config("LANGUAGE_FOLDER"), Post("language", ""));
-
-		// Set up API request
-		if (!$this->setupApiRequest())
-			return FALSE;
-
-		// Get lookup object
-		$fieldName = Post("field");
-		if (!array_key_exists($fieldName, $this->fields))
-			return FALSE;
-		$lookupField = $this->fields[$fieldName];
-		$lookup = $lookupField->Lookup;
-		if ($lookup === NULL)
-			return FALSE;
-		$tbl = $lookup->getTable();
-		if (!$Security->allowLookup(Config("PROJECT_ID") . $tbl->TableName)) // Lookup permission
-			return FALSE;
-
-		// Get lookup parameters
-		$lookupType = Post("ajax", "unknown");
-		$pageSize = -1;
-		$offset = -1;
-		$searchValue = "";
-		if (SameText($lookupType, "modal")) {
-			$searchValue = Post("sv", "");
-			$pageSize = Post("recperpage", 10);
-			$offset = Post("start", 0);
-		} elseif (SameText($lookupType, "autosuggest")) {
-			$searchValue = Get("q", "");
-			$pageSize = Param("n", -1);
-			$pageSize = is_numeric($pageSize) ? (int)$pageSize : -1;
-			if ($pageSize <= 0)
-				$pageSize = Config("AUTO_SUGGEST_MAX_ENTRIES");
-			$start = Param("start", -1);
-			$start = is_numeric($start) ? (int)$start : -1;
-			$page = Param("page", -1);
-			$page = is_numeric($page) ? (int)$page : -1;
-			$offset = $start >= 0 ? $start : ($page > 0 && $pageSize > 0 ? ($page - 1) * $pageSize : 0);
-		}
-		$userSelect = Decrypt(Post("s", ""));
-		$userFilter = Decrypt(Post("f", ""));
-		$userOrderBy = Decrypt(Post("o", ""));
-		$keys = Post("keys");
-		$lookup->LookupType = $lookupType; // Lookup type
-		if ($keys !== NULL) { // Selected records from modal
-			if (is_array($keys))
-				$keys = implode(Config("MULTIPLE_OPTION_SEPARATOR"), $keys);
-			$lookup->FilterFields = []; // Skip parent fields if any
-			$lookup->FilterValues[] = $keys; // Lookup values
-			$pageSize = -1; // Show all records
-		} else { // Lookup values
-			$lookup->FilterValues[] = Post("v0", Post("lookupValue", ""));
-		}
-		$cnt = is_array($lookup->FilterFields) ? count($lookup->FilterFields) : 0;
-		for ($i = 1; $i <= $cnt; $i++)
-			$lookup->FilterValues[] = Post("v" . $i, "");
-		$lookup->SearchValue = $searchValue;
-		$lookup->PageSize = $pageSize;
-		$lookup->Offset = $offset;
-		if ($userSelect != "")
-			$lookup->UserSelect = $userSelect;
-		if ($userFilter != "")
-			$lookup->UserFilter = $userFilter;
-		if ($userOrderBy != "")
-			$lookup->UserOrderBy = $userOrderBy;
-		$lookup->toJson($this); // Use settings from current page
-	}
-
 	// Set up API request
 	public function setupApiRequest()
 	{
@@ -619,15 +530,14 @@ class t205_default_add extends t205_default
 		}
 		return FALSE;
 	}
-	public $FormClassName = "ew-horizontal ew-form ew-add-form";
-	public $IsModal = FALSE;
-	public $IsMobileOrModal = FALSE;
 	public $DbMasterFilter = "";
 	public $DbDetailFilter = "";
 	public $StartRecord;
-	public $Priv = 0;
-	public $OldRecordset;
-	public $CopyRecord;
+	public $TotalRecords = 0;
+	public $RecordCount;
+	public $RecKeys = [];
+	public $StartRowCount = 1;
+	public $RowCount = 0;
 
 	//
 	// Page run
@@ -635,11 +545,7 @@ class t205_default_add extends t205_default
 
 	public function run()
 	{
-		global $ExportType, $CustomExportType, $ExportFileName, $UserProfile, $Language, $Security, $CurrentForm,
-			$FormError, $SkipHeaderFooter;
-
-		// Is modal
-		$this->IsModal = (Param("modal") == "1");
+		global $ExportType, $CustomExportType, $ExportFileName, $UserProfile, $Language, $Security, $CurrentForm;
 
 		// User profile
 		$UserProfile = new UserProfile();
@@ -654,11 +560,11 @@ class t205_default_add extends t205_default
 			$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName);
 			if ($Security->isLoggedIn())
 				$Security->TablePermission_Loaded();
-			if (!$Security->canAdd()) {
+			if (!$Security->canDelete()) {
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t205_defaultlist.php"));
+					$this->terminate(GetUrl("t003_kelaslist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -669,15 +575,9 @@ class t205_default_add extends t205_default
 				$Security->UserID_Loaded();
 			}
 		}
-
-		// Create form object
-		$CurrentForm = new HttpForm();
 		$this->CurrentAction = Param("action"); // Set up current action
-		$this->id->Visible = FALSE;
-		$this->User_ID->setVisibility();
-		$this->Field_ID->setVisibility();
-		$this->Nilai->setVisibility();
-		$this->Keterangan->setVisibility();
+		$this->id->setVisibility();
+		$this->Kelas->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -699,191 +599,93 @@ class t205_default_add extends t205_default
 		$this->createToken();
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->User_ID);
-
 		// Check permission
-		if (!$Security->canAdd()) {
+
+		if (!$Security->canDelete()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t205_defaultlist.php");
+			$this->terminate("t003_kelaslist.php");
 			return;
-		}
-
-		// Check modal
-		if ($this->IsModal)
-			$SkipHeaderFooter = TRUE;
-		$this->IsMobileOrModal = IsMobile() || $this->IsModal;
-		$this->FormClassName = "ew-form ew-add-form ew-horizontal";
-		$postBack = FALSE;
-
-		// Set up current action
-		if (IsApi()) {
-			$this->CurrentAction = "insert"; // Add record directly
-			$postBack = TRUE;
-		} elseif (Post("action") !== NULL) {
-			$this->CurrentAction = Post("action"); // Get form action
-			$postBack = TRUE;
-		} else { // Not post back
-
-			// Load key values from QueryString
-			$this->CopyRecord = TRUE;
-			if (Get("id") !== NULL) {
-				$this->id->setQueryStringValue(Get("id"));
-				$this->setKey("id", $this->id->CurrentValue); // Set up key
-			} else {
-				$this->setKey("id", ""); // Clear key
-				$this->CopyRecord = FALSE;
-			}
-			if ($this->CopyRecord) {
-				$this->CurrentAction = "copy"; // Copy record
-			} else {
-				$this->CurrentAction = "show"; // Display blank record
-			}
-		}
-
-		// Load old record / default values
-		$loaded = $this->loadOldRecord();
-
-		// Load form values
-		if ($postBack) {
-			$this->loadFormValues(); // Load form values
-		}
-
-		// Validate form if post back
-		if ($postBack) {
-			if (!$this->validateForm()) {
-				$this->EventCancelled = TRUE; // Event cancelled
-				$this->restoreFormValues(); // Restore form values
-				$this->setFailureMessage($FormError);
-				if (IsApi()) {
-					$this->terminate();
-					return;
-				} else {
-					$this->CurrentAction = "show"; // Form error, reset action
-				}
-			}
-		}
-
-		// Perform current action
-		switch ($this->CurrentAction) {
-			case "copy": // Copy an existing record
-				if (!$loaded) { // Record not loaded
-					if ($this->getFailureMessage() == "")
-						$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
-					$this->terminate("t205_defaultlist.php"); // No matching record, return to list
-				}
-				break;
-			case "insert": // Add new record
-				$this->SendEmail = TRUE; // Send email on add success
-				if ($this->addRow($this->OldRecordset)) { // Add successful
-					if ($this->getSuccessMessage() == "")
-						$this->setSuccessMessage($Language->phrase("AddSuccess")); // Set up success message
-					$returnUrl = $this->getReturnUrl();
-					if (GetPageName($returnUrl) == "t205_defaultlist.php")
-						$returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
-					elseif (GetPageName($returnUrl) == "t205_defaultview.php")
-						$returnUrl = $this->getViewUrl(); // View page, return to View page with keyurl directly
-					if (IsApi()) { // Return to caller
-						$this->terminate(TRUE);
-						return;
-					} else {
-						$this->terminate($returnUrl);
-					}
-				} elseif (IsApi()) { // API request, return
-					$this->terminate();
-					return;
-				} else {
-					$this->EventCancelled = TRUE; // Event cancelled
-					$this->restoreFormValues(); // Add failed, restore form values
-				}
 		}
 
 		// Set up Breadcrumb
 		$this->setupBreadcrumb();
 
-		// Render row based on row type
-		$this->RowType = ROWTYPE_ADD; // Render add type
-
-		// Render row
-		$this->resetAttributes();
-		$this->renderRow();
-	}
-
-	// Get upload files
-	protected function getUploadFiles()
-	{
-		global $CurrentForm, $Language;
-	}
-
-	// Load default values
-	protected function loadDefaultValues()
-	{
-		$this->id->CurrentValue = NULL;
-		$this->id->OldValue = $this->id->CurrentValue;
-		$this->User_ID->CurrentValue = NULL;
-		$this->User_ID->OldValue = $this->User_ID->CurrentValue;
-		$this->Field_ID->CurrentValue = NULL;
-		$this->Field_ID->OldValue = $this->Field_ID->CurrentValue;
-		$this->Nilai->CurrentValue = NULL;
-		$this->Nilai->OldValue = $this->Nilai->CurrentValue;
-		$this->Keterangan->CurrentValue = NULL;
-		$this->Keterangan->OldValue = $this->Keterangan->CurrentValue;
-	}
-
-	// Load form values
-	protected function loadFormValues()
-	{
-
-		// Load from form
-		global $CurrentForm;
-
-		// Check field name 'User_ID' first before field var 'x_User_ID'
-		$val = $CurrentForm->hasValue("User_ID") ? $CurrentForm->getValue("User_ID") : $CurrentForm->getValue("x_User_ID");
-		if (!$this->User_ID->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->User_ID->Visible = FALSE; // Disable update for API request
-			else
-				$this->User_ID->setFormValue($val);
+		// Load key parameters
+		$this->RecKeys = $this->getRecordKeys(); // Load record keys
+		$filter = $this->getFilterFromRecordKeys();
+		if ($filter == "") {
+			$this->terminate("t003_kelaslist.php"); // Prevent SQL injection, return to list
+			return;
 		}
 
-		// Check field name 'Field_ID' first before field var 'x_Field_ID'
-		$val = $CurrentForm->hasValue("Field_ID") ? $CurrentForm->getValue("Field_ID") : $CurrentForm->getValue("x_Field_ID");
-		if (!$this->Field_ID->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->Field_ID->Visible = FALSE; // Disable update for API request
-			else
-				$this->Field_ID->setFormValue($val);
-		}
+		// Set up filter (WHERE Clause)
+		$this->CurrentFilter = $filter;
 
-		// Check field name 'Nilai' first before field var 'x_Nilai'
-		$val = $CurrentForm->hasValue("Nilai") ? $CurrentForm->getValue("Nilai") : $CurrentForm->getValue("x_Nilai");
-		if (!$this->Nilai->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->Nilai->Visible = FALSE; // Disable update for API request
-			else
-				$this->Nilai->setFormValue($val);
+		// Get action
+		if (IsApi()) {
+			$this->CurrentAction = "delete"; // Delete record directly
+		} elseif (Post("action") !== NULL) {
+			$this->CurrentAction = Post("action");
+		} elseif (Get("action") == "1") {
+			$this->CurrentAction = "delete"; // Delete record directly
+		} else {
+			$this->CurrentAction = "show"; // Display record
 		}
-
-		// Check field name 'Keterangan' first before field var 'x_Keterangan'
-		$val = $CurrentForm->hasValue("Keterangan") ? $CurrentForm->getValue("Keterangan") : $CurrentForm->getValue("x_Keterangan");
-		if (!$this->Keterangan->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->Keterangan->Visible = FALSE; // Disable update for API request
-			else
-				$this->Keterangan->setFormValue($val);
+		if ($this->isDelete()) {
+			$this->SendEmail = TRUE; // Send email on delete success
+			if ($this->deleteRows()) { // Delete rows
+				if ($this->getSuccessMessage() == "")
+					$this->setSuccessMessage($Language->phrase("DeleteSuccess")); // Set up success message
+				if (IsApi()) {
+					$this->terminate(TRUE);
+					return;
+				} else {
+					$this->terminate($this->getReturnUrl()); // Return to caller
+				}
+			} else { // Delete failed
+				if (IsApi()) {
+					$this->terminate();
+					return;
+				}
+				$this->CurrentAction = "show"; // Display record
+			}
 		}
-
-		// Check field name 'id' first before field var 'x_id'
-		$val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
+		if ($this->isShow()) { // Load records for display
+			if ($this->Recordset = $this->loadRecordset())
+				$this->TotalRecords = $this->Recordset->RecordCount(); // Get record count
+			if ($this->TotalRecords <= 0) { // No record found, exit
+				if ($this->Recordset)
+					$this->Recordset->close();
+				$this->terminate("t003_kelaslist.php"); // Return to list
+			}
+		}
 	}
 
-	// Restore form values
-	public function restoreFormValues()
+	// Load recordset
+	public function loadRecordset($offset = -1, $rowcnt = -1)
 	{
-		global $CurrentForm;
-		$this->User_ID->CurrentValue = $this->User_ID->FormValue;
-		$this->Field_ID->CurrentValue = $this->Field_ID->FormValue;
-		$this->Nilai->CurrentValue = $this->Nilai->FormValue;
-		$this->Keterangan->CurrentValue = $this->Keterangan->FormValue;
+
+		// Load List page SQL
+		$sql = $this->getListSql();
+		$conn = $this->getConnection();
+
+		// Load recordset
+		$dbtype = GetConnectionType($this->Dbid);
+		if ($this->UseSelectLimit) {
+			$conn->raiseErrorFn = Config("ERROR_FUNC");
+			if ($dbtype == "MSSQL") {
+				$rs = $conn->selectLimit($sql, $rowcnt, $offset, ["_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())]);
+			} else {
+				$rs = $conn->selectLimit($sql, $rowcnt, $offset);
+			}
+			$conn->raiseErrorFn = "";
+		} else {
+			$rs = LoadRecordset($sql, $conn);
+		}
+
+		// Call Recordset Selected event
+		$this->Recordset_Selected($rs);
+		return $rs;
 	}
 
 	// Load row based on key values
@@ -922,46 +724,16 @@ class t205_default_add extends t205_default
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->User_ID->setDbValue($row['User_ID']);
-		$this->Field_ID->setDbValue($row['Field_ID']);
-		$this->Nilai->setDbValue($row['Nilai']);
-		$this->Keterangan->setDbValue($row['Keterangan']);
+		$this->Kelas->setDbValue($row['Kelas']);
 	}
 
 	// Return a row with default values
 	protected function newRow()
 	{
-		$this->loadDefaultValues();
 		$row = [];
-		$row['id'] = $this->id->CurrentValue;
-		$row['User_ID'] = $this->User_ID->CurrentValue;
-		$row['Field_ID'] = $this->Field_ID->CurrentValue;
-		$row['Nilai'] = $this->Nilai->CurrentValue;
-		$row['Keterangan'] = $this->Keterangan->CurrentValue;
+		$row['id'] = NULL;
+		$row['Kelas'] = NULL;
 		return $row;
-	}
-
-	// Load old record
-	protected function loadOldRecord()
-	{
-
-		// Load key values from Session
-		$validKey = TRUE;
-		if (strval($this->getKey("id")) != "")
-			$this->id->OldValue = $this->getKey("id"); // id
-		else
-			$validKey = FALSE;
-
-		// Load old record
-		$this->OldRecordset = NULL;
-		if ($validKey) {
-			$this->CurrentFilter = $this->getRecordFilter();
-			$sql = $this->getCurrentSql();
-			$conn = $this->getConnection();
-			$this->OldRecordset = LoadRecordset($sql, $conn);
-		}
-		$this->loadRowValues($this->OldRecordset); // Load row values
-		return $validKey;
 	}
 
 	// Render row values based on field settings
@@ -976,10 +748,7 @@ class t205_default_add extends t205_default
 
 		// Common render codes for all row types
 		// id
-		// User_ID
-		// Field_ID
-		// Nilai
-		// Keterangan
+		// Kelas
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -987,213 +756,85 @@ class t205_default_add extends t205_default
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// User_ID
-			$curVal = strval($this->User_ID->CurrentValue);
-			if ($curVal != "") {
-				$this->User_ID->ViewValue = $this->User_ID->lookupCacheOption($curVal);
-				if ($this->User_ID->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`EmployeeID`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->User_ID->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = [];
-						$arwrk[1] = $rswrk->fields('df');
-						$this->User_ID->ViewValue = $this->User_ID->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->User_ID->ViewValue = $this->User_ID->CurrentValue;
-					}
-				}
-			} else {
-				$this->User_ID->ViewValue = NULL;
-			}
-			$this->User_ID->ViewCustomAttributes = "";
+			// Kelas
+			$this->Kelas->ViewValue = $this->Kelas->CurrentValue;
+			$this->Kelas->ViewCustomAttributes = "";
 
-			// Field_ID
-			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
-			$this->Field_ID->ViewCustomAttributes = "";
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
 
-			// Nilai
-			$this->Nilai->ViewValue = $this->Nilai->CurrentValue;
-			$this->Nilai->ViewCustomAttributes = "";
-
-			// Keterangan
-			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
-			$this->Keterangan->ViewCustomAttributes = "";
-
-			// User_ID
-			$this->User_ID->LinkCustomAttributes = "";
-			$this->User_ID->HrefValue = "";
-			$this->User_ID->TooltipValue = "";
-
-			// Field_ID
-			$this->Field_ID->LinkCustomAttributes = "";
-			$this->Field_ID->HrefValue = "";
-			$this->Field_ID->TooltipValue = "";
-
-			// Nilai
-			$this->Nilai->LinkCustomAttributes = "";
-			$this->Nilai->HrefValue = "";
-			$this->Nilai->TooltipValue = "";
-
-			// Keterangan
-			$this->Keterangan->LinkCustomAttributes = "";
-			$this->Keterangan->HrefValue = "";
-			$this->Keterangan->TooltipValue = "";
-		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
-
-			// User_ID
-			$this->User_ID->EditAttrs["class"] = "form-control";
-			$this->User_ID->EditCustomAttributes = "";
-			$curVal = trim(strval($this->User_ID->CurrentValue));
-			if ($curVal != "")
-				$this->User_ID->ViewValue = $this->User_ID->lookupCacheOption($curVal);
-			else
-				$this->User_ID->ViewValue = $this->User_ID->Lookup !== NULL && is_array($this->User_ID->Lookup->Options) ? $curVal : NULL;
-			if ($this->User_ID->ViewValue !== NULL) { // Load from cache
-				$this->User_ID->EditValue = array_values($this->User_ID->Lookup->Options);
-			} else { // Lookup from database
-				if ($curVal == "") {
-					$filterWrk = "0=1";
-				} else {
-					$filterWrk = "`EmployeeID`" . SearchString("=", $this->User_ID->CurrentValue, DATATYPE_NUMBER, "");
-				}
-				$sqlWrk = $this->User_ID->Lookup->getSql(TRUE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				$arwrk = $rswrk ? $rswrk->getRows() : [];
-				if ($rswrk)
-					$rswrk->close();
-				$this->User_ID->EditValue = $arwrk;
-			}
-
-			// Field_ID
-			$this->Field_ID->EditAttrs["class"] = "form-control";
-			$this->Field_ID->EditCustomAttributes = "";
-			if (!$this->Field_ID->Raw)
-				$this->Field_ID->CurrentValue = HtmlDecode($this->Field_ID->CurrentValue);
-			$this->Field_ID->EditValue = HtmlEncode($this->Field_ID->CurrentValue);
-			$this->Field_ID->PlaceHolder = RemoveHtml($this->Field_ID->caption());
-
-			// Nilai
-			$this->Nilai->EditAttrs["class"] = "form-control";
-			$this->Nilai->EditCustomAttributes = "";
-			if (!$this->Nilai->Raw)
-				$this->Nilai->CurrentValue = HtmlDecode($this->Nilai->CurrentValue);
-			$this->Nilai->EditValue = HtmlEncode($this->Nilai->CurrentValue);
-			$this->Nilai->PlaceHolder = RemoveHtml($this->Nilai->caption());
-
-			// Keterangan
-			$this->Keterangan->EditAttrs["class"] = "form-control";
-			$this->Keterangan->EditCustomAttributes = "";
-			if (!$this->Keterangan->Raw)
-				$this->Keterangan->CurrentValue = HtmlDecode($this->Keterangan->CurrentValue);
-			$this->Keterangan->EditValue = HtmlEncode($this->Keterangan->CurrentValue);
-			$this->Keterangan->PlaceHolder = RemoveHtml($this->Keterangan->caption());
-
-			// Add refer script
-			// User_ID
-
-			$this->User_ID->LinkCustomAttributes = "";
-			$this->User_ID->HrefValue = "";
-
-			// Field_ID
-			$this->Field_ID->LinkCustomAttributes = "";
-			$this->Field_ID->HrefValue = "";
-
-			// Nilai
-			$this->Nilai->LinkCustomAttributes = "";
-			$this->Nilai->HrefValue = "";
-
-			// Keterangan
-			$this->Keterangan->LinkCustomAttributes = "";
-			$this->Keterangan->HrefValue = "";
+			// Kelas
+			$this->Kelas->LinkCustomAttributes = "";
+			$this->Kelas->HrefValue = "";
+			$this->Kelas->TooltipValue = "";
 		}
-		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
-			$this->setupFieldTitles();
 
 		// Call Row Rendered event
 		if ($this->RowType != ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
 	}
 
-	// Validate form
-	protected function validateForm()
-	{
-		global $Language, $FormError;
-
-		// Initialize form error message
-		$FormError = "";
-
-		// Check if validation required
-		if (!Config("SERVER_VALIDATE"))
-			return ($FormError == "");
-		if ($this->User_ID->Required) {
-			if (!$this->User_ID->IsDetailKey && $this->User_ID->FormValue != NULL && $this->User_ID->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->User_ID->caption(), $this->User_ID->RequiredErrorMessage));
-			}
-		}
-		if ($this->Field_ID->Required) {
-			if (!$this->Field_ID->IsDetailKey && $this->Field_ID->FormValue != NULL && $this->Field_ID->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->Field_ID->caption(), $this->Field_ID->RequiredErrorMessage));
-			}
-		}
-		if ($this->Nilai->Required) {
-			if (!$this->Nilai->IsDetailKey && $this->Nilai->FormValue != NULL && $this->Nilai->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->Nilai->caption(), $this->Nilai->RequiredErrorMessage));
-			}
-		}
-		if ($this->Keterangan->Required) {
-			if (!$this->Keterangan->IsDetailKey && $this->Keterangan->FormValue != NULL && $this->Keterangan->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->Keterangan->caption(), $this->Keterangan->RequiredErrorMessage));
-			}
-		}
-
-		// Return validate result
-		$validateForm = ($FormError == "");
-
-		// Call Form_CustomValidate event
-		$formCustomError = "";
-		$validateForm = $validateForm && $this->Form_CustomValidate($formCustomError);
-		if ($formCustomError != "") {
-			AddMessage($FormError, $formCustomError);
-		}
-		return $validateForm;
-	}
-
-	// Add record
-	protected function addRow($rsold = NULL)
+	// Delete records based on current filter
+	protected function deleteRows()
 	{
 		global $Language, $Security;
-		$conn = $this->getConnection();
-
-		// Load db values from rsold
-		$this->loadDbValues($rsold);
-		if ($rsold) {
+		if (!$Security->canDelete()) {
+			$this->setFailureMessage($Language->phrase("NoDeletePermission")); // No delete permission
+			return FALSE;
 		}
-		$rsnew = [];
+		$deleteRows = TRUE;
+		$sql = $this->getCurrentSql();
+		$conn = $this->getConnection();
+		$conn->raiseErrorFn = Config("ERROR_FUNC");
+		$rs = $conn->execute($sql);
+		$conn->raiseErrorFn = "";
+		if ($rs === FALSE) {
+			return FALSE;
+		} elseif ($rs->EOF) {
+			$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
+			$rs->close();
+			return FALSE;
+		}
+		$rows = ($rs) ? $rs->getRows() : [];
+		$conn->beginTrans();
 
-		// User_ID
-		$this->User_ID->setDbValueDef($rsnew, $this->User_ID->CurrentValue, 0, FALSE);
+		// Clone old rows
+		$rsold = $rows;
+		if ($rs)
+			$rs->close();
 
-		// Field_ID
-		$this->Field_ID->setDbValueDef($rsnew, $this->Field_ID->CurrentValue, "", FALSE);
-
-		// Nilai
-		$this->Nilai->setDbValueDef($rsnew, $this->Nilai->CurrentValue, "", FALSE);
-
-		// Keterangan
-		$this->Keterangan->setDbValueDef($rsnew, $this->Keterangan->CurrentValue, "", FALSE);
-
-		// Call Row Inserting event
-		$rs = ($rsold) ? $rsold->fields : NULL;
-		$insertRow = $this->Row_Inserting($rs, $rsnew);
-		if ($insertRow) {
-			$conn->raiseErrorFn = Config("ERROR_FUNC");
-			$addRow = $this->insert($rsnew);
-			$conn->raiseErrorFn = "";
-			if ($addRow) {
+		// Call row deleting event
+		if ($deleteRows) {
+			foreach ($rsold as $row) {
+				$deleteRows = $this->Row_Deleting($row);
+				if (!$deleteRows)
+					break;
 			}
-		} else {
+		}
+		if ($deleteRows) {
+			$key = "";
+			foreach ($rsold as $row) {
+				$thisKey = "";
+				if ($thisKey != "")
+					$thisKey .= Config("COMPOSITE_KEY_SEPARATOR");
+				$thisKey .= $row['id'];
+				if (Config("DELETE_UPLOADED_FILES")) // Delete old files
+					$this->deleteUploadedFiles($row);
+				$conn->raiseErrorFn = Config("ERROR_FUNC");
+				$deleteRows = $this->delete($row); // Delete
+				$conn->raiseErrorFn = "";
+				if ($deleteRows === FALSE)
+					break;
+				if ($key != "")
+					$key .= ", ";
+				$key .= $thisKey;
+			}
+		}
+		if (!$deleteRows) {
+
+			// Set up error message
 			if ($this->getSuccessMessage() != "" || $this->getFailureMessage() != "") {
 
 				// Use the message, do nothing
@@ -1201,27 +842,28 @@ class t205_default_add extends t205_default
 				$this->setFailureMessage($this->CancelMessage);
 				$this->CancelMessage = "";
 			} else {
-				$this->setFailureMessage($Language->phrase("InsertCancelled"));
+				$this->setFailureMessage($Language->phrase("DeleteCancelled"));
 			}
-			$addRow = FALSE;
 		}
-		if ($addRow) {
-
-			// Call Row Inserted event
-			$rs = ($rsold) ? $rsold->fields : NULL;
-			$this->Row_Inserted($rs, $rsnew);
+		if ($deleteRows) {
+			$conn->commitTrans(); // Commit the changes
+		} else {
+			$conn->rollbackTrans(); // Rollback changes
 		}
 
-		// Clean upload path if any
-		if ($addRow) {
+		// Call Row Deleted event
+		if ($deleteRows) {
+			foreach ($rsold as $row) {
+				$this->Row_Deleted($row);
+			}
 		}
 
-		// Write JSON for API request
-		if (IsApi() && $addRow) {
-			$row = $this->getRecordsFromRecordset([$rsnew], TRUE);
+		// Write JSON for API request (Support single row only)
+		if (IsApi() && $deleteRows) {
+			$row = $this->getRecordsFromRecordset($rsold, TRUE);
 			WriteJson(["success" => TRUE, $this->TableVar => $row]);
 		}
-		return $addRow;
+		return $deleteRows;
 	}
 
 	// Set up Breadcrumb
@@ -1230,9 +872,9 @@ class t205_default_add extends t205_default
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t205_defaultlist.php"), "", $this->TableVar, TRUE);
-		$pageId = ($this->isCopy()) ? "Copy" : "Add";
-		$Breadcrumb->add("add", $pageId, $url);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t003_kelaslist.php"), "", $this->TableVar, TRUE);
+		$pageId = "delete";
+		$Breadcrumb->add("delete", $pageId, $url);
 	}
 
 	// Setup lookup options
@@ -1249,8 +891,6 @@ class t205_default_add extends t205_default
 
 			// Set up lookup SQL and connection
 			switch ($fld->FieldVar) {
-				case "x_User_ID":
-					break;
 				default:
 					$lookupFilter = "";
 					break;
@@ -1271,8 +911,6 @@ class t205_default_add extends t205_default
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x_User_ID":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();
@@ -1342,13 +980,6 @@ class t205_default_add extends t205_default
 		// Example:
 		//$footer = "your footer";
 
-	}
-
-	// Form Custom Validate event
-	function Form_CustomValidate(&$customError) {
-
-		// Return error message in CustomError
-		return TRUE;
 	}
 } // End class
 ?>

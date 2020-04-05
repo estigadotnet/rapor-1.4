@@ -2,9 +2,9 @@
 <?php
 
 /**
- * Table class for t101_session
+ * Table class for t003_kelas
  */
-class t101_session extends DbTable
+class t003_kelas extends DbTable
 {
 	protected $SqlFrom = "";
 	protected $SqlSelect = "";
@@ -26,10 +26,7 @@ class t101_session extends DbTable
 
 	// Fields
 	public $id;
-	public $sekolah_id;
-	public $user_id;
-	public $tanggal_jam;
-	public $session_value;
+	public $Kelas;
 
 	// Constructor
 	public function __construct()
@@ -40,12 +37,12 @@ class t101_session extends DbTable
 		// Language object
 		if (!isset($Language))
 			$Language = new Language();
-		$this->TableVar = 't101_session';
-		$this->TableName = 't101_session';
+		$this->TableVar = 't003_kelas';
+		$this->TableName = 't003_kelas';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`t101_session`";
+		$this->UpdateTable = "`t003_kelas`";
 		$this->Dbid = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -65,46 +62,19 @@ class t101_session extends DbTable
 		$this->BasicSearch = new BasicSearch($this->TableVar);
 
 		// id
-		$this->id = new DbField('t101_session', 't101_session', 'x_id', 'id', '`id`', '`id`', 3, 11, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->id = new DbField('t003_kelas', 't003_kelas', 'x_id', 'id', '`id`', '`id`', 3, 11, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
 		$this->id->IsAutoIncrement = TRUE; // Autoincrement field
 		$this->id->IsPrimaryKey = TRUE; // Primary key field
 		$this->id->Sortable = TRUE; // Allow sort
 		$this->id->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
 		$this->fields['id'] = &$this->id;
 
-		// sekolah_id
-		$this->sekolah_id = new DbField('t101_session', 't101_session', 'x_sekolah_id', 'sekolah_id', '`sekolah_id`', '`sekolah_id`', 3, 11, -1, FALSE, '`sekolah_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
-		$this->sekolah_id->Nullable = FALSE; // NOT NULL field
-		$this->sekolah_id->Required = TRUE; // Required field
-		$this->sekolah_id->Sortable = TRUE; // Allow sort
-		$this->sekolah_id->UsePleaseSelect = TRUE; // Use PleaseSelect by default
-		$this->sekolah_id->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-		$this->sekolah_id->Lookup = new Lookup('sekolah_id', 't001_sekolah', FALSE, 'id', ["Nama","","",""], [], [], [], [], [], [], '', '');
-		$this->sekolah_id->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
-		$this->fields['sekolah_id'] = &$this->sekolah_id;
-
-		// user_id
-		$this->user_id = new DbField('t101_session', 't101_session', 'x_user_id', 'user_id', '`user_id`', '`user_id`', 3, 11, -1, FALSE, '`user_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->user_id->Nullable = FALSE; // NOT NULL field
-		$this->user_id->Required = TRUE; // Required field
-		$this->user_id->Sortable = TRUE; // Allow sort
-		$this->user_id->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
-		$this->fields['user_id'] = &$this->user_id;
-
-		// tanggal_jam
-		$this->tanggal_jam = new DbField('t101_session', 't101_session', 'x_tanggal_jam', 'tanggal_jam', '`tanggal_jam`', CastDateFieldForLike("`tanggal_jam`", 0, "DB"), 135, 19, 0, FALSE, '`tanggal_jam`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->tanggal_jam->Nullable = FALSE; // NOT NULL field
-		$this->tanggal_jam->Required = TRUE; // Required field
-		$this->tanggal_jam->Sortable = TRUE; // Allow sort
-		$this->tanggal_jam->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->phrase("IncorrectDate"));
-		$this->fields['tanggal_jam'] = &$this->tanggal_jam;
-
-		// session_value
-		$this->session_value = new DbField('t101_session', 't101_session', 'x_session_value', 'session_value', '`session_value`', '`session_value`', 200, 255, -1, FALSE, '`session_value`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->session_value->Nullable = FALSE; // NOT NULL field
-		$this->session_value->Required = TRUE; // Required field
-		$this->session_value->Sortable = TRUE; // Allow sort
-		$this->fields['session_value'] = &$this->session_value;
+		// Kelas
+		$this->Kelas = new DbField('t003_kelas', 't003_kelas', 'x_Kelas', 'Kelas', '`Kelas`', '`Kelas`', 200, 25, -1, FALSE, '`Kelas`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->Kelas->Nullable = FALSE; // NOT NULL field
+		$this->Kelas->Required = TRUE; // Required field
+		$this->Kelas->Sortable = TRUE; // Allow sort
+		$this->fields['Kelas'] = &$this->Kelas;
 	}
 
 	// Field Visibility
@@ -159,7 +129,7 @@ class t101_session extends DbTable
 	// Table level SQL
 	public function getSqlFrom() // From
 	{
-		return ($this->SqlFrom != "") ? $this->SqlFrom : "`t101_session`";
+		return ($this->SqlFrom != "") ? $this->SqlFrom : "`t003_kelas`";
 	}
 	public function sqlFrom() // For backward compatibility
 	{
@@ -472,10 +442,7 @@ class t101_session extends DbTable
 			return;
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->id->DbValue = $row['id'];
-		$this->sekolah_id->DbValue = $row['sekolah_id'];
-		$this->user_id->DbValue = $row['user_id'];
-		$this->tanggal_jam->DbValue = $row['tanggal_jam'];
-		$this->session_value->DbValue = $row['session_value'];
+		$this->Kelas->DbValue = $row['Kelas'];
 	}
 
 	// Delete uploaded files
@@ -518,7 +485,7 @@ class t101_session extends DbTable
 		if (@$_SESSION[$name] != "") {
 			return $_SESSION[$name];
 		} else {
-			return "t101_sessionlist.php";
+			return "t003_kelaslist.php";
 		}
 	}
 	public function setReturnUrl($v)
@@ -530,11 +497,11 @@ class t101_session extends DbTable
 	public function getModalCaption($pageName)
 	{
 		global $Language;
-		if ($pageName == "t101_sessionview.php")
+		if ($pageName == "t003_kelasview.php")
 			return $Language->phrase("View");
-		elseif ($pageName == "t101_sessionedit.php")
+		elseif ($pageName == "t003_kelasedit.php")
 			return $Language->phrase("Edit");
-		elseif ($pageName == "t101_sessionadd.php")
+		elseif ($pageName == "t003_kelasadd.php")
 			return $Language->phrase("Add");
 		else
 			return "";
@@ -543,16 +510,16 @@ class t101_session extends DbTable
 	// List URL
 	public function getListUrl()
 	{
-		return "t101_sessionlist.php";
+		return "t003_kelaslist.php";
 	}
 
 	// View URL
 	public function getViewUrl($parm = "")
 	{
 		if ($parm != "")
-			$url = $this->keyUrl("t101_sessionview.php", $this->getUrlParm($parm));
+			$url = $this->keyUrl("t003_kelasview.php", $this->getUrlParm($parm));
 		else
-			$url = $this->keyUrl("t101_sessionview.php", $this->getUrlParm(Config("TABLE_SHOW_DETAIL") . "="));
+			$url = $this->keyUrl("t003_kelasview.php", $this->getUrlParm(Config("TABLE_SHOW_DETAIL") . "="));
 		return $this->addMasterUrl($url);
 	}
 
@@ -560,16 +527,16 @@ class t101_session extends DbTable
 	public function getAddUrl($parm = "")
 	{
 		if ($parm != "")
-			$url = "t101_sessionadd.php?" . $this->getUrlParm($parm);
+			$url = "t003_kelasadd.php?" . $this->getUrlParm($parm);
 		else
-			$url = "t101_sessionadd.php";
+			$url = "t003_kelasadd.php";
 		return $this->addMasterUrl($url);
 	}
 
 	// Edit URL
 	public function getEditUrl($parm = "")
 	{
-		$url = $this->keyUrl("t101_sessionedit.php", $this->getUrlParm($parm));
+		$url = $this->keyUrl("t003_kelasedit.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -583,7 +550,7 @@ class t101_session extends DbTable
 	// Copy URL
 	public function getCopyUrl($parm = "")
 	{
-		$url = $this->keyUrl("t101_sessionadd.php", $this->getUrlParm($parm));
+		$url = $this->keyUrl("t003_kelasadd.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -597,7 +564,7 @@ class t101_session extends DbTable
 	// Delete URL
 	public function getDeleteUrl()
 	{
-		return $this->keyUrl("t101_sessiondelete.php", $this->getUrlParm());
+		return $this->keyUrl("t003_kelasdelete.php", $this->getUrlParm());
 	}
 
 	// Add master url
@@ -707,10 +674,7 @@ class t101_session extends DbTable
 	public function loadListRowValues(&$rs)
 	{
 		$this->id->setDbValue($rs->fields('id'));
-		$this->sekolah_id->setDbValue($rs->fields('sekolah_id'));
-		$this->user_id->setDbValue($rs->fields('user_id'));
-		$this->tanggal_jam->setDbValue($rs->fields('tanggal_jam'));
-		$this->session_value->setDbValue($rs->fields('session_value'));
+		$this->Kelas->setDbValue($rs->fields('Kelas'));
 	}
 
 	// Render list row values
@@ -723,75 +687,25 @@ class t101_session extends DbTable
 
 		// Common render codes
 		// id
-		// sekolah_id
-		// user_id
-		// tanggal_jam
-		// session_value
+		// Kelas
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
 
-		// sekolah_id
-		$curVal = strval($this->sekolah_id->CurrentValue);
-		if ($curVal != "") {
-			$this->sekolah_id->ViewValue = $this->sekolah_id->lookupCacheOption($curVal);
-			if ($this->sekolah_id->ViewValue === NULL) { // Lookup from database
-				$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-				$sqlWrk = $this->sekolah_id->Lookup->getSql(FALSE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = [];
-					$arwrk[1] = $rswrk->fields('df');
-					$this->sekolah_id->ViewValue = $this->sekolah_id->displayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->sekolah_id->ViewValue = $this->sekolah_id->CurrentValue;
-				}
-			}
-		} else {
-			$this->sekolah_id->ViewValue = NULL;
-		}
-		$this->sekolah_id->ViewCustomAttributes = "";
-
-		// user_id
-		$this->user_id->ViewValue = $this->user_id->CurrentValue;
-		$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
-		$this->user_id->ViewCustomAttributes = "";
-
-		// tanggal_jam
-		$this->tanggal_jam->ViewValue = $this->tanggal_jam->CurrentValue;
-		$this->tanggal_jam->ViewValue = FormatDateTime($this->tanggal_jam->ViewValue, 0);
-		$this->tanggal_jam->ViewCustomAttributes = "";
-
-		// session_value
-		$this->session_value->ViewValue = $this->session_value->CurrentValue;
-		$this->session_value->ViewCustomAttributes = "";
+		// Kelas
+		$this->Kelas->ViewValue = $this->Kelas->CurrentValue;
+		$this->Kelas->ViewCustomAttributes = "";
 
 		// id
 		$this->id->LinkCustomAttributes = "";
 		$this->id->HrefValue = "";
 		$this->id->TooltipValue = "";
 
-		// sekolah_id
-		$this->sekolah_id->LinkCustomAttributes = "";
-		$this->sekolah_id->HrefValue = "";
-		$this->sekolah_id->TooltipValue = "";
-
-		// user_id
-		$this->user_id->LinkCustomAttributes = "";
-		$this->user_id->HrefValue = "";
-		$this->user_id->TooltipValue = "";
-
-		// tanggal_jam
-		$this->tanggal_jam->LinkCustomAttributes = "";
-		$this->tanggal_jam->HrefValue = "";
-		$this->tanggal_jam->TooltipValue = "";
-
-		// session_value
-		$this->session_value->LinkCustomAttributes = "";
-		$this->session_value->HrefValue = "";
-		$this->session_value->TooltipValue = "";
+		// Kelas
+		$this->Kelas->LinkCustomAttributes = "";
+		$this->Kelas->HrefValue = "";
+		$this->Kelas->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -814,29 +728,13 @@ class t101_session extends DbTable
 		$this->id->EditValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
 
-		// sekolah_id
-		$this->sekolah_id->EditAttrs["class"] = "form-control";
-		$this->sekolah_id->EditCustomAttributes = "";
-
-		// user_id
-		$this->user_id->EditAttrs["class"] = "form-control";
-		$this->user_id->EditCustomAttributes = "";
-		$this->user_id->EditValue = $this->user_id->CurrentValue;
-		$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
-
-		// tanggal_jam
-		$this->tanggal_jam->EditAttrs["class"] = "form-control";
-		$this->tanggal_jam->EditCustomAttributes = "";
-		$this->tanggal_jam->EditValue = FormatDateTime($this->tanggal_jam->CurrentValue, 8);
-		$this->tanggal_jam->PlaceHolder = RemoveHtml($this->tanggal_jam->caption());
-
-		// session_value
-		$this->session_value->EditAttrs["class"] = "form-control";
-		$this->session_value->EditCustomAttributes = "";
-		if (!$this->session_value->Raw)
-			$this->session_value->CurrentValue = HtmlDecode($this->session_value->CurrentValue);
-		$this->session_value->EditValue = $this->session_value->CurrentValue;
-		$this->session_value->PlaceHolder = RemoveHtml($this->session_value->caption());
+		// Kelas
+		$this->Kelas->EditAttrs["class"] = "form-control";
+		$this->Kelas->EditCustomAttributes = "";
+		if (!$this->Kelas->Raw)
+			$this->Kelas->CurrentValue = HtmlDecode($this->Kelas->CurrentValue);
+		$this->Kelas->EditValue = $this->Kelas->CurrentValue;
+		$this->Kelas->PlaceHolder = RemoveHtml($this->Kelas->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -868,16 +766,10 @@ class t101_session extends DbTable
 				$doc->beginExportRow();
 				if ($exportPageType == "view") {
 					$doc->exportCaption($this->id);
-					$doc->exportCaption($this->sekolah_id);
-					$doc->exportCaption($this->user_id);
-					$doc->exportCaption($this->tanggal_jam);
-					$doc->exportCaption($this->session_value);
+					$doc->exportCaption($this->Kelas);
 				} else {
 					$doc->exportCaption($this->id);
-					$doc->exportCaption($this->sekolah_id);
-					$doc->exportCaption($this->user_id);
-					$doc->exportCaption($this->tanggal_jam);
-					$doc->exportCaption($this->session_value);
+					$doc->exportCaption($this->Kelas);
 				}
 				$doc->endExportRow();
 			}
@@ -910,16 +802,10 @@ class t101_session extends DbTable
 					$doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
 					if ($exportPageType == "view") {
 						$doc->exportField($this->id);
-						$doc->exportField($this->sekolah_id);
-						$doc->exportField($this->user_id);
-						$doc->exportField($this->tanggal_jam);
-						$doc->exportField($this->session_value);
+						$doc->exportField($this->Kelas);
 					} else {
 						$doc->exportField($this->id);
-						$doc->exportField($this->sekolah_id);
-						$doc->exportField($this->user_id);
-						$doc->exportField($this->tanggal_jam);
-						$doc->exportField($this->session_value);
+						$doc->exportField($this->Kelas);
 					}
 					$doc->endExportRow($rowCnt);
 				}

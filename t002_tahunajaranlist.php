@@ -141,6 +141,15 @@ $t002_tahunajaran_list->renderListOptions();
 // Render list options (header, left)
 $t002_tahunajaran_list->ListOptions->render("header", "left");
 ?>
+<?php if ($t002_tahunajaran_list->id->Visible) { // id ?>
+	<?php if ($t002_tahunajaran_list->SortUrl($t002_tahunajaran_list->id) == "") { ?>
+		<th data-name="id" class="<?php echo $t002_tahunajaran_list->id->headerCellClass() ?>"><div id="elh_t002_tahunajaran_id" class="t002_tahunajaran_id"><div class="ew-table-header-caption"><?php echo $t002_tahunajaran_list->id->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="id" class="<?php echo $t002_tahunajaran_list->id->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event, '<?php echo $t002_tahunajaran_list->SortUrl($t002_tahunajaran_list->id) ?>', 2);"><div id="elh_t002_tahunajaran_id" class="t002_tahunajaran_id">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $t002_tahunajaran_list->id->caption() ?></span><span class="ew-table-header-sort"><?php if ($t002_tahunajaran_list->id->getSort() == "ASC") { ?><i class="fas fa-sort-up"></i><?php } elseif ($t002_tahunajaran_list->id->getSort() == "DESC") { ?><i class="fas fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php if ($t002_tahunajaran_list->Mulai->Visible) { // Mulai ?>
 	<?php if ($t002_tahunajaran_list->SortUrl($t002_tahunajaran_list->Mulai) == "") { ?>
 		<th data-name="Mulai" class="<?php echo $t002_tahunajaran_list->Mulai->headerCellClass() ?>"><div id="elh_t002_tahunajaran_Mulai" class="t002_tahunajaran_Mulai"><div class="ew-table-header-caption"><?php echo $t002_tahunajaran_list->Mulai->caption() ?></div></div></th>
@@ -224,6 +233,13 @@ while ($t002_tahunajaran_list->RecordCount < $t002_tahunajaran_list->StopRecord)
 // Render list options (body, left)
 $t002_tahunajaran_list->ListOptions->render("body", "left", $t002_tahunajaran_list->RowCount);
 ?>
+	<?php if ($t002_tahunajaran_list->id->Visible) { // id ?>
+		<td data-name="id" <?php echo $t002_tahunajaran_list->id->cellAttributes() ?>>
+<span id="el<?php echo $t002_tahunajaran_list->RowCount ?>_t002_tahunajaran_id">
+<span<?php echo $t002_tahunajaran_list->id->viewAttributes() ?>><?php echo $t002_tahunajaran_list->id->getViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
 	<?php if ($t002_tahunajaran_list->Mulai->Visible) { // Mulai ?>
 		<td data-name="Mulai" <?php echo $t002_tahunajaran_list->Mulai->cellAttributes() ?>>
 <span id="el<?php echo $t002_tahunajaran_list->RowCount ?>_t002_tahunajaran_Mulai">

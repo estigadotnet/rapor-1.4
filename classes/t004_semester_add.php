@@ -4,7 +4,7 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t205_default_add extends t205_default
+class t004_semester_add extends t004_semester
 {
 
 	// Page ID
@@ -14,10 +14,10 @@ class t205_default_add extends t205_default
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't205_default';
+	public $TableName = 't004_semester';
 
 	// Page object name
-	public $PageObjName = "t205_default_add";
+	public $PageObjName = "t004_semester_add";
 
 	// Page headings
 	public $Heading = "";
@@ -341,10 +341,10 @@ class t205_default_add extends t205_default
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t205_default)
-		if (!isset($GLOBALS["t205_default"]) || get_class($GLOBALS["t205_default"]) == PROJECT_NAMESPACE . "t205_default") {
-			$GLOBALS["t205_default"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t205_default"];
+		// Table object (t004_semester)
+		if (!isset($GLOBALS["t004_semester"]) || get_class($GLOBALS["t004_semester"]) == PROJECT_NAMESPACE . "t004_semester") {
+			$GLOBALS["t004_semester"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t004_semester"];
 		}
 
 		// Table object (t201_employees)
@@ -357,7 +357,7 @@ class t205_default_add extends t205_default
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't205_default');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't004_semester');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -386,14 +386,14 @@ class t205_default_add extends t205_default
 		Page_Unloaded();
 
 		// Export
-		global $t205_default;
+		global $t004_semester;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t205_default);
+				$doc = new $class($t004_semester);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -428,7 +428,7 @@ class t205_default_add extends t205_default
 				$pageName = GetPageName($url);
 				if ($pageName != $this->getListUrl()) { // Not List page
 					$row["caption"] = $this->getModalCaption($pageName);
-					if ($pageName == "t205_defaultview.php")
+					if ($pageName == "t004_semesterview.php")
 						$row["view"] = "1";
 				} else { // List page should not be shown as modal => error
 					$row["error"] = $this->getFailureMessage();
@@ -658,7 +658,7 @@ class t205_default_add extends t205_default
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t205_defaultlist.php"));
+					$this->terminate(GetUrl("t004_semesterlist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -674,10 +674,7 @@ class t205_default_add extends t205_default
 		$CurrentForm = new HttpForm();
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->Visible = FALSE;
-		$this->User_ID->setVisibility();
-		$this->Field_ID->setVisibility();
-		$this->Nilai->setVisibility();
-		$this->Keterangan->setVisibility();
+		$this->Semester->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -699,12 +696,11 @@ class t205_default_add extends t205_default
 		$this->createToken();
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->User_ID);
-
 		// Check permission
+
 		if (!$Security->canAdd()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t205_defaultlist.php");
+			$this->terminate("t004_semesterlist.php");
 			return;
 		}
 
@@ -769,7 +765,7 @@ class t205_default_add extends t205_default
 				if (!$loaded) { // Record not loaded
 					if ($this->getFailureMessage() == "")
 						$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
-					$this->terminate("t205_defaultlist.php"); // No matching record, return to list
+					$this->terminate("t004_semesterlist.php"); // No matching record, return to list
 				}
 				break;
 			case "insert": // Add new record
@@ -778,9 +774,9 @@ class t205_default_add extends t205_default
 					if ($this->getSuccessMessage() == "")
 						$this->setSuccessMessage($Language->phrase("AddSuccess")); // Set up success message
 					$returnUrl = $this->getReturnUrl();
-					if (GetPageName($returnUrl) == "t205_defaultlist.php")
+					if (GetPageName($returnUrl) == "t004_semesterlist.php")
 						$returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
-					elseif (GetPageName($returnUrl) == "t205_defaultview.php")
+					elseif (GetPageName($returnUrl) == "t004_semesterview.php")
 						$returnUrl = $this->getViewUrl(); // View page, return to View page with keyurl directly
 					if (IsApi()) { // Return to caller
 						$this->terminate(TRUE);
@@ -819,14 +815,8 @@ class t205_default_add extends t205_default
 	{
 		$this->id->CurrentValue = NULL;
 		$this->id->OldValue = $this->id->CurrentValue;
-		$this->User_ID->CurrentValue = NULL;
-		$this->User_ID->OldValue = $this->User_ID->CurrentValue;
-		$this->Field_ID->CurrentValue = NULL;
-		$this->Field_ID->OldValue = $this->Field_ID->CurrentValue;
-		$this->Nilai->CurrentValue = NULL;
-		$this->Nilai->OldValue = $this->Nilai->CurrentValue;
-		$this->Keterangan->CurrentValue = NULL;
-		$this->Keterangan->OldValue = $this->Keterangan->CurrentValue;
+		$this->Semester->CurrentValue = NULL;
+		$this->Semester->OldValue = $this->Semester->CurrentValue;
 	}
 
 	// Load form values
@@ -836,40 +826,13 @@ class t205_default_add extends t205_default
 		// Load from form
 		global $CurrentForm;
 
-		// Check field name 'User_ID' first before field var 'x_User_ID'
-		$val = $CurrentForm->hasValue("User_ID") ? $CurrentForm->getValue("User_ID") : $CurrentForm->getValue("x_User_ID");
-		if (!$this->User_ID->IsDetailKey) {
+		// Check field name 'Semester' first before field var 'x_Semester'
+		$val = $CurrentForm->hasValue("Semester") ? $CurrentForm->getValue("Semester") : $CurrentForm->getValue("x_Semester");
+		if (!$this->Semester->IsDetailKey) {
 			if (IsApi() && $val == NULL)
-				$this->User_ID->Visible = FALSE; // Disable update for API request
+				$this->Semester->Visible = FALSE; // Disable update for API request
 			else
-				$this->User_ID->setFormValue($val);
-		}
-
-		// Check field name 'Field_ID' first before field var 'x_Field_ID'
-		$val = $CurrentForm->hasValue("Field_ID") ? $CurrentForm->getValue("Field_ID") : $CurrentForm->getValue("x_Field_ID");
-		if (!$this->Field_ID->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->Field_ID->Visible = FALSE; // Disable update for API request
-			else
-				$this->Field_ID->setFormValue($val);
-		}
-
-		// Check field name 'Nilai' first before field var 'x_Nilai'
-		$val = $CurrentForm->hasValue("Nilai") ? $CurrentForm->getValue("Nilai") : $CurrentForm->getValue("x_Nilai");
-		if (!$this->Nilai->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->Nilai->Visible = FALSE; // Disable update for API request
-			else
-				$this->Nilai->setFormValue($val);
-		}
-
-		// Check field name 'Keterangan' first before field var 'x_Keterangan'
-		$val = $CurrentForm->hasValue("Keterangan") ? $CurrentForm->getValue("Keterangan") : $CurrentForm->getValue("x_Keterangan");
-		if (!$this->Keterangan->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->Keterangan->Visible = FALSE; // Disable update for API request
-			else
-				$this->Keterangan->setFormValue($val);
+				$this->Semester->setFormValue($val);
 		}
 
 		// Check field name 'id' first before field var 'x_id'
@@ -880,10 +843,7 @@ class t205_default_add extends t205_default
 	public function restoreFormValues()
 	{
 		global $CurrentForm;
-		$this->User_ID->CurrentValue = $this->User_ID->FormValue;
-		$this->Field_ID->CurrentValue = $this->Field_ID->FormValue;
-		$this->Nilai->CurrentValue = $this->Nilai->FormValue;
-		$this->Keterangan->CurrentValue = $this->Keterangan->FormValue;
+		$this->Semester->CurrentValue = $this->Semester->FormValue;
 	}
 
 	// Load row based on key values
@@ -922,10 +882,7 @@ class t205_default_add extends t205_default
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->User_ID->setDbValue($row['User_ID']);
-		$this->Field_ID->setDbValue($row['Field_ID']);
-		$this->Nilai->setDbValue($row['Nilai']);
-		$this->Keterangan->setDbValue($row['Keterangan']);
+		$this->Semester->setDbValue($row['Semester']);
 	}
 
 	// Return a row with default values
@@ -934,10 +891,7 @@ class t205_default_add extends t205_default
 		$this->loadDefaultValues();
 		$row = [];
 		$row['id'] = $this->id->CurrentValue;
-		$row['User_ID'] = $this->User_ID->CurrentValue;
-		$row['Field_ID'] = $this->Field_ID->CurrentValue;
-		$row['Nilai'] = $this->Nilai->CurrentValue;
-		$row['Keterangan'] = $this->Keterangan->CurrentValue;
+		$row['Semester'] = $this->Semester->CurrentValue;
 		return $row;
 	}
 
@@ -976,10 +930,7 @@ class t205_default_add extends t205_default
 
 		// Common render codes for all row types
 		// id
-		// User_ID
-		// Field_ID
-		// Nilai
-		// Keterangan
+		// Semester
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -987,126 +938,29 @@ class t205_default_add extends t205_default
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// User_ID
-			$curVal = strval($this->User_ID->CurrentValue);
-			if ($curVal != "") {
-				$this->User_ID->ViewValue = $this->User_ID->lookupCacheOption($curVal);
-				if ($this->User_ID->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`EmployeeID`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->User_ID->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = [];
-						$arwrk[1] = $rswrk->fields('df');
-						$this->User_ID->ViewValue = $this->User_ID->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->User_ID->ViewValue = $this->User_ID->CurrentValue;
-					}
-				}
-			} else {
-				$this->User_ID->ViewValue = NULL;
-			}
-			$this->User_ID->ViewCustomAttributes = "";
+			// Semester
+			$this->Semester->ViewValue = $this->Semester->CurrentValue;
+			$this->Semester->ViewCustomAttributes = "";
 
-			// Field_ID
-			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
-			$this->Field_ID->ViewCustomAttributes = "";
-
-			// Nilai
-			$this->Nilai->ViewValue = $this->Nilai->CurrentValue;
-			$this->Nilai->ViewCustomAttributes = "";
-
-			// Keterangan
-			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
-			$this->Keterangan->ViewCustomAttributes = "";
-
-			// User_ID
-			$this->User_ID->LinkCustomAttributes = "";
-			$this->User_ID->HrefValue = "";
-			$this->User_ID->TooltipValue = "";
-
-			// Field_ID
-			$this->Field_ID->LinkCustomAttributes = "";
-			$this->Field_ID->HrefValue = "";
-			$this->Field_ID->TooltipValue = "";
-
-			// Nilai
-			$this->Nilai->LinkCustomAttributes = "";
-			$this->Nilai->HrefValue = "";
-			$this->Nilai->TooltipValue = "";
-
-			// Keterangan
-			$this->Keterangan->LinkCustomAttributes = "";
-			$this->Keterangan->HrefValue = "";
-			$this->Keterangan->TooltipValue = "";
+			// Semester
+			$this->Semester->LinkCustomAttributes = "";
+			$this->Semester->HrefValue = "";
+			$this->Semester->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
 
-			// User_ID
-			$this->User_ID->EditAttrs["class"] = "form-control";
-			$this->User_ID->EditCustomAttributes = "";
-			$curVal = trim(strval($this->User_ID->CurrentValue));
-			if ($curVal != "")
-				$this->User_ID->ViewValue = $this->User_ID->lookupCacheOption($curVal);
-			else
-				$this->User_ID->ViewValue = $this->User_ID->Lookup !== NULL && is_array($this->User_ID->Lookup->Options) ? $curVal : NULL;
-			if ($this->User_ID->ViewValue !== NULL) { // Load from cache
-				$this->User_ID->EditValue = array_values($this->User_ID->Lookup->Options);
-			} else { // Lookup from database
-				if ($curVal == "") {
-					$filterWrk = "0=1";
-				} else {
-					$filterWrk = "`EmployeeID`" . SearchString("=", $this->User_ID->CurrentValue, DATATYPE_NUMBER, "");
-				}
-				$sqlWrk = $this->User_ID->Lookup->getSql(TRUE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				$arwrk = $rswrk ? $rswrk->getRows() : [];
-				if ($rswrk)
-					$rswrk->close();
-				$this->User_ID->EditValue = $arwrk;
-			}
-
-			// Field_ID
-			$this->Field_ID->EditAttrs["class"] = "form-control";
-			$this->Field_ID->EditCustomAttributes = "";
-			if (!$this->Field_ID->Raw)
-				$this->Field_ID->CurrentValue = HtmlDecode($this->Field_ID->CurrentValue);
-			$this->Field_ID->EditValue = HtmlEncode($this->Field_ID->CurrentValue);
-			$this->Field_ID->PlaceHolder = RemoveHtml($this->Field_ID->caption());
-
-			// Nilai
-			$this->Nilai->EditAttrs["class"] = "form-control";
-			$this->Nilai->EditCustomAttributes = "";
-			if (!$this->Nilai->Raw)
-				$this->Nilai->CurrentValue = HtmlDecode($this->Nilai->CurrentValue);
-			$this->Nilai->EditValue = HtmlEncode($this->Nilai->CurrentValue);
-			$this->Nilai->PlaceHolder = RemoveHtml($this->Nilai->caption());
-
-			// Keterangan
-			$this->Keterangan->EditAttrs["class"] = "form-control";
-			$this->Keterangan->EditCustomAttributes = "";
-			if (!$this->Keterangan->Raw)
-				$this->Keterangan->CurrentValue = HtmlDecode($this->Keterangan->CurrentValue);
-			$this->Keterangan->EditValue = HtmlEncode($this->Keterangan->CurrentValue);
-			$this->Keterangan->PlaceHolder = RemoveHtml($this->Keterangan->caption());
+			// Semester
+			$this->Semester->EditAttrs["class"] = "form-control";
+			$this->Semester->EditCustomAttributes = "";
+			if (!$this->Semester->Raw)
+				$this->Semester->CurrentValue = HtmlDecode($this->Semester->CurrentValue);
+			$this->Semester->EditValue = HtmlEncode($this->Semester->CurrentValue);
+			$this->Semester->PlaceHolder = RemoveHtml($this->Semester->caption());
 
 			// Add refer script
-			// User_ID
+			// Semester
 
-			$this->User_ID->LinkCustomAttributes = "";
-			$this->User_ID->HrefValue = "";
-
-			// Field_ID
-			$this->Field_ID->LinkCustomAttributes = "";
-			$this->Field_ID->HrefValue = "";
-
-			// Nilai
-			$this->Nilai->LinkCustomAttributes = "";
-			$this->Nilai->HrefValue = "";
-
-			// Keterangan
-			$this->Keterangan->LinkCustomAttributes = "";
-			$this->Keterangan->HrefValue = "";
+			$this->Semester->LinkCustomAttributes = "";
+			$this->Semester->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -1127,24 +981,9 @@ class t205_default_add extends t205_default
 		// Check if validation required
 		if (!Config("SERVER_VALIDATE"))
 			return ($FormError == "");
-		if ($this->User_ID->Required) {
-			if (!$this->User_ID->IsDetailKey && $this->User_ID->FormValue != NULL && $this->User_ID->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->User_ID->caption(), $this->User_ID->RequiredErrorMessage));
-			}
-		}
-		if ($this->Field_ID->Required) {
-			if (!$this->Field_ID->IsDetailKey && $this->Field_ID->FormValue != NULL && $this->Field_ID->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->Field_ID->caption(), $this->Field_ID->RequiredErrorMessage));
-			}
-		}
-		if ($this->Nilai->Required) {
-			if (!$this->Nilai->IsDetailKey && $this->Nilai->FormValue != NULL && $this->Nilai->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->Nilai->caption(), $this->Nilai->RequiredErrorMessage));
-			}
-		}
-		if ($this->Keterangan->Required) {
-			if (!$this->Keterangan->IsDetailKey && $this->Keterangan->FormValue != NULL && $this->Keterangan->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->Keterangan->caption(), $this->Keterangan->RequiredErrorMessage));
+		if ($this->Semester->Required) {
+			if (!$this->Semester->IsDetailKey && $this->Semester->FormValue != NULL && $this->Semester->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->Semester->caption(), $this->Semester->RequiredErrorMessage));
 			}
 		}
 
@@ -1172,17 +1011,8 @@ class t205_default_add extends t205_default
 		}
 		$rsnew = [];
 
-		// User_ID
-		$this->User_ID->setDbValueDef($rsnew, $this->User_ID->CurrentValue, 0, FALSE);
-
-		// Field_ID
-		$this->Field_ID->setDbValueDef($rsnew, $this->Field_ID->CurrentValue, "", FALSE);
-
-		// Nilai
-		$this->Nilai->setDbValueDef($rsnew, $this->Nilai->CurrentValue, "", FALSE);
-
-		// Keterangan
-		$this->Keterangan->setDbValueDef($rsnew, $this->Keterangan->CurrentValue, "", FALSE);
+		// Semester
+		$this->Semester->setDbValueDef($rsnew, $this->Semester->CurrentValue, "", FALSE);
 
 		// Call Row Inserting event
 		$rs = ($rsold) ? $rsold->fields : NULL;
@@ -1230,7 +1060,7 @@ class t205_default_add extends t205_default
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t205_defaultlist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t004_semesterlist.php"), "", $this->TableVar, TRUE);
 		$pageId = ($this->isCopy()) ? "Copy" : "Add";
 		$Breadcrumb->add("add", $pageId, $url);
 	}
@@ -1249,8 +1079,6 @@ class t205_default_add extends t205_default
 
 			// Set up lookup SQL and connection
 			switch ($fld->FieldVar) {
-				case "x_User_ID":
-					break;
 				default:
 					$lookupFilter = "";
 					break;
@@ -1271,8 +1099,6 @@ class t205_default_add extends t205_default
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x_User_ID":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

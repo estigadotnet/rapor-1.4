@@ -974,6 +974,11 @@ class t002_tahunajaran_view extends t002_tahunajaran
 			$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
 			$this->Selesai->ViewCustomAttributes = "";
 
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
+
 			// Mulai
 			$this->Mulai->LinkCustomAttributes = "";
 			$this->Mulai->HrefValue = "";

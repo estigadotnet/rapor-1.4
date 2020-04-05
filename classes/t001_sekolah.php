@@ -841,6 +841,7 @@ class t001_sekolah extends DbTable
 			if ($doc->Horizontal) { // Horizontal format, write header
 				$doc->beginExportRow();
 				if ($exportPageType == "view") {
+					$doc->exportCaption($this->id);
 					$doc->exportCaption($this->Nama);
 					$doc->exportCaption($this->Alamat);
 					$doc->exportCaption($this->KepalaSekolah);
@@ -882,6 +883,7 @@ class t001_sekolah extends DbTable
 				if (!$doc->ExportCustom) {
 					$doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
 					if ($exportPageType == "view") {
+						$doc->exportField($this->id);
 						$doc->exportField($this->Nama);
 						$doc->exportField($this->Alamat);
 						$doc->exportField($this->KepalaSekolah);

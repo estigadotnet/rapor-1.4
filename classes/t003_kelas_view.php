@@ -4,7 +4,7 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t101_session_view extends t101_session
+class t003_kelas_view extends t003_kelas
 {
 
 	// Page ID
@@ -14,10 +14,10 @@ class t101_session_view extends t101_session
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't101_session';
+	public $TableName = 't003_kelas';
 
 	// Page object name
-	public $PageObjName = "t101_session_view";
+	public $PageObjName = "t003_kelas_view";
 
 	// Page URLs
 	public $AddUrl;
@@ -373,10 +373,10 @@ class t101_session_view extends t101_session
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t101_session)
-		if (!isset($GLOBALS["t101_session"]) || get_class($GLOBALS["t101_session"]) == PROJECT_NAMESPACE . "t101_session") {
-			$GLOBALS["t101_session"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t101_session"];
+		// Table object (t003_kelas)
+		if (!isset($GLOBALS["t003_kelas"]) || get_class($GLOBALS["t003_kelas"]) == PROJECT_NAMESPACE . "t003_kelas") {
+			$GLOBALS["t003_kelas"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t003_kelas"];
 		}
 		$keyUrl = "";
 		if (Get("id") !== NULL) {
@@ -401,7 +401,7 @@ class t101_session_view extends t101_session
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't101_session');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't003_kelas');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -442,14 +442,14 @@ class t101_session_view extends t101_session
 		Page_Unloaded();
 
 		// Export
-		global $t101_session;
+		global $t003_kelas;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t101_session);
+				$doc = new $class($t003_kelas);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -484,7 +484,7 @@ class t101_session_view extends t101_session
 				$pageName = GetPageName($url);
 				if ($pageName != $this->getListUrl()) { // Not List page
 					$row["caption"] = $this->getModalCaption($pageName);
-					if ($pageName == "t101_sessionview.php")
+					if ($pageName == "t003_kelasview.php")
 						$row["view"] = "1";
 				} else { // List page should not be shown as modal => error
 					$row["error"] = $this->getFailureMessage();
@@ -643,7 +643,7 @@ class t101_session_view extends t101_session
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t101_sessionlist.php"));
+					$this->terminate(GetUrl("t003_kelaslist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -700,10 +700,7 @@ class t101_session_view extends t101_session
 		// Setup export options
 		$this->setupExportOptions();
 		$this->id->setVisibility();
-		$this->sekolah_id->setVisibility();
-		$this->user_id->setVisibility();
-		$this->tanggal_jam->setVisibility();
-		$this->session_value->setVisibility();
+		$this->Kelas->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -725,12 +722,11 @@ class t101_session_view extends t101_session
 		$this->createToken();
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->sekolah_id);
-
 		// Check permission
+
 		if (!$Security->canView()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t101_sessionlist.php");
+			$this->terminate("t003_kelaslist.php");
 			return;
 		}
 
@@ -756,7 +752,7 @@ class t101_session_view extends t101_session
 				$this->id->setFormValue(Route(2));
 				$this->RecKey["id"] = $this->id->FormValue;
 			} else {
-				$returnUrl = "t101_sessionlist.php"; // Return to list
+				$returnUrl = "t003_kelaslist.php"; // Return to list
 			}
 
 			// Get action
@@ -778,7 +774,7 @@ class t101_session_view extends t101_session
 					if (!$res) { // Load record based on key
 						if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 							$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
-						$returnUrl = "t101_sessionlist.php"; // No matching record, return to list
+						$returnUrl = "t003_kelaslist.php"; // No matching record, return to list
 					}
 			}
 
@@ -788,7 +784,7 @@ class t101_session_view extends t101_session
 				$this->terminate();
 			}
 		} else {
-			$returnUrl = "t101_sessionlist.php"; // Not page request, return to list
+			$returnUrl = "t003_kelaslist.php"; // Not page request, return to list
 		}
 		if ($returnUrl != "") {
 			$this->terminate($returnUrl);
@@ -928,10 +924,7 @@ class t101_session_view extends t101_session
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->sekolah_id->setDbValue($row['sekolah_id']);
-		$this->user_id->setDbValue($row['user_id']);
-		$this->tanggal_jam->setDbValue($row['tanggal_jam']);
-		$this->session_value->setDbValue($row['session_value']);
+		$this->Kelas->setDbValue($row['Kelas']);
 	}
 
 	// Return a row with default values
@@ -939,10 +932,7 @@ class t101_session_view extends t101_session
 	{
 		$row = [];
 		$row['id'] = NULL;
-		$row['sekolah_id'] = NULL;
-		$row['user_id'] = NULL;
-		$row['tanggal_jam'] = NULL;
-		$row['session_value'] = NULL;
+		$row['Kelas'] = NULL;
 		return $row;
 	}
 
@@ -964,10 +954,7 @@ class t101_session_view extends t101_session
 
 		// Common render codes for all row types
 		// id
-		// sekolah_id
-		// user_id
-		// tanggal_jam
-		// session_value
+		// Kelas
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -975,66 +962,19 @@ class t101_session_view extends t101_session
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// sekolah_id
-			$curVal = strval($this->sekolah_id->CurrentValue);
-			if ($curVal != "") {
-				$this->sekolah_id->ViewValue = $this->sekolah_id->lookupCacheOption($curVal);
-				if ($this->sekolah_id->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->sekolah_id->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = [];
-						$arwrk[1] = $rswrk->fields('df');
-						$this->sekolah_id->ViewValue = $this->sekolah_id->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->sekolah_id->ViewValue = $this->sekolah_id->CurrentValue;
-					}
-				}
-			} else {
-				$this->sekolah_id->ViewValue = NULL;
-			}
-			$this->sekolah_id->ViewCustomAttributes = "";
-
-			// user_id
-			$this->user_id->ViewValue = $this->user_id->CurrentValue;
-			$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
-			$this->user_id->ViewCustomAttributes = "";
-
-			// tanggal_jam
-			$this->tanggal_jam->ViewValue = $this->tanggal_jam->CurrentValue;
-			$this->tanggal_jam->ViewValue = FormatDateTime($this->tanggal_jam->ViewValue, 0);
-			$this->tanggal_jam->ViewCustomAttributes = "";
-
-			// session_value
-			$this->session_value->ViewValue = $this->session_value->CurrentValue;
-			$this->session_value->ViewCustomAttributes = "";
+			// Kelas
+			$this->Kelas->ViewValue = $this->Kelas->CurrentValue;
+			$this->Kelas->ViewCustomAttributes = "";
 
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
 			$this->id->TooltipValue = "";
 
-			// sekolah_id
-			$this->sekolah_id->LinkCustomAttributes = "";
-			$this->sekolah_id->HrefValue = "";
-			$this->sekolah_id->TooltipValue = "";
-
-			// user_id
-			$this->user_id->LinkCustomAttributes = "";
-			$this->user_id->HrefValue = "";
-			$this->user_id->TooltipValue = "";
-
-			// tanggal_jam
-			$this->tanggal_jam->LinkCustomAttributes = "";
-			$this->tanggal_jam->HrefValue = "";
-			$this->tanggal_jam->TooltipValue = "";
-
-			// session_value
-			$this->session_value->LinkCustomAttributes = "";
-			$this->session_value->HrefValue = "";
-			$this->session_value->TooltipValue = "";
+			// Kelas
+			$this->Kelas->LinkCustomAttributes = "";
+			$this->Kelas->HrefValue = "";
+			$this->Kelas->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1048,17 +988,17 @@ class t101_session_view extends t101_session
 		global $Language;
 		if (SameText($type, "excel")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft101_sessionview, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft003_kelasview, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportExcelUrl . "\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\">" . $Language->phrase("ExportToExcel") . "</a>";
 		} elseif (SameText($type, "word")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft101_sessionview, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft003_kelasview, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportWordUrl . "\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\">" . $Language->phrase("ExportToWord") . "</a>";
 		} elseif (SameText($type, "pdf")) {
 			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft101_sessionview, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
+				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft003_kelasview, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
 			else
 				return "<a href=\"" . $this->ExportPdfUrl . "\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\">" . $Language->phrase("ExportToPDF") . "</a>";
 		} elseif (SameText($type, "html")) {
@@ -1069,7 +1009,7 @@ class t101_session_view extends t101_session
 			return "<a href=\"" . $this->ExportCsvUrl . "\" class=\"ew-export-link ew-csv\" title=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\">" . $Language->phrase("ExportToCsv") . "</a>";
 		} elseif (SameText($type, "email")) {
 			$url = $custom ? ",url:'" . $this->pageUrl() . "export=email&amp;custom=1'" : "";
-			return '<button id="emf_t101_session" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t101_session\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft101_sessionview, key:' . ArrayToJsonAttribute($this->RecKey) . ', sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
+			return '<button id="emf_t003_kelas" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t003_kelas\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft003_kelasview, key:' . ArrayToJsonAttribute($this->RecKey) . ', sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
 		} elseif (SameText($type, "print")) {
 			return "<a href=\"" . $this->ExportPrintUrl . "\" class=\"ew-export-link ew-print\" title=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\">" . $Language->phrase("PrinterFriendly") . "</a>";
 		}
@@ -1236,7 +1176,7 @@ class t101_session_view extends t101_session
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t101_sessionlist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t003_kelaslist.php"), "", $this->TableVar, TRUE);
 		$pageId = "view";
 		$Breadcrumb->add("view", $pageId, $url);
 	}
@@ -1255,8 +1195,6 @@ class t101_session_view extends t101_session
 
 			// Set up lookup SQL and connection
 			switch ($fld->FieldVar) {
-				case "x_sekolah_id":
-					break;
 				default:
 					$lookupFilter = "";
 					break;
@@ -1277,8 +1215,6 @@ class t101_session_view extends t101_session
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x_sekolah_id":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

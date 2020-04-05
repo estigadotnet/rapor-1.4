@@ -4,52 +4,20 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t001_sekolah_view extends t001_sekolah
+class t004_semester_edit extends t004_semester
 {
 
 	// Page ID
-	public $PageID = "view";
+	public $PageID = "edit";
 
 	// Project ID
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't001_sekolah';
+	public $TableName = 't004_semester';
 
 	// Page object name
-	public $PageObjName = "t001_sekolah_view";
-
-	// Page URLs
-	public $AddUrl;
-	public $EditUrl;
-	public $CopyUrl;
-	public $DeleteUrl;
-	public $ViewUrl;
-	public $ListUrl;
-
-	// Export URLs
-	public $ExportPrintUrl;
-	public $ExportHtmlUrl;
-	public $ExportExcelUrl;
-	public $ExportWordUrl;
-	public $ExportXmlUrl;
-	public $ExportCsvUrl;
-	public $ExportPdfUrl;
-
-	// Custom export
-	public $ExportExcelCustom = FALSE;
-	public $ExportWordCustom = FALSE;
-	public $ExportPdfCustom = FALSE;
-	public $ExportEmailCustom = FALSE;
-
-	// Update URLs
-	public $InlineAddUrl;
-	public $InlineCopyUrl;
-	public $InlineEditUrl;
-	public $GridAddUrl;
-	public $GridEditUrl;
-	public $MultiDeleteUrl;
-	public $MultiUpdateUrl;
+	public $PageObjName = "t004_semester_edit";
 
 	// Page headings
 	public $Heading = "";
@@ -373,23 +341,11 @@ class t001_sekolah_view extends t001_sekolah
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t001_sekolah)
-		if (!isset($GLOBALS["t001_sekolah"]) || get_class($GLOBALS["t001_sekolah"]) == PROJECT_NAMESPACE . "t001_sekolah") {
-			$GLOBALS["t001_sekolah"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t001_sekolah"];
+		// Table object (t004_semester)
+		if (!isset($GLOBALS["t004_semester"]) || get_class($GLOBALS["t004_semester"]) == PROJECT_NAMESPACE . "t004_semester") {
+			$GLOBALS["t004_semester"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t004_semester"];
 		}
-		$keyUrl = "";
-		if (Get("id") !== NULL) {
-			$this->RecKey["id"] = Get("id");
-			$keyUrl .= "&amp;id=" . urlencode($this->RecKey["id"]);
-		}
-		$this->ExportPrintUrl = $this->pageUrl() . "export=print" . $keyUrl;
-		$this->ExportHtmlUrl = $this->pageUrl() . "export=html" . $keyUrl;
-		$this->ExportExcelUrl = $this->pageUrl() . "export=excel" . $keyUrl;
-		$this->ExportWordUrl = $this->pageUrl() . "export=word" . $keyUrl;
-		$this->ExportXmlUrl = $this->pageUrl() . "export=xml" . $keyUrl;
-		$this->ExportCsvUrl = $this->pageUrl() . "export=csv" . $keyUrl;
-		$this->ExportPdfUrl = $this->pageUrl() . "export=pdf" . $keyUrl;
 
 		// Table object (t201_employees)
 		if (!isset($GLOBALS['t201_employees']))
@@ -397,11 +353,11 @@ class t001_sekolah_view extends t001_sekolah
 
 		// Page ID (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
-			define(PROJECT_NAMESPACE . "PAGE_ID", 'view');
+			define(PROJECT_NAMESPACE . "PAGE_ID", 'edit');
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't001_sekolah');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't004_semester');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -416,18 +372,6 @@ class t001_sekolah_view extends t001_sekolah
 
 		// User table object (t201_employees)
 		$UserTable = $UserTable ?: new t201_employees();
-
-		// Export options
-		$this->ExportOptions = new ListOptions("div");
-		$this->ExportOptions->TagClassName = "ew-export-option";
-
-		// Other options
-		if (!$this->OtherOptions)
-			$this->OtherOptions = new ListOptionsArray();
-		$this->OtherOptions["action"] = new ListOptions("div");
-		$this->OtherOptions["action"]->TagClassName = "ew-action-option";
-		$this->OtherOptions["detail"] = new ListOptions("div");
-		$this->OtherOptions["detail"]->TagClassName = "ew-detail-option";
 	}
 
 	// Terminate page
@@ -442,14 +386,14 @@ class t001_sekolah_view extends t001_sekolah
 		Page_Unloaded();
 
 		// Export
-		global $t001_sekolah;
+		global $t004_semester;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t001_sekolah);
+				$doc = new $class($t004_semester);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -484,7 +428,7 @@ class t001_sekolah_view extends t001_sekolah
 				$pageName = GetPageName($url);
 				if ($pageName != $this->getListUrl()) { // Not List page
 					$row["caption"] = $this->getModalCaption($pageName);
-					if ($pageName == "t001_sekolahview.php")
+					if ($pageName == "t004_semesterview.php")
 						$row["view"] = "1";
 				} else { // List page should not be shown as modal => error
 					$row["error"] = $this->getFailureMessage();
@@ -585,6 +529,79 @@ class t001_sekolah_view extends t001_sekolah
 			$this->id->Visible = FALSE;
 	}
 
+	// Lookup data
+	public function lookup()
+	{
+		global $Language, $Security;
+		if (!isset($Language))
+			$Language = new Language(Config("LANGUAGE_FOLDER"), Post("language", ""));
+
+		// Set up API request
+		if (!$this->setupApiRequest())
+			return FALSE;
+
+		// Get lookup object
+		$fieldName = Post("field");
+		if (!array_key_exists($fieldName, $this->fields))
+			return FALSE;
+		$lookupField = $this->fields[$fieldName];
+		$lookup = $lookupField->Lookup;
+		if ($lookup === NULL)
+			return FALSE;
+		$tbl = $lookup->getTable();
+		if (!$Security->allowLookup(Config("PROJECT_ID") . $tbl->TableName)) // Lookup permission
+			return FALSE;
+
+		// Get lookup parameters
+		$lookupType = Post("ajax", "unknown");
+		$pageSize = -1;
+		$offset = -1;
+		$searchValue = "";
+		if (SameText($lookupType, "modal")) {
+			$searchValue = Post("sv", "");
+			$pageSize = Post("recperpage", 10);
+			$offset = Post("start", 0);
+		} elseif (SameText($lookupType, "autosuggest")) {
+			$searchValue = Get("q", "");
+			$pageSize = Param("n", -1);
+			$pageSize = is_numeric($pageSize) ? (int)$pageSize : -1;
+			if ($pageSize <= 0)
+				$pageSize = Config("AUTO_SUGGEST_MAX_ENTRIES");
+			$start = Param("start", -1);
+			$start = is_numeric($start) ? (int)$start : -1;
+			$page = Param("page", -1);
+			$page = is_numeric($page) ? (int)$page : -1;
+			$offset = $start >= 0 ? $start : ($page > 0 && $pageSize > 0 ? ($page - 1) * $pageSize : 0);
+		}
+		$userSelect = Decrypt(Post("s", ""));
+		$userFilter = Decrypt(Post("f", ""));
+		$userOrderBy = Decrypt(Post("o", ""));
+		$keys = Post("keys");
+		$lookup->LookupType = $lookupType; // Lookup type
+		if ($keys !== NULL) { // Selected records from modal
+			if (is_array($keys))
+				$keys = implode(Config("MULTIPLE_OPTION_SEPARATOR"), $keys);
+			$lookup->FilterFields = []; // Skip parent fields if any
+			$lookup->FilterValues[] = $keys; // Lookup values
+			$pageSize = -1; // Show all records
+		} else { // Lookup values
+			$lookup->FilterValues[] = Post("v0", Post("lookupValue", ""));
+		}
+		$cnt = is_array($lookup->FilterFields) ? count($lookup->FilterFields) : 0;
+		for ($i = 1; $i <= $cnt; $i++)
+			$lookup->FilterValues[] = Post("v" . $i, "");
+		$lookup->SearchValue = $searchValue;
+		$lookup->PageSize = $pageSize;
+		$lookup->Offset = $offset;
+		if ($userSelect != "")
+			$lookup->UserSelect = $userSelect;
+		if ($userFilter != "")
+			$lookup->UserFilter = $userFilter;
+		if ($userOrderBy != "")
+			$lookup->UserOrderBy = $userOrderBy;
+		$lookup->toJson($this); // Use settings from current page
+	}
+
 	// Set up API request
 	public function setupApiRequest()
 	{
@@ -602,17 +619,11 @@ class t001_sekolah_view extends t001_sekolah
 		}
 		return FALSE;
 	}
-	public $ExportOptions; // Export options
-	public $OtherOptions; // Other options
-	public $DisplayRecords = 1;
+	public $FormClassName = "ew-horizontal ew-form ew-edit-form";
+	public $IsModal = FALSE;
+	public $IsMobileOrModal = FALSE;
 	public $DbMasterFilter;
 	public $DbDetailFilter;
-	public $StartRecord;
-	public $StopRecord;
-	public $TotalRecords = 0;
-	public $RecordRange = 10;
-	public $RecKey = [];
-	public $IsModal = FALSE;
 
 	//
 	// Page run
@@ -621,7 +632,7 @@ class t001_sekolah_view extends t001_sekolah
 	public function run()
 	{
 		global $ExportType, $CustomExportType, $ExportFileName, $UserProfile, $Language, $Security, $CurrentForm,
-			$SkipHeaderFooter;
+			$FormError, $SkipHeaderFooter;
 
 		// Is modal
 		$this->IsModal = (Param("modal") == "1");
@@ -639,11 +650,11 @@ class t001_sekolah_view extends t001_sekolah
 			$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName);
 			if ($Security->isLoggedIn())
 				$Security->TablePermission_Loaded();
-			if (!$Security->canView()) {
+			if (!$Security->canEdit()) {
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t001_sekolahlist.php"));
+					$this->terminate(GetUrl("t004_semesterlist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -655,55 +666,11 @@ class t001_sekolah_view extends t001_sekolah
 			}
 		}
 
-		// Get export parameters
-		$custom = "";
-		if (Param("export") !== NULL) {
-			$this->Export = Param("export");
-			$custom = Param("custom", "");
-		} elseif (IsPost()) {
-			if (Post("exporttype") !== NULL)
-				$this->Export = Post("exporttype");
-			$custom = Post("custom", "");
-		} elseif (Get("cmd") == "json") {
-			$this->Export = Get("cmd");
-		} else {
-			$this->setExportReturnUrl(CurrentUrl());
-		}
-		$ExportFileName = $this->TableVar; // Get export file, used in header
-		if (Get("id") !== NULL) {
-			if ($ExportFileName != "")
-				$ExportFileName .= "_";
-			$ExportFileName .= Get("id");
-		}
-
-		// Get custom export parameters
-		if ($this->isExport() && $custom != "") {
-			$this->CustomExport = $this->Export;
-			$this->Export = "print";
-		}
-		$CustomExportType = $this->CustomExport;
-		$ExportType = $this->Export; // Get export parameter, used in header
-
-		// Update Export URLs
-		if (Config("USE_PHPEXCEL"))
-			$this->ExportExcelCustom = FALSE;
-		if ($this->ExportExcelCustom)
-			$this->ExportExcelUrl .= "&amp;custom=1";
-		if (Config("USE_PHPWORD"))
-			$this->ExportWordCustom = FALSE;
-		if ($this->ExportWordCustom)
-			$this->ExportWordUrl .= "&amp;custom=1";
-		if ($this->ExportPdfCustom)
-			$this->ExportPdfUrl .= "&amp;custom=1";
+		// Create form object
+		$CurrentForm = new HttpForm();
 		$this->CurrentAction = Param("action"); // Set up current action
-
-		// Setup export options
-		$this->setupExportOptions();
-		$this->id->setVisibility();
-		$this->Nama->setVisibility();
-		$this->Alamat->setVisibility();
-		$this->KepalaSekolah->setVisibility();
-		$this->NIPKepalaSekolah->setVisibility();
+		$this->id->Visible = FALSE;
+		$this->Semester->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -727,168 +694,178 @@ class t001_sekolah_view extends t001_sekolah
 		// Set up lookup cache
 		// Check permission
 
-		if (!$Security->canView()) {
+		if (!$Security->canEdit()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t001_sekolahlist.php");
+			$this->terminate("t004_semesterlist.php");
 			return;
 		}
 
 		// Check modal
 		if ($this->IsModal)
 			$SkipHeaderFooter = TRUE;
+		$this->IsMobileOrModal = IsMobile() || $this->IsModal;
+		$this->FormClassName = "ew-form ew-edit-form ew-horizontal";
+		$loaded = FALSE;
+		$postBack = FALSE;
 
-		// Load current record
-		$loadCurrentRecord = FALSE;
-		$returnUrl = "";
-		$matchRecord = FALSE;
-		if ($this->isPageRequest()) { // Validate request
+		// Set up current action and primary key
+		if (IsApi()) {
+
+			// Load key values
+			$loaded = TRUE;
 			if (Get("id") !== NULL) {
 				$this->id->setQueryStringValue(Get("id"));
-				$this->RecKey["id"] = $this->id->QueryStringValue;
-			} elseif (IsApi() && Key(0) !== NULL) {
+				$this->id->setOldValue($this->id->QueryStringValue);
+			} elseif (Key(0) !== NULL) {
 				$this->id->setQueryStringValue(Key(0));
-				$this->RecKey["id"] = $this->id->QueryStringValue;
+				$this->id->setOldValue($this->id->QueryStringValue);
 			} elseif (Post("id") !== NULL) {
 				$this->id->setFormValue(Post("id"));
-				$this->RecKey["id"] = $this->id->FormValue;
-			} elseif (IsApi() && Route(2) !== NULL) {
-				$this->id->setFormValue(Route(2));
-				$this->RecKey["id"] = $this->id->FormValue;
+				$this->id->setOldValue($this->id->FormValue);
+			} elseif (Route(2) !== NULL) {
+				$this->id->setQueryStringValue(Route(2));
+				$this->id->setOldValue($this->id->QueryStringValue);
 			} else {
-				$returnUrl = "t001_sekolahlist.php"; // Return to list
+				$loaded = FALSE; // Unable to load key
 			}
 
-			// Get action
-			$this->CurrentAction = "show"; // Display
-			switch ($this->CurrentAction) {
-				case "show": // Get a record to display
-
-					// Load record based on key
-					if (IsApi()) {
-						$filter = $this->getRecordFilter();
-						$this->CurrentFilter = $filter;
-						$sql = $this->getCurrentSql();
-						$conn = $this->getConnection();
-						$this->Recordset = LoadRecordset($sql, $conn);
-						$res = $this->Recordset && !$this->Recordset->EOF;
-					} else {
-						$res = $this->loadRow();
-					}
-					if (!$res) { // Load record based on key
-						if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
-							$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
-						$returnUrl = "t001_sekolahlist.php"; // No matching record, return to list
-					}
-			}
-
-			// Export data only
-			if (!$this->CustomExport && in_array($this->Export, array_keys(Config("EXPORT_CLASSES")))) {
-				$this->exportData();
+			// Load record
+			if ($loaded)
+				$loaded = $this->loadRow();
+			if (!$loaded) {
+				$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
 				$this->terminate();
+				return;
 			}
+			$this->CurrentAction = "update"; // Update record directly
+			$postBack = TRUE;
 		} else {
-			$returnUrl = "t001_sekolahlist.php"; // Not page request, return to list
+			if (Post("action") !== NULL) {
+				$this->CurrentAction = Post("action"); // Get action code
+				if (!$this->isShow()) // Not reload record, handle as postback
+					$postBack = TRUE;
+
+				// Load key from Form
+				if ($CurrentForm->hasValue("x_id")) {
+					$this->id->setFormValue($CurrentForm->getValue("x_id"));
+				}
+			} else {
+				$this->CurrentAction = "show"; // Default action is display
+
+				// Load key from QueryString / Route
+				$loadByQuery = FALSE;
+				if (Get("id") !== NULL) {
+					$this->id->setQueryStringValue(Get("id"));
+					$loadByQuery = TRUE;
+				} elseif (Route(2) !== NULL) {
+					$this->id->setQueryStringValue(Route(2));
+					$loadByQuery = TRUE;
+				} else {
+					$this->id->CurrentValue = NULL;
+				}
+			}
+
+			// Load current record
+			$loaded = $this->loadRow();
 		}
-		if ($returnUrl != "") {
-			$this->terminate($returnUrl);
-			return;
+
+		// Process form if post back
+		if ($postBack) {
+			$this->loadFormValues(); // Get form values
+		}
+
+		// Validate form if post back
+		if ($postBack) {
+			if (!$this->validateForm()) {
+				$this->setFailureMessage($FormError);
+				$this->EventCancelled = TRUE; // Event cancelled
+				$this->restoreFormValues();
+				if (IsApi()) {
+					$this->terminate();
+					return;
+				} else {
+					$this->CurrentAction = ""; // Form error, reset action
+				}
+			}
+		}
+
+		// Perform current action
+		switch ($this->CurrentAction) {
+			case "show": // Get a record to display
+				if (!$loaded) { // Load record based on key
+					if ($this->getFailureMessage() == "")
+						$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
+					$this->terminate("t004_semesterlist.php"); // No matching record, return to list
+				}
+				break;
+			case "update": // Update
+				$returnUrl = $this->getReturnUrl();
+				if (GetPageName($returnUrl) == "t004_semesterlist.php")
+					$returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
+				$this->SendEmail = TRUE; // Send email on update success
+				if ($this->editRow()) { // Update record based on key
+					if ($this->getSuccessMessage() == "")
+						$this->setSuccessMessage($Language->phrase("UpdateSuccess")); // Update success
+					if (IsApi()) {
+						$this->terminate(TRUE);
+						return;
+					} else {
+						$this->terminate($returnUrl); // Return to caller
+					}
+				} elseif (IsApi()) { // API request, return
+					$this->terminate();
+					return;
+				} elseif ($this->getFailureMessage() == $Language->phrase("NoRecord")) {
+					$this->terminate($returnUrl); // Return to caller
+				} else {
+					$this->EventCancelled = TRUE; // Event cancelled
+					$this->restoreFormValues(); // Restore form values if update failed
+				}
 		}
 
 		// Set up Breadcrumb
-		if (!$this->isExport())
-			$this->setupBreadcrumb();
+		$this->setupBreadcrumb();
 
-		// Render row
-		$this->RowType = ROWTYPE_VIEW;
+		// Render the record
+		$this->RowType = ROWTYPE_EDIT; // Render as Edit
 		$this->resetAttributes();
 		$this->renderRow();
-
-		// Normal return
-		if (IsApi()) {
-			$rows = $this->getRecordsFromRecordset($this->Recordset, TRUE); // Get current record only
-			$this->Recordset->close();
-			WriteJson(["success" => TRUE, $this->TableVar => $rows]);
-			$this->terminate(TRUE);
-		}
 	}
 
-	// Set up other options
-	protected function setupOtherOptions()
+	// Get upload files
+	protected function getUploadFiles()
 	{
-		global $Language, $Security;
-		$options = &$this->OtherOptions;
-		$option = $options["action"];
-
-		// Add
-		$item = &$option->add("add");
-		$addcaption = HtmlTitle($Language->phrase("ViewPageAddLink"));
-		if ($this->IsModal) // Modal
-			$item->Body = "<a class=\"ew-action ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"#\" onclick=\"return ew.modalDialogShow({lnk:this,url:'" . HtmlEncode($this->AddUrl) . "'});\">" . $Language->phrase("ViewPageAddLink") . "</a>";
-		else
-			$item->Body = "<a class=\"ew-action ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode($this->AddUrl) . "\">" . $Language->phrase("ViewPageAddLink") . "</a>";
-		$item->Visible = ($this->AddUrl != "" && $Security->canAdd());
-
-		// Edit
-		$item = &$option->add("edit");
-		$editcaption = HtmlTitle($Language->phrase("ViewPageEditLink"));
-		if ($this->IsModal) // Modal
-			$item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"#\" onclick=\"return ew.modalDialogShow({lnk:this,url:'" . HtmlEncode($this->EditUrl) . "'});\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-		else
-			$item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode($this->EditUrl) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-		$item->Visible = ($this->EditUrl != "" && $Security->canEdit());
-
-		// Copy
-		$item = &$option->add("copy");
-		$copycaption = HtmlTitle($Language->phrase("ViewPageCopyLink"));
-		if ($this->IsModal) // Modal
-			$item->Body = "<a class=\"ew-action ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"#\" onclick=\"return ew.modalDialogShow({lnk:this,btn:'AddBtn',url:'" . HtmlEncode($this->CopyUrl) . "'});\">" . $Language->phrase("ViewPageCopyLink") . "</a>";
-		else
-			$item->Body = "<a class=\"ew-action ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . HtmlEncode($this->CopyUrl) . "\">" . $Language->phrase("ViewPageCopyLink") . "</a>";
-		$item->Visible = ($this->CopyUrl != "" && $Security->canAdd());
-
-		// Delete
-		$item = &$option->add("delete");
-		if ($this->IsModal) // Handle as inline delete
-			$item->Body = "<a onclick=\"return ew.confirmDelete(this);\" class=\"ew-action ew-delete\" title=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" href=\"" . HtmlEncode(UrlAddQuery($this->DeleteUrl, "action=1")) . "\">" . $Language->phrase("ViewPageDeleteLink") . "</a>";
-		else
-			$item->Body = "<a class=\"ew-action ew-delete\" title=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" href=\"" . HtmlEncode($this->DeleteUrl) . "\">" . $Language->phrase("ViewPageDeleteLink") . "</a>";
-		$item->Visible = ($this->DeleteUrl != "" && $Security->canDelete());
-
-		// Set up action default
-		$option = $options["action"];
-		$option->DropDownButtonPhrase = $Language->phrase("ButtonActions");
-		$option->UseDropDownButton = FALSE;
-		$option->UseButtonGroup = TRUE;
-		$item = &$option->add($option->GroupOptionName);
-		$item->Body = "";
-		$item->Visible = FALSE;
+		global $CurrentForm, $Language;
 	}
 
-	// Load recordset
-	public function loadRecordset($offset = -1, $rowcnt = -1)
+	// Load form values
+	protected function loadFormValues()
 	{
 
-		// Load List page SQL
-		$sql = $this->getListSql();
-		$conn = $this->getConnection();
+		// Load from form
+		global $CurrentForm;
 
-		// Load recordset
-		$dbtype = GetConnectionType($this->Dbid);
-		if ($this->UseSelectLimit) {
-			$conn->raiseErrorFn = Config("ERROR_FUNC");
-			if ($dbtype == "MSSQL") {
-				$rs = $conn->selectLimit($sql, $rowcnt, $offset, ["_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())]);
-			} else {
-				$rs = $conn->selectLimit($sql, $rowcnt, $offset);
-			}
-			$conn->raiseErrorFn = "";
-		} else {
-			$rs = LoadRecordset($sql, $conn);
+		// Check field name 'Semester' first before field var 'x_Semester'
+		$val = $CurrentForm->hasValue("Semester") ? $CurrentForm->getValue("Semester") : $CurrentForm->getValue("x_Semester");
+		if (!$this->Semester->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->Semester->Visible = FALSE; // Disable update for API request
+			else
+				$this->Semester->setFormValue($val);
 		}
 
-		// Call Recordset Selected event
-		$this->Recordset_Selected($rs);
-		return $rs;
+		// Check field name 'id' first before field var 'x_id'
+		$val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
+		if (!$this->id->IsDetailKey)
+			$this->id->setFormValue($val);
+	}
+
+	// Restore form values
+	public function restoreFormValues()
+	{
+		global $CurrentForm;
+		$this->id->CurrentValue = $this->id->FormValue;
+		$this->Semester->CurrentValue = $this->Semester->FormValue;
 	}
 
 	// Load row based on key values
@@ -927,10 +904,7 @@ class t001_sekolah_view extends t001_sekolah
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->Nama->setDbValue($row['Nama']);
-		$this->Alamat->setDbValue($row['Alamat']);
-		$this->KepalaSekolah->setDbValue($row['KepalaSekolah']);
-		$this->NIPKepalaSekolah->setDbValue($row['NIPKepalaSekolah']);
+		$this->Semester->setDbValue($row['Semester']);
 	}
 
 	// Return a row with default values
@@ -938,11 +912,31 @@ class t001_sekolah_view extends t001_sekolah
 	{
 		$row = [];
 		$row['id'] = NULL;
-		$row['Nama'] = NULL;
-		$row['Alamat'] = NULL;
-		$row['KepalaSekolah'] = NULL;
-		$row['NIPKepalaSekolah'] = NULL;
+		$row['Semester'] = NULL;
 		return $row;
+	}
+
+	// Load old record
+	protected function loadOldRecord()
+	{
+
+		// Load key values from Session
+		$validKey = TRUE;
+		if (strval($this->getKey("id")) != "")
+			$this->id->OldValue = $this->getKey("id"); // id
+		else
+			$validKey = FALSE;
+
+		// Load old record
+		$this->OldRecordset = NULL;
+		if ($validKey) {
+			$this->CurrentFilter = $this->getRecordFilter();
+			$sql = $this->getCurrentSql();
+			$conn = $this->getConnection();
+			$this->OldRecordset = LoadRecordset($sql, $conn);
+		}
+		$this->loadRowValues($this->OldRecordset); // Load row values
+		return $validKey;
 	}
 
 	// Render row values based on field settings
@@ -951,22 +945,13 @@ class t001_sekolah_view extends t001_sekolah
 		global $Security, $Language, $CurrentLanguage;
 
 		// Initialize URLs
-		$this->AddUrl = $this->getAddUrl();
-		$this->EditUrl = $this->getEditUrl();
-		$this->CopyUrl = $this->getCopyUrl();
-		$this->DeleteUrl = $this->getDeleteUrl();
-		$this->ListUrl = $this->getListUrl();
-		$this->setupOtherOptions();
-
 		// Call Row_Rendering event
+
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
 		// id
-		// Nama
-		// Alamat
-		// KepalaSekolah
-		// NIPKepalaSekolah
+		// Semester
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -974,239 +959,148 @@ class t001_sekolah_view extends t001_sekolah
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// Nama
-			$this->Nama->ViewValue = $this->Nama->CurrentValue;
-			$this->Nama->ViewCustomAttributes = "";
+			// Semester
+			$this->Semester->ViewValue = $this->Semester->CurrentValue;
+			$this->Semester->ViewCustomAttributes = "";
 
-			// Alamat
-			$this->Alamat->ViewValue = $this->Alamat->CurrentValue;
-			$this->Alamat->ViewCustomAttributes = "";
+			// Semester
+			$this->Semester->LinkCustomAttributes = "";
+			$this->Semester->HrefValue = "";
+			$this->Semester->TooltipValue = "";
+		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
 
-			// KepalaSekolah
-			$this->KepalaSekolah->ViewValue = $this->KepalaSekolah->CurrentValue;
-			$this->KepalaSekolah->ViewCustomAttributes = "";
+			// Semester
+			$this->Semester->EditAttrs["class"] = "form-control";
+			$this->Semester->EditCustomAttributes = "";
+			if (!$this->Semester->Raw)
+				$this->Semester->CurrentValue = HtmlDecode($this->Semester->CurrentValue);
+			$this->Semester->EditValue = HtmlEncode($this->Semester->CurrentValue);
+			$this->Semester->PlaceHolder = RemoveHtml($this->Semester->caption());
 
-			// NIPKepalaSekolah
-			$this->NIPKepalaSekolah->ViewValue = $this->NIPKepalaSekolah->CurrentValue;
-			$this->NIPKepalaSekolah->ViewCustomAttributes = "";
+			// Edit refer script
+			// Semester
 
-			// id
-			$this->id->LinkCustomAttributes = "";
-			$this->id->HrefValue = "";
-			$this->id->TooltipValue = "";
-
-			// Nama
-			$this->Nama->LinkCustomAttributes = "";
-			$this->Nama->HrefValue = "";
-			$this->Nama->TooltipValue = "";
-
-			// Alamat
-			$this->Alamat->LinkCustomAttributes = "";
-			$this->Alamat->HrefValue = "";
-			$this->Alamat->TooltipValue = "";
-
-			// KepalaSekolah
-			$this->KepalaSekolah->LinkCustomAttributes = "";
-			$this->KepalaSekolah->HrefValue = "";
-			$this->KepalaSekolah->TooltipValue = "";
-
-			// NIPKepalaSekolah
-			$this->NIPKepalaSekolah->LinkCustomAttributes = "";
-			$this->NIPKepalaSekolah->HrefValue = "";
-			$this->NIPKepalaSekolah->TooltipValue = "";
+			$this->Semester->LinkCustomAttributes = "";
+			$this->Semester->HrefValue = "";
 		}
+		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
+			$this->setupFieldTitles();
 
 		// Call Row Rendered event
 		if ($this->RowType != ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
 	}
 
-	// Get export HTML tag
-	protected function getExportTag($type, $custom = FALSE)
+	// Validate form
+	protected function validateForm()
 	{
-		global $Language;
-		if (SameText($type, "excel")) {
-			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" onclick=\"return ew.export(document.ft001_sekolahview, '" . $this->ExportExcelUrl . "', 'excel', true);\">" . $Language->phrase("ExportToExcel") . "</a>";
-			else
-				return "<a href=\"" . $this->ExportExcelUrl . "\" class=\"ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcelText")) . "\">" . $Language->phrase("ExportToExcel") . "</a>";
-		} elseif (SameText($type, "word")) {
-			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" onclick=\"return ew.export(document.ft001_sekolahview, '" . $this->ExportWordUrl . "', 'word', true);\">" . $Language->phrase("ExportToWord") . "</a>";
-			else
-				return "<a href=\"" . $this->ExportWordUrl . "\" class=\"ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWordText")) . "\">" . $Language->phrase("ExportToWord") . "</a>";
-		} elseif (SameText($type, "pdf")) {
-			if ($custom)
-				return "<a href=\"#\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" onclick=\"return ew.export(document.ft001_sekolahview, '" . $this->ExportPdfUrl . "', 'pdf', true);\">" . $Language->phrase("ExportToPDF") . "</a>";
-			else
-				return "<a href=\"" . $this->ExportPdfUrl . "\" class=\"ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPDFText")) . "\">" . $Language->phrase("ExportToPDF") . "</a>";
-		} elseif (SameText($type, "html")) {
-			return "<a href=\"" . $this->ExportHtmlUrl . "\" class=\"ew-export-link ew-html\" title=\"" . HtmlEncode($Language->phrase("ExportToHtmlText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToHtmlText")) . "\">" . $Language->phrase("ExportToHtml") . "</a>";
-		} elseif (SameText($type, "xml")) {
-			return "<a href=\"" . $this->ExportXmlUrl . "\" class=\"ew-export-link ew-xml\" title=\"" . HtmlEncode($Language->phrase("ExportToXmlText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToXmlText")) . "\">" . $Language->phrase("ExportToXml") . "</a>";
-		} elseif (SameText($type, "csv")) {
-			return "<a href=\"" . $this->ExportCsvUrl . "\" class=\"ew-export-link ew-csv\" title=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToCsvText")) . "\">" . $Language->phrase("ExportToCsv") . "</a>";
-		} elseif (SameText($type, "email")) {
-			$url = $custom ? ",url:'" . $this->pageUrl() . "export=email&amp;custom=1'" : "";
-			return '<button id="emf_t001_sekolah" class="ew-export-link ew-email" title="' . $Language->phrase("ExportToEmailText") . '" data-caption="' . $Language->phrase("ExportToEmailText") . '" onclick="ew.emailDialogShow({lnk:\'emf_t001_sekolah\', hdr:ew.language.phrase(\'ExportToEmailText\'), f:document.ft001_sekolahview, key:' . ArrayToJsonAttribute($this->RecKey) . ', sel:false' . $url . '});">' . $Language->phrase("ExportToEmail") . '</button>';
-		} elseif (SameText($type, "print")) {
-			return "<a href=\"" . $this->ExportPrintUrl . "\" class=\"ew-export-link ew-print\" title=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\" data-caption=\"" . HtmlEncode($Language->phrase("PrinterFriendlyText")) . "\">" . $Language->phrase("PrinterFriendly") . "</a>";
-		}
-	}
+		global $Language, $FormError;
 
-	// Set up export options
-	protected function setupExportOptions()
-	{
-		global $Language;
+		// Initialize form error message
+		$FormError = "";
 
-		// Printer friendly
-		$item = &$this->ExportOptions->add("print");
-		$item->Body = $this->getExportTag("print");
-		$item->Visible = TRUE;
-
-		// Export to Excel
-		$item = &$this->ExportOptions->add("excel");
-		$item->Body = $this->getExportTag("excel");
-		$item->Visible = TRUE;
-
-		// Export to Word
-		$item = &$this->ExportOptions->add("word");
-		$item->Body = $this->getExportTag("word");
-		$item->Visible = FALSE;
-
-		// Export to Html
-		$item = &$this->ExportOptions->add("html");
-		$item->Body = $this->getExportTag("html");
-		$item->Visible = FALSE;
-
-		// Export to Xml
-		$item = &$this->ExportOptions->add("xml");
-		$item->Body = $this->getExportTag("xml");
-		$item->Visible = FALSE;
-
-		// Export to Csv
-		$item = &$this->ExportOptions->add("csv");
-		$item->Body = $this->getExportTag("csv");
-		$item->Visible = TRUE;
-
-		// Export to Pdf
-		$item = &$this->ExportOptions->add("pdf");
-		$item->Body = $this->getExportTag("pdf");
-		$item->Visible = TRUE;
-
-		// Export to Email
-		$item = &$this->ExportOptions->add("email");
-		$item->Body = $this->getExportTag("email");
-		$item->Visible = FALSE;
-
-		// Drop down button for export
-		$this->ExportOptions->UseButtonGroup = TRUE;
-		$this->ExportOptions->UseDropDownButton = FALSE;
-		if ($this->ExportOptions->UseButtonGroup && IsMobile())
-			$this->ExportOptions->UseDropDownButton = TRUE;
-		$this->ExportOptions->DropDownButtonPhrase = $Language->phrase("ButtonExport");
-
-		// Add group option item
-		$item = &$this->ExportOptions->add($this->ExportOptions->GroupOptionName);
-		$item->Body = "";
-		$item->Visible = FALSE;
-
-		// Hide options for export
-		if ($this->isExport())
-			$this->ExportOptions->hideAllOptions();
-	}
-
-	/**
-	 * Export data in HTML/CSV/Word/Excel/XML/Email/PDF format
-	 *
-	 * @param boolean $return Return the data rather than output it
-	 * @return mixed
-	 */
-	public function exportData($return = FALSE)
-	{
-		global $Language;
-		$utf8 = SameText(Config("PROJECT_CHARSET"), "utf-8");
-		$selectLimit = FALSE;
-
-		// Load recordset
-		if ($selectLimit) {
-			$this->TotalRecords = $this->listRecordCount();
-		} else {
-			if (!$this->Recordset)
-				$this->Recordset = $this->loadRecordset();
-			$rs = &$this->Recordset;
-			if ($rs)
-				$this->TotalRecords = $rs->RecordCount();
-		}
-		$this->StartRecord = 1;
-		$this->setupStartRecord(); // Set up start record position
-
-		// Set the last record to display
-		if ($this->DisplayRecords <= 0) {
-			$this->StopRecord = $this->TotalRecords;
-		} else {
-			$this->StopRecord = $this->StartRecord + $this->DisplayRecords - 1;
-		}
-		$this->ExportDoc = GetExportDocument($this, "v");
-		$doc = &$this->ExportDoc;
-		if (!$doc)
-			$this->setFailureMessage($Language->phrase("ExportClassNotFound")); // Export class not found
-		if (!$rs || !$doc) {
-			RemoveHeader("Content-Type"); // Remove header
-			RemoveHeader("Content-Disposition");
-			$this->showMessage();
-			return;
-		}
-		if ($selectLimit) {
-			$this->StartRecord = 1;
-			$this->StopRecord = $this->DisplayRecords <= 0 ? $this->TotalRecords : $this->DisplayRecords;
-		}
-
-		// Call Page Exporting server event
-		$this->ExportDoc->ExportCustom = !$this->Page_Exporting();
-		$header = $this->PageHeader;
-		$this->Page_DataRendering($header);
-		$doc->Text .= $header;
-		$this->exportDocument($doc, $rs, $this->StartRecord, $this->StopRecord, "view");
-		$footer = $this->PageFooter;
-		$this->Page_DataRendered($footer);
-		$doc->Text .= $footer;
-
-		// Close recordset
-		$rs->close();
-
-		// Call Page Exported server event
-		$this->Page_Exported();
-
-		// Export header and footer
-		$doc->exportHeaderAndFooter();
-
-		// Clean output buffer (without destroying output buffer)
-		$buffer = ob_get_contents(); // Save the output buffer
-		if (!Config("DEBUG") && $buffer)
-			ob_clean();
-
-		// Write debug message if enabled
-		if (Config("DEBUG") && !$this->isExport("pdf"))
-			echo GetDebugMessage();
-
-		// Output data
-		if ($this->isExport("email")) {
-
-			// Export-to-email disabled
-		} else {
-			$doc->export();
-			if ($return) {
-				RemoveHeader("Content-Type"); // Remove header
-				RemoveHeader("Content-Disposition");
-				$content = ob_get_contents();
-				if ($content)
-					ob_clean();
-				if ($buffer)
-					echo $buffer; // Resume the output buffer
-				return $content;
+		// Check if validation required
+		if (!Config("SERVER_VALIDATE"))
+			return ($FormError == "");
+		if ($this->Semester->Required) {
+			if (!$this->Semester->IsDetailKey && $this->Semester->FormValue != NULL && $this->Semester->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->Semester->caption(), $this->Semester->RequiredErrorMessage));
 			}
 		}
+
+		// Return validate result
+		$validateForm = ($FormError == "");
+
+		// Call Form_CustomValidate event
+		$formCustomError = "";
+		$validateForm = $validateForm && $this->Form_CustomValidate($formCustomError);
+		if ($formCustomError != "") {
+			AddMessage($FormError, $formCustomError);
+		}
+		return $validateForm;
+	}
+
+	// Update record based on key values
+	protected function editRow()
+	{
+		global $Security, $Language;
+		$oldKeyFilter = $this->getRecordFilter();
+		$filter = $this->applyUserIDFilters($oldKeyFilter);
+		$conn = $this->getConnection();
+		$this->CurrentFilter = $filter;
+		$sql = $this->getCurrentSql();
+		$conn->raiseErrorFn = Config("ERROR_FUNC");
+		$rs = $conn->execute($sql);
+		$conn->raiseErrorFn = "";
+		if ($rs === FALSE)
+			return FALSE;
+		if ($rs->EOF) {
+			$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
+			$editRow = FALSE; // Update Failed
+		} else {
+
+			// Save old values
+			$rsold = &$rs->fields;
+			$this->loadDbValues($rsold);
+			$rsnew = [];
+
+			// Semester
+			$this->Semester->setDbValueDef($rsnew, $this->Semester->CurrentValue, "", $this->Semester->ReadOnly);
+
+			// Call Row Updating event
+			$updateRow = $this->Row_Updating($rsold, $rsnew);
+
+			// Check for duplicate key when key changed
+			if ($updateRow) {
+				$newKeyFilter = $this->getRecordFilter($rsnew);
+				if ($newKeyFilter != $oldKeyFilter) {
+					$rsChk = $this->loadRs($newKeyFilter);
+					if ($rsChk && !$rsChk->EOF) {
+						$keyErrMsg = str_replace("%f", $newKeyFilter, $Language->phrase("DupKey"));
+						$this->setFailureMessage($keyErrMsg);
+						$rsChk->close();
+						$updateRow = FALSE;
+					}
+				}
+			}
+			if ($updateRow) {
+				$conn->raiseErrorFn = Config("ERROR_FUNC");
+				if (count($rsnew) > 0)
+					$editRow = $this->update($rsnew, "", $rsold);
+				else
+					$editRow = TRUE; // No field to update
+				$conn->raiseErrorFn = "";
+				if ($editRow) {
+				}
+			} else {
+				if ($this->getSuccessMessage() != "" || $this->getFailureMessage() != "") {
+
+					// Use the message, do nothing
+				} elseif ($this->CancelMessage != "") {
+					$this->setFailureMessage($this->CancelMessage);
+					$this->CancelMessage = "";
+				} else {
+					$this->setFailureMessage($Language->phrase("UpdateCancelled"));
+				}
+				$editRow = FALSE;
+			}
+		}
+
+		// Call Row_Updated event
+		if ($editRow)
+			$this->Row_Updated($rsold, $rsnew);
+		$rs->close();
+
+		// Clean upload path if any
+		if ($editRow) {
+		}
+
+		// Write JSON for API request
+		if (IsApi() && $editRow) {
+			$row = $this->getRecordsFromRecordset([$rsnew], TRUE);
+			WriteJson(["success" => TRUE, $this->TableVar => $row]);
+		}
+		return $editRow;
 	}
 
 	// Set up Breadcrumb
@@ -1215,9 +1109,9 @@ class t001_sekolah_view extends t001_sekolah
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t001_sekolahlist.php"), "", $this->TableVar, TRUE);
-		$pageId = "view";
-		$Breadcrumb->add("view", $pageId, $url);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t004_semesterlist.php"), "", $this->TableVar, TRUE);
+		$pageId = "edit";
+		$Breadcrumb->add("edit", $pageId, $url);
 	}
 
 	// Setup lookup options
@@ -1363,30 +1257,11 @@ class t001_sekolah_view extends t001_sekolah
 
 	}
 
-	// Page Exporting event
-	// $this->ExportDoc = export document object
-	function Page_Exporting() {
+	// Form Custom Validate event
+	function Form_CustomValidate(&$customError) {
 
-		//$this->ExportDoc->Text = "my header"; // Export header
-		//return FALSE; // Return FALSE to skip default export and use Row_Export event
-
-		return TRUE; // Return TRUE to use default export and skip Row_Export event
-	}
-
-	// Row Export event
-	// $this->ExportDoc = export document object
-	function Row_Export($rs) {
-
-		//$this->ExportDoc->Text .= "my content"; // Build HTML with field value: $rs["MyField"] or $this->MyField->ViewValue
-	}
-
-	// Page Exported event
-	// $this->ExportDoc = export document object
-	function Page_Exported() {
-
-		//$this->ExportDoc->Text .= "my footer"; // Export footer
-		//echo $this->ExportDoc->Text;
-
+		// Return error message in CustomError
+		return TRUE;
 	}
 } // End class
 ?>

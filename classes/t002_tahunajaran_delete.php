@@ -576,7 +576,7 @@ class t002_tahunajaran_delete extends t002_tahunajaran
 			}
 		}
 		$this->CurrentAction = Param("action"); // Set up current action
-		$this->id->Visible = FALSE;
+		$this->id->setVisibility();
 		$this->Mulai->setVisibility();
 		$this->Selesai->setVisibility();
 		$this->hideFieldsForAddEdit();
@@ -767,6 +767,11 @@ class t002_tahunajaran_delete extends t002_tahunajaran
 			// Selesai
 			$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
 			$this->Selesai->ViewCustomAttributes = "";
+
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
 
 			// Mulai
 			$this->Mulai->LinkCustomAttributes = "";

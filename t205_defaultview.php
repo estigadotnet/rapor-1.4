@@ -81,12 +81,12 @@ $t205_default_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($t205_default_view->Keterangan->Visible) { // Keterangan ?>
-	<tr id="r_Keterangan">
-		<td class="<?php echo $t205_default_view->TableLeftColumnClass ?>"><span id="elh_t205_default_Keterangan"><?php echo $t205_default_view->Keterangan->caption() ?></span></td>
-		<td data-name="Keterangan" <?php echo $t205_default_view->Keterangan->cellAttributes() ?>>
-<span id="el_t205_default_Keterangan">
-<span<?php echo $t205_default_view->Keterangan->viewAttributes() ?>><?php echo $t205_default_view->Keterangan->getViewValue() ?></span>
+<?php if ($t205_default_view->Field_ID->Visible) { // Field_ID ?>
+	<tr id="r_Field_ID">
+		<td class="<?php echo $t205_default_view->TableLeftColumnClass ?>"><span id="elh_t205_default_Field_ID"><?php echo $t205_default_view->Field_ID->caption() ?></span></td>
+		<td data-name="Field_ID" <?php echo $t205_default_view->Field_ID->cellAttributes() ?>>
+<span id="el_t205_default_Field_ID">
+<span<?php echo $t205_default_view->Field_ID->viewAttributes() ?>><?php echo $t205_default_view->Field_ID->getViewValue() ?></span>
 </span>
 </td>
 	</tr>
@@ -101,12 +101,12 @@ $t205_default_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($t205_default_view->Field_ID->Visible) { // Field_ID ?>
-	<tr id="r_Field_ID">
-		<td class="<?php echo $t205_default_view->TableLeftColumnClass ?>"><span id="elh_t205_default_Field_ID"><?php echo $t205_default_view->Field_ID->caption() ?></span></td>
-		<td data-name="Field_ID" <?php echo $t205_default_view->Field_ID->cellAttributes() ?>>
-<span id="el_t205_default_Field_ID">
-<span<?php echo $t205_default_view->Field_ID->viewAttributes() ?>><?php echo $t205_default_view->Field_ID->getViewValue() ?></span>
+<?php if ($t205_default_view->Keterangan->Visible) { // Keterangan ?>
+	<tr id="r_Keterangan">
+		<td class="<?php echo $t205_default_view->TableLeftColumnClass ?>"><span id="elh_t205_default_Keterangan"><?php echo $t205_default_view->Keterangan->caption() ?></span></td>
+		<td data-name="Keterangan" <?php echo $t205_default_view->Keterangan->cellAttributes() ?>>
+<span id="el_t205_default_Keterangan">
+<span<?php echo $t205_default_view->Keterangan->viewAttributes() ?>><?php echo $t205_default_view->Keterangan->getViewValue() ?></span>
 </span>
 </td>
 	</tr>

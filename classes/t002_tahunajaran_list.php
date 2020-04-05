@@ -812,7 +812,7 @@ class t002_tahunajaran_list extends t002_tahunajaran
 
 		// Setup export options
 		$this->setupExportOptions();
-		$this->id->Visible = FALSE;
+		$this->id->setVisibility();
 		$this->Mulai->setVisibility();
 		$this->Selesai->setVisibility();
 		$this->hideFieldsForAddEdit();
@@ -1335,6 +1335,7 @@ class t002_tahunajaran_list extends t002_tahunajaran
 		if (Get("order") !== NULL) {
 			$this->CurrentOrder = Get("order");
 			$this->CurrentOrderType = Get("ordertype", "");
+			$this->updateSort($this->id, $ctrl); // id
 			$this->updateSort($this->Mulai, $ctrl); // Mulai
 			$this->updateSort($this->Selesai, $ctrl); // Selesai
 			$this->setStartRecordNumber(1); // Reset start position
@@ -1372,6 +1373,7 @@ class t002_tahunajaran_list extends t002_tahunajaran
 			if ($this->Command == "resetsort") {
 				$orderBy = "";
 				$this->setSessionOrderBy($orderBy);
+				$this->id->setSort("");
 				$this->Mulai->setSort("");
 				$this->Selesai->setSort("");
 			}
@@ -1851,6 +1853,11 @@ class t002_tahunajaran_list extends t002_tahunajaran
 			// Selesai
 			$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
 			$this->Selesai->ViewCustomAttributes = "";
+
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
 
 			// Mulai
 			$this->Mulai->LinkCustomAttributes = "";

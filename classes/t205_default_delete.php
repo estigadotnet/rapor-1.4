@@ -578,9 +578,9 @@ class t205_default_delete extends t205_default
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->Visible = FALSE;
 		$this->User_ID->setVisibility();
-		$this->Keterangan->setVisibility();
-		$this->Nilai->setVisibility();
 		$this->Field_ID->setVisibility();
+		$this->Nilai->setVisibility();
+		$this->Keterangan->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -729,9 +729,9 @@ class t205_default_delete extends t205_default
 			return;
 		$this->id->setDbValue($row['id']);
 		$this->User_ID->setDbValue($row['User_ID']);
-		$this->Keterangan->setDbValue($row['Keterangan']);
-		$this->Nilai->setDbValue($row['Nilai']);
 		$this->Field_ID->setDbValue($row['Field_ID']);
+		$this->Nilai->setDbValue($row['Nilai']);
+		$this->Keterangan->setDbValue($row['Keterangan']);
 	}
 
 	// Return a row with default values
@@ -740,9 +740,9 @@ class t205_default_delete extends t205_default
 		$row = [];
 		$row['id'] = NULL;
 		$row['User_ID'] = NULL;
-		$row['Keterangan'] = NULL;
-		$row['Nilai'] = NULL;
 		$row['Field_ID'] = NULL;
+		$row['Nilai'] = NULL;
+		$row['Keterangan'] = NULL;
 		return $row;
 	}
 
@@ -759,9 +759,9 @@ class t205_default_delete extends t205_default
 		// Common render codes for all row types
 		// id
 		// User_ID
-		// Keterangan
-		// Nilai
 		// Field_ID
+		// Nilai
+		// Keterangan
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -791,37 +791,37 @@ class t205_default_delete extends t205_default
 			}
 			$this->User_ID->ViewCustomAttributes = "";
 
-			// Keterangan
-			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
-			$this->Keterangan->ViewCustomAttributes = "";
+			// Field_ID
+			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
+			$this->Field_ID->ViewCustomAttributes = "";
 
 			// Nilai
 			$this->Nilai->ViewValue = $this->Nilai->CurrentValue;
 			$this->Nilai->ViewCustomAttributes = "";
 
-			// Field_ID
-			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
-			$this->Field_ID->ViewCustomAttributes = "";
+			// Keterangan
+			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
+			$this->Keterangan->ViewCustomAttributes = "";
 
 			// User_ID
 			$this->User_ID->LinkCustomAttributes = "";
 			$this->User_ID->HrefValue = "";
 			$this->User_ID->TooltipValue = "";
 
-			// Keterangan
-			$this->Keterangan->LinkCustomAttributes = "";
-			$this->Keterangan->HrefValue = "";
-			$this->Keterangan->TooltipValue = "";
+			// Field_ID
+			$this->Field_ID->LinkCustomAttributes = "";
+			$this->Field_ID->HrefValue = "";
+			$this->Field_ID->TooltipValue = "";
 
 			// Nilai
 			$this->Nilai->LinkCustomAttributes = "";
 			$this->Nilai->HrefValue = "";
 			$this->Nilai->TooltipValue = "";
 
-			// Field_ID
-			$this->Field_ID->LinkCustomAttributes = "";
-			$this->Field_ID->HrefValue = "";
-			$this->Field_ID->TooltipValue = "";
+			// Keterangan
+			$this->Keterangan->LinkCustomAttributes = "";
+			$this->Keterangan->HrefValue = "";
+			$this->Keterangan->TooltipValue = "";
 		}
 
 		// Call Row Rendered event

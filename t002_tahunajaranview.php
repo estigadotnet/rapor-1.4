@@ -71,6 +71,16 @@ $t002_tahunajaran_view->showMessage();
 <input type="hidden" name="t" value="t002_tahunajaran">
 <input type="hidden" name="modal" value="<?php echo (int)$t002_tahunajaran_view->IsModal ?>">
 <table class="table table-striped table-sm ew-view-table">
+<?php if ($t002_tahunajaran_view->id->Visible) { // id ?>
+	<tr id="r_id">
+		<td class="<?php echo $t002_tahunajaran_view->TableLeftColumnClass ?>"><span id="elh_t002_tahunajaran_id"><?php echo $t002_tahunajaran_view->id->caption() ?></span></td>
+		<td data-name="id" <?php echo $t002_tahunajaran_view->id->cellAttributes() ?>>
+<span id="el_t002_tahunajaran_id">
+<span<?php echo $t002_tahunajaran_view->id->viewAttributes() ?>><?php echo $t002_tahunajaran_view->id->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
 <?php if ($t002_tahunajaran_view->Mulai->Visible) { // Mulai ?>
 	<tr id="r_Mulai">
 		<td class="<?php echo $t002_tahunajaran_view->TableLeftColumnClass ?>"><span id="elh_t002_tahunajaran_Mulai"><?php echo $t002_tahunajaran_view->Mulai->caption() ?></span></td>

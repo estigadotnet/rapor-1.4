@@ -1485,24 +1485,6 @@ class t204_audittrail_list extends t204_audittrail
 		$item->Visible = $Security->canView();
 		$item->OnLeft = TRUE;
 
-		// "edit"
-		$item = &$this->ListOptions->add("edit");
-		$item->CssClass = "text-nowrap";
-		$item->Visible = $Security->canEdit();
-		$item->OnLeft = TRUE;
-
-		// "copy"
-		$item = &$this->ListOptions->add("copy");
-		$item->CssClass = "text-nowrap";
-		$item->Visible = $Security->canAdd();
-		$item->OnLeft = TRUE;
-
-		// "delete"
-		$item = &$this->ListOptions->add("delete");
-		$item->CssClass = "text-nowrap";
-		$item->Visible = $Security->canDelete();
-		$item->OnLeft = TRUE;
-
 		// List actions
 		$item = &$this->ListOptions->add("listactions");
 		$item->CssClass = "text-nowrap";
@@ -1517,6 +1499,14 @@ class t204_audittrail_list extends t204_audittrail
 		$item->OnLeft = TRUE;
 		$item->Header = "<div class=\"custom-control custom-checkbox d-inline-block\"><input type=\"checkbox\" name=\"key\" id=\"key\" class=\"custom-control-input\" onclick=\"ew.selectAllKey(this);\"><label class=\"custom-control-label\" for=\"key\"></label></div>";
 		$item->moveTo(0);
+		$item->ShowInDropDown = FALSE;
+		$item->ShowInButtonGroup = FALSE;
+
+		// "sequence"
+		$item = &$this->ListOptions->add("sequence");
+		$item->CssClass = "text-nowrap";
+		$item->Visible = TRUE;
+		$item->OnLeft = TRUE; // Always on left
 		$item->ShowInDropDown = FALSE;
 		$item->ShowInButtonGroup = FALSE;
 
@@ -1545,6 +1535,10 @@ class t204_audittrail_list extends t204_audittrail
 		// Call ListOptions_Rendering event
 		$this->ListOptions_Rendering();
 
+		// "sequence"
+		$opt = $this->ListOptions["sequence"];
+		$opt->Body = FormatSequenceNumber($this->RecordCount);
+
 		// "view"
 		$opt = $this->ListOptions["view"];
 		$viewcaption = HtmlTitle($Language->phrase("ViewLink"));
@@ -1553,31 +1547,6 @@ class t204_audittrail_list extends t204_audittrail
 		} else {
 			$opt->Body = "";
 		}
-
-		// "edit"
-		$opt = $this->ListOptions["edit"];
-		$editcaption = HtmlTitle($Language->phrase("EditLink"));
-		if ($Security->canEdit()) {
-			$opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . HtmlTitle($Language->phrase("EditLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("EditLink")) . "\" href=\"" . HtmlEncode($this->EditUrl) . "\">" . $Language->phrase("EditLink") . "</a>";
-		} else {
-			$opt->Body = "";
-		}
-
-		// "copy"
-		$opt = $this->ListOptions["copy"];
-		$copycaption = HtmlTitle($Language->phrase("CopyLink"));
-		if ($Security->canAdd()) {
-			$opt->Body = "<a class=\"ew-row-link ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . HtmlEncode($this->CopyUrl) . "\">" . $Language->phrase("CopyLink") . "</a>";
-		} else {
-			$opt->Body = "";
-		}
-
-		// "delete"
-		$opt = $this->ListOptions["delete"];
-		if ($Security->canDelete())
-			$opt->Body = "<a class=\"ew-row-link ew-delete\"" . "" . " title=\"" . HtmlTitle($Language->phrase("DeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("DeleteLink")) . "\" href=\"" . HtmlEncode($this->DeleteUrl) . "\">" . $Language->phrase("DeleteLink") . "</a>";
-		else
-			$opt->Body = "";
 
 		// Set up list action buttons
 		$opt = $this->ListOptions["listactions"];
@@ -1622,13 +1591,6 @@ class t204_audittrail_list extends t204_audittrail
 	{
 		global $Language, $Security;
 		$options = &$this->OtherOptions;
-		$option = $options["addedit"];
-
-		// Add
-		$item = &$option->add("add");
-		$addcaption = HtmlTitle($Language->phrase("AddLink"));
-		$item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode($this->AddUrl) . "\">" . $Language->phrase("AddLink") . "</a>";
-		$item->Visible = $this->AddUrl != "" && $Security->canAdd();
 		$option = $options["action"];
 
 		// Set up options default

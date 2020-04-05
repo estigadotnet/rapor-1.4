@@ -2,9 +2,9 @@
 <?php
 
 /**
- * Table class for t002_tahunajaran
+ * Table class for t004_semester
  */
-class t002_tahunajaran extends DbTable
+class t004_semester extends DbTable
 {
 	protected $SqlFrom = "";
 	protected $SqlSelect = "";
@@ -26,8 +26,7 @@ class t002_tahunajaran extends DbTable
 
 	// Fields
 	public $id;
-	public $Mulai;
-	public $Selesai;
+	public $Semester;
 
 	// Constructor
 	public function __construct()
@@ -38,12 +37,12 @@ class t002_tahunajaran extends DbTable
 		// Language object
 		if (!isset($Language))
 			$Language = new Language();
-		$this->TableVar = 't002_tahunajaran';
-		$this->TableName = 't002_tahunajaran';
+		$this->TableVar = 't004_semester';
+		$this->TableName = 't004_semester';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`t002_tahunajaran`";
+		$this->UpdateTable = "`t004_semester`";
 		$this->Dbid = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -63,26 +62,19 @@ class t002_tahunajaran extends DbTable
 		$this->BasicSearch = new BasicSearch($this->TableVar);
 
 		// id
-		$this->id = new DbField('t002_tahunajaran', 't002_tahunajaran', 'x_id', 'id', '`id`', '`id`', 3, 11, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->id = new DbField('t004_semester', 't004_semester', 'x_id', 'id', '`id`', '`id`', 3, 11, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
 		$this->id->IsAutoIncrement = TRUE; // Autoincrement field
 		$this->id->IsPrimaryKey = TRUE; // Primary key field
 		$this->id->Sortable = TRUE; // Allow sort
 		$this->id->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
 		$this->fields['id'] = &$this->id;
 
-		// Mulai
-		$this->Mulai = new DbField('t002_tahunajaran', 't002_tahunajaran', 'x_Mulai', 'Mulai', '`Mulai`', '`Mulai`', 200, 4, -1, FALSE, '`Mulai`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->Mulai->Nullable = FALSE; // NOT NULL field
-		$this->Mulai->Required = TRUE; // Required field
-		$this->Mulai->Sortable = TRUE; // Allow sort
-		$this->fields['Mulai'] = &$this->Mulai;
-
-		// Selesai
-		$this->Selesai = new DbField('t002_tahunajaran', 't002_tahunajaran', 'x_Selesai', 'Selesai', '`Selesai`', '`Selesai`', 200, 4, -1, FALSE, '`Selesai`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->Selesai->Nullable = FALSE; // NOT NULL field
-		$this->Selesai->Required = TRUE; // Required field
-		$this->Selesai->Sortable = TRUE; // Allow sort
-		$this->fields['Selesai'] = &$this->Selesai;
+		// Semester
+		$this->Semester = new DbField('t004_semester', 't004_semester', 'x_Semester', 'Semester', '`Semester`', '`Semester`', 200, 25, -1, FALSE, '`Semester`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->Semester->Nullable = FALSE; // NOT NULL field
+		$this->Semester->Required = TRUE; // Required field
+		$this->Semester->Sortable = TRUE; // Allow sort
+		$this->fields['Semester'] = &$this->Semester;
 	}
 
 	// Field Visibility
@@ -137,7 +129,7 @@ class t002_tahunajaran extends DbTable
 	// Table level SQL
 	public function getSqlFrom() // From
 	{
-		return ($this->SqlFrom != "") ? $this->SqlFrom : "`t002_tahunajaran`";
+		return ($this->SqlFrom != "") ? $this->SqlFrom : "`t004_semester`";
 	}
 	public function sqlFrom() // For backward compatibility
 	{
@@ -450,8 +442,7 @@ class t002_tahunajaran extends DbTable
 			return;
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->id->DbValue = $row['id'];
-		$this->Mulai->DbValue = $row['Mulai'];
-		$this->Selesai->DbValue = $row['Selesai'];
+		$this->Semester->DbValue = $row['Semester'];
 	}
 
 	// Delete uploaded files
@@ -494,7 +485,7 @@ class t002_tahunajaran extends DbTable
 		if (@$_SESSION[$name] != "") {
 			return $_SESSION[$name];
 		} else {
-			return "t002_tahunajaranlist.php";
+			return "t004_semesterlist.php";
 		}
 	}
 	public function setReturnUrl($v)
@@ -506,11 +497,11 @@ class t002_tahunajaran extends DbTable
 	public function getModalCaption($pageName)
 	{
 		global $Language;
-		if ($pageName == "t002_tahunajaranview.php")
+		if ($pageName == "t004_semesterview.php")
 			return $Language->phrase("View");
-		elseif ($pageName == "t002_tahunajaranedit.php")
+		elseif ($pageName == "t004_semesteredit.php")
 			return $Language->phrase("Edit");
-		elseif ($pageName == "t002_tahunajaranadd.php")
+		elseif ($pageName == "t004_semesteradd.php")
 			return $Language->phrase("Add");
 		else
 			return "";
@@ -519,16 +510,16 @@ class t002_tahunajaran extends DbTable
 	// List URL
 	public function getListUrl()
 	{
-		return "t002_tahunajaranlist.php";
+		return "t004_semesterlist.php";
 	}
 
 	// View URL
 	public function getViewUrl($parm = "")
 	{
 		if ($parm != "")
-			$url = $this->keyUrl("t002_tahunajaranview.php", $this->getUrlParm($parm));
+			$url = $this->keyUrl("t004_semesterview.php", $this->getUrlParm($parm));
 		else
-			$url = $this->keyUrl("t002_tahunajaranview.php", $this->getUrlParm(Config("TABLE_SHOW_DETAIL") . "="));
+			$url = $this->keyUrl("t004_semesterview.php", $this->getUrlParm(Config("TABLE_SHOW_DETAIL") . "="));
 		return $this->addMasterUrl($url);
 	}
 
@@ -536,16 +527,16 @@ class t002_tahunajaran extends DbTable
 	public function getAddUrl($parm = "")
 	{
 		if ($parm != "")
-			$url = "t002_tahunajaranadd.php?" . $this->getUrlParm($parm);
+			$url = "t004_semesteradd.php?" . $this->getUrlParm($parm);
 		else
-			$url = "t002_tahunajaranadd.php";
+			$url = "t004_semesteradd.php";
 		return $this->addMasterUrl($url);
 	}
 
 	// Edit URL
 	public function getEditUrl($parm = "")
 	{
-		$url = $this->keyUrl("t002_tahunajaranedit.php", $this->getUrlParm($parm));
+		$url = $this->keyUrl("t004_semesteredit.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -559,7 +550,7 @@ class t002_tahunajaran extends DbTable
 	// Copy URL
 	public function getCopyUrl($parm = "")
 	{
-		$url = $this->keyUrl("t002_tahunajaranadd.php", $this->getUrlParm($parm));
+		$url = $this->keyUrl("t004_semesteradd.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -573,7 +564,7 @@ class t002_tahunajaran extends DbTable
 	// Delete URL
 	public function getDeleteUrl()
 	{
-		return $this->keyUrl("t002_tahunajarandelete.php", $this->getUrlParm());
+		return $this->keyUrl("t004_semesterdelete.php", $this->getUrlParm());
 	}
 
 	// Add master url
@@ -683,8 +674,7 @@ class t002_tahunajaran extends DbTable
 	public function loadListRowValues(&$rs)
 	{
 		$this->id->setDbValue($rs->fields('id'));
-		$this->Mulai->setDbValue($rs->fields('Mulai'));
-		$this->Selesai->setDbValue($rs->fields('Selesai'));
+		$this->Semester->setDbValue($rs->fields('Semester'));
 	}
 
 	// Render list row values
@@ -697,35 +687,25 @@ class t002_tahunajaran extends DbTable
 
 		// Common render codes
 		// id
-		// Mulai
-		// Selesai
+		// Semester
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
 
-		// Mulai
-		$this->Mulai->ViewValue = $this->Mulai->CurrentValue;
-		$this->Mulai->ViewCustomAttributes = "";
-
-		// Selesai
-		$this->Selesai->ViewValue = $this->Selesai->CurrentValue;
-		$this->Selesai->ViewCustomAttributes = "";
+		// Semester
+		$this->Semester->ViewValue = $this->Semester->CurrentValue;
+		$this->Semester->ViewCustomAttributes = "";
 
 		// id
 		$this->id->LinkCustomAttributes = "";
 		$this->id->HrefValue = "";
 		$this->id->TooltipValue = "";
 
-		// Mulai
-		$this->Mulai->LinkCustomAttributes = "";
-		$this->Mulai->HrefValue = "";
-		$this->Mulai->TooltipValue = "";
-
-		// Selesai
-		$this->Selesai->LinkCustomAttributes = "";
-		$this->Selesai->HrefValue = "";
-		$this->Selesai->TooltipValue = "";
+		// Semester
+		$this->Semester->LinkCustomAttributes = "";
+		$this->Semester->HrefValue = "";
+		$this->Semester->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -748,21 +728,13 @@ class t002_tahunajaran extends DbTable
 		$this->id->EditValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
 
-		// Mulai
-		$this->Mulai->EditAttrs["class"] = "form-control";
-		$this->Mulai->EditCustomAttributes = "";
-		if (!$this->Mulai->Raw)
-			$this->Mulai->CurrentValue = HtmlDecode($this->Mulai->CurrentValue);
-		$this->Mulai->EditValue = $this->Mulai->CurrentValue;
-		$this->Mulai->PlaceHolder = RemoveHtml($this->Mulai->caption());
-
-		// Selesai
-		$this->Selesai->EditAttrs["class"] = "form-control";
-		$this->Selesai->EditCustomAttributes = "";
-		if (!$this->Selesai->Raw)
-			$this->Selesai->CurrentValue = HtmlDecode($this->Selesai->CurrentValue);
-		$this->Selesai->EditValue = $this->Selesai->CurrentValue;
-		$this->Selesai->PlaceHolder = RemoveHtml($this->Selesai->caption());
+		// Semester
+		$this->Semester->EditAttrs["class"] = "form-control";
+		$this->Semester->EditCustomAttributes = "";
+		if (!$this->Semester->Raw)
+			$this->Semester->CurrentValue = HtmlDecode($this->Semester->CurrentValue);
+		$this->Semester->EditValue = $this->Semester->CurrentValue;
+		$this->Semester->PlaceHolder = RemoveHtml($this->Semester->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -794,12 +766,10 @@ class t002_tahunajaran extends DbTable
 				$doc->beginExportRow();
 				if ($exportPageType == "view") {
 					$doc->exportCaption($this->id);
-					$doc->exportCaption($this->Mulai);
-					$doc->exportCaption($this->Selesai);
+					$doc->exportCaption($this->Semester);
 				} else {
 					$doc->exportCaption($this->id);
-					$doc->exportCaption($this->Mulai);
-					$doc->exportCaption($this->Selesai);
+					$doc->exportCaption($this->Semester);
 				}
 				$doc->endExportRow();
 			}
@@ -832,12 +802,10 @@ class t002_tahunajaran extends DbTable
 					$doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
 					if ($exportPageType == "view") {
 						$doc->exportField($this->id);
-						$doc->exportField($this->Mulai);
-						$doc->exportField($this->Selesai);
+						$doc->exportField($this->Semester);
 					} else {
 						$doc->exportField($this->id);
-						$doc->exportField($this->Mulai);
-						$doc->exportField($this->Selesai);
+						$doc->exportField($this->Semester);
 					}
 					$doc->endExportRow($rowCnt);
 				}

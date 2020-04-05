@@ -27,9 +27,9 @@ class t205_default extends DbTable
 	// Fields
 	public $id;
 	public $User_ID;
-	public $Keterangan;
-	public $Nilai;
 	public $Field_ID;
+	public $Nilai;
+	public $Keterangan;
 
 	// Constructor
 	public function __construct()
@@ -79,16 +79,16 @@ class t205_default extends DbTable
 		$this->User_ID->Sortable = TRUE; // Allow sort
 		$this->User_ID->UsePleaseSelect = TRUE; // Use PleaseSelect by default
 		$this->User_ID->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-		$this->User_ID->Lookup = new Lookup('User_ID', 't201_employees', FALSE, 'EmployeeID', ["Username","","",""], ["x_User_ID"], ["x_User_ID"], ["EmployeeID"], ["x_EmployeeID"], [], [], '', '');
+		$this->User_ID->Lookup = new Lookup('User_ID', 't201_employees', FALSE, 'EmployeeID', ["Username","","",""], [], [], [], [], [], [], '', '');
 		$this->User_ID->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
 		$this->fields['User_ID'] = &$this->User_ID;
 
-		// Keterangan
-		$this->Keterangan = new DbField('t205_default', 't205_default', 'x_Keterangan', 'Keterangan', '`Keterangan`', '`Keterangan`', 200, 255, -1, FALSE, '`Keterangan`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->Keterangan->Nullable = FALSE; // NOT NULL field
-		$this->Keterangan->Required = TRUE; // Required field
-		$this->Keterangan->Sortable = TRUE; // Allow sort
-		$this->fields['Keterangan'] = &$this->Keterangan;
+		// Field_ID
+		$this->Field_ID = new DbField('t205_default', 't205_default', 'x_Field_ID', 'Field_ID', '`Field_ID`', '`Field_ID`', 200, 25, -1, FALSE, '`Field_ID`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->Field_ID->Nullable = FALSE; // NOT NULL field
+		$this->Field_ID->Required = TRUE; // Required field
+		$this->Field_ID->Sortable = TRUE; // Allow sort
+		$this->fields['Field_ID'] = &$this->Field_ID;
 
 		// Nilai
 		$this->Nilai = new DbField('t205_default', 't205_default', 'x_Nilai', 'Nilai', '`Nilai`', '`Nilai`', 200, 255, -1, FALSE, '`Nilai`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
@@ -97,12 +97,12 @@ class t205_default extends DbTable
 		$this->Nilai->Sortable = TRUE; // Allow sort
 		$this->fields['Nilai'] = &$this->Nilai;
 
-		// Field_ID
-		$this->Field_ID = new DbField('t205_default', 't205_default', 'x_Field_ID', 'Field_ID', '`Field_ID`', '`Field_ID`', 200, 25, -1, FALSE, '`Field_ID`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->Field_ID->Nullable = FALSE; // NOT NULL field
-		$this->Field_ID->Required = TRUE; // Required field
-		$this->Field_ID->Sortable = TRUE; // Allow sort
-		$this->fields['Field_ID'] = &$this->Field_ID;
+		// Keterangan
+		$this->Keterangan = new DbField('t205_default', 't205_default', 'x_Keterangan', 'Keterangan', '`Keterangan`', '`Keterangan`', 200, 255, -1, FALSE, '`Keterangan`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->Keterangan->Nullable = FALSE; // NOT NULL field
+		$this->Keterangan->Required = TRUE; // Required field
+		$this->Keterangan->Sortable = TRUE; // Allow sort
+		$this->fields['Keterangan'] = &$this->Keterangan;
 	}
 
 	// Field Visibility
@@ -471,9 +471,9 @@ class t205_default extends DbTable
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->id->DbValue = $row['id'];
 		$this->User_ID->DbValue = $row['User_ID'];
-		$this->Keterangan->DbValue = $row['Keterangan'];
-		$this->Nilai->DbValue = $row['Nilai'];
 		$this->Field_ID->DbValue = $row['Field_ID'];
+		$this->Nilai->DbValue = $row['Nilai'];
+		$this->Keterangan->DbValue = $row['Keterangan'];
 	}
 
 	// Delete uploaded files
@@ -706,9 +706,9 @@ class t205_default extends DbTable
 	{
 		$this->id->setDbValue($rs->fields('id'));
 		$this->User_ID->setDbValue($rs->fields('User_ID'));
-		$this->Keterangan->setDbValue($rs->fields('Keterangan'));
-		$this->Nilai->setDbValue($rs->fields('Nilai'));
 		$this->Field_ID->setDbValue($rs->fields('Field_ID'));
+		$this->Nilai->setDbValue($rs->fields('Nilai'));
+		$this->Keterangan->setDbValue($rs->fields('Keterangan'));
 	}
 
 	// Render list row values
@@ -722,9 +722,9 @@ class t205_default extends DbTable
 		// Common render codes
 		// id
 		// User_ID
-		// Keterangan
-		// Nilai
 		// Field_ID
+		// Nilai
+		// Keterangan
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
@@ -752,17 +752,17 @@ class t205_default extends DbTable
 		}
 		$this->User_ID->ViewCustomAttributes = "";
 
-		// Keterangan
-		$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
-		$this->Keterangan->ViewCustomAttributes = "";
+		// Field_ID
+		$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
+		$this->Field_ID->ViewCustomAttributes = "";
 
 		// Nilai
 		$this->Nilai->ViewValue = $this->Nilai->CurrentValue;
 		$this->Nilai->ViewCustomAttributes = "";
 
-		// Field_ID
-		$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
-		$this->Field_ID->ViewCustomAttributes = "";
+		// Keterangan
+		$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
+		$this->Keterangan->ViewCustomAttributes = "";
 
 		// id
 		$this->id->LinkCustomAttributes = "";
@@ -774,20 +774,20 @@ class t205_default extends DbTable
 		$this->User_ID->HrefValue = "";
 		$this->User_ID->TooltipValue = "";
 
-		// Keterangan
-		$this->Keterangan->LinkCustomAttributes = "";
-		$this->Keterangan->HrefValue = "";
-		$this->Keterangan->TooltipValue = "";
+		// Field_ID
+		$this->Field_ID->LinkCustomAttributes = "";
+		$this->Field_ID->HrefValue = "";
+		$this->Field_ID->TooltipValue = "";
 
 		// Nilai
 		$this->Nilai->LinkCustomAttributes = "";
 		$this->Nilai->HrefValue = "";
 		$this->Nilai->TooltipValue = "";
 
-		// Field_ID
-		$this->Field_ID->LinkCustomAttributes = "";
-		$this->Field_ID->HrefValue = "";
-		$this->Field_ID->TooltipValue = "";
+		// Keterangan
+		$this->Keterangan->LinkCustomAttributes = "";
+		$this->Keterangan->HrefValue = "";
+		$this->Keterangan->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -814,13 +814,13 @@ class t205_default extends DbTable
 		$this->User_ID->EditAttrs["class"] = "form-control";
 		$this->User_ID->EditCustomAttributes = "";
 
-		// Keterangan
-		$this->Keterangan->EditAttrs["class"] = "form-control";
-		$this->Keterangan->EditCustomAttributes = "";
-		if (!$this->Keterangan->Raw)
-			$this->Keterangan->CurrentValue = HtmlDecode($this->Keterangan->CurrentValue);
-		$this->Keterangan->EditValue = $this->Keterangan->CurrentValue;
-		$this->Keterangan->PlaceHolder = RemoveHtml($this->Keterangan->caption());
+		// Field_ID
+		$this->Field_ID->EditAttrs["class"] = "form-control";
+		$this->Field_ID->EditCustomAttributes = "";
+		if (!$this->Field_ID->Raw)
+			$this->Field_ID->CurrentValue = HtmlDecode($this->Field_ID->CurrentValue);
+		$this->Field_ID->EditValue = $this->Field_ID->CurrentValue;
+		$this->Field_ID->PlaceHolder = RemoveHtml($this->Field_ID->caption());
 
 		// Nilai
 		$this->Nilai->EditAttrs["class"] = "form-control";
@@ -830,13 +830,13 @@ class t205_default extends DbTable
 		$this->Nilai->EditValue = $this->Nilai->CurrentValue;
 		$this->Nilai->PlaceHolder = RemoveHtml($this->Nilai->caption());
 
-		// Field_ID
-		$this->Field_ID->EditAttrs["class"] = "form-control";
-		$this->Field_ID->EditCustomAttributes = "";
-		if (!$this->Field_ID->Raw)
-			$this->Field_ID->CurrentValue = HtmlDecode($this->Field_ID->CurrentValue);
-		$this->Field_ID->EditValue = $this->Field_ID->CurrentValue;
-		$this->Field_ID->PlaceHolder = RemoveHtml($this->Field_ID->caption());
+		// Keterangan
+		$this->Keterangan->EditAttrs["class"] = "form-control";
+		$this->Keterangan->EditCustomAttributes = "";
+		if (!$this->Keterangan->Raw)
+			$this->Keterangan->CurrentValue = HtmlDecode($this->Keterangan->CurrentValue);
+		$this->Keterangan->EditValue = $this->Keterangan->CurrentValue;
+		$this->Keterangan->PlaceHolder = RemoveHtml($this->Keterangan->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -868,15 +868,15 @@ class t205_default extends DbTable
 				$doc->beginExportRow();
 				if ($exportPageType == "view") {
 					$doc->exportCaption($this->User_ID);
-					$doc->exportCaption($this->Keterangan);
-					$doc->exportCaption($this->Nilai);
 					$doc->exportCaption($this->Field_ID);
+					$doc->exportCaption($this->Nilai);
+					$doc->exportCaption($this->Keterangan);
 				} else {
 					$doc->exportCaption($this->id);
 					$doc->exportCaption($this->User_ID);
-					$doc->exportCaption($this->Keterangan);
-					$doc->exportCaption($this->Nilai);
 					$doc->exportCaption($this->Field_ID);
+					$doc->exportCaption($this->Nilai);
+					$doc->exportCaption($this->Keterangan);
 				}
 				$doc->endExportRow();
 			}
@@ -909,15 +909,15 @@ class t205_default extends DbTable
 					$doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
 					if ($exportPageType == "view") {
 						$doc->exportField($this->User_ID);
-						$doc->exportField($this->Keterangan);
-						$doc->exportField($this->Nilai);
 						$doc->exportField($this->Field_ID);
+						$doc->exportField($this->Nilai);
+						$doc->exportField($this->Keterangan);
 					} else {
 						$doc->exportField($this->id);
 						$doc->exportField($this->User_ID);
-						$doc->exportField($this->Keterangan);
-						$doc->exportField($this->Nilai);
 						$doc->exportField($this->Field_ID);
+						$doc->exportField($this->Nilai);
+						$doc->exportField($this->Keterangan);
 					}
 					$doc->endExportRow($rowCnt);
 				}
@@ -946,6 +946,7 @@ class t205_default extends DbTable
 	function Recordset_Selecting(&$filter) {
 
 		// Enter your code here
+		AddFilter($filter, "User_ID = " . CurrentUserID());
 	}
 
 	// Recordset Selected event

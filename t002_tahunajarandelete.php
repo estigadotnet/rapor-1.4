@@ -70,6 +70,9 @@ $t002_tahunajaran_delete->showMessage();
 <table class="table ew-table">
 	<thead>
 	<tr class="ew-table-header">
+<?php if ($t002_tahunajaran_delete->id->Visible) { // id ?>
+		<th class="<?php echo $t002_tahunajaran_delete->id->headerCellClass() ?>"><span id="elh_t002_tahunajaran_id" class="t002_tahunajaran_id"><?php echo $t002_tahunajaran_delete->id->caption() ?></span></th>
+<?php } ?>
 <?php if ($t002_tahunajaran_delete->Mulai->Visible) { // Mulai ?>
 		<th class="<?php echo $t002_tahunajaran_delete->Mulai->headerCellClass() ?>"><span id="elh_t002_tahunajaran_Mulai" class="t002_tahunajaran_Mulai"><?php echo $t002_tahunajaran_delete->Mulai->caption() ?></span></th>
 <?php } ?>
@@ -97,6 +100,13 @@ while (!$t002_tahunajaran_delete->Recordset->EOF) {
 	$t002_tahunajaran_delete->renderRow();
 ?>
 	<tr <?php echo $t002_tahunajaran->rowAttributes() ?>>
+<?php if ($t002_tahunajaran_delete->id->Visible) { // id ?>
+		<td <?php echo $t002_tahunajaran_delete->id->cellAttributes() ?>>
+<span id="el<?php echo $t002_tahunajaran_delete->RowCount ?>_t002_tahunajaran_id" class="t002_tahunajaran_id">
+<span<?php echo $t002_tahunajaran_delete->id->viewAttributes() ?>><?php echo $t002_tahunajaran_delete->id->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
 <?php if ($t002_tahunajaran_delete->Mulai->Visible) { // Mulai ?>
 		<td <?php echo $t002_tahunajaran_delete->Mulai->cellAttributes() ?>>
 <span id="el<?php echo $t002_tahunajaran_delete->RowCount ?>_t002_tahunajaran_Mulai" class="t002_tahunajaran_Mulai">

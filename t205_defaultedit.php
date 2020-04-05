@@ -61,20 +61,20 @@ loadjs.ready("head", function() {
 				if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 					return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $t205_default_edit->User_ID->caption(), $t205_default_edit->User_ID->RequiredErrorMessage)) ?>");
 			<?php } ?>
-			<?php if ($t205_default_edit->Keterangan->Required) { ?>
-				elm = this.getElements("x" + infix + "_Keterangan");
+			<?php if ($t205_default_edit->Field_ID->Required) { ?>
+				elm = this.getElements("x" + infix + "_Field_ID");
 				if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-					return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $t205_default_edit->Keterangan->caption(), $t205_default_edit->Keterangan->RequiredErrorMessage)) ?>");
+					return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $t205_default_edit->Field_ID->caption(), $t205_default_edit->Field_ID->RequiredErrorMessage)) ?>");
 			<?php } ?>
 			<?php if ($t205_default_edit->Nilai->Required) { ?>
 				elm = this.getElements("x" + infix + "_Nilai");
 				if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 					return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $t205_default_edit->Nilai->caption(), $t205_default_edit->Nilai->RequiredErrorMessage)) ?>");
 			<?php } ?>
-			<?php if ($t205_default_edit->Field_ID->Required) { ?>
-				elm = this.getElements("x" + infix + "_Field_ID");
+			<?php if ($t205_default_edit->Keterangan->Required) { ?>
+				elm = this.getElements("x" + infix + "_Keterangan");
 				if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-					return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $t205_default_edit->Field_ID->caption(), $t205_default_edit->Field_ID->RequiredErrorMessage)) ?>");
+					return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $t205_default_edit->Keterangan->caption(), $t205_default_edit->Keterangan->RequiredErrorMessage)) ?>");
 			<?php } ?>
 
 				// Call Form_CustomValidate event
@@ -134,7 +134,6 @@ $t205_default_edit->showMessage();
 		<label id="elh_t205_default_User_ID" for="x_User_ID" class="<?php echo $t205_default_edit->LeftColumnClass ?>"><?php echo $t205_default_edit->User_ID->caption() ?><?php echo $t205_default_edit->User_ID->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
 		<div class="<?php echo $t205_default_edit->RightColumnClass ?>"><div <?php echo $t205_default_edit->User_ID->cellAttributes() ?>>
 <span id="el_t205_default_User_ID">
-<?php $t205_default_edit->User_ID->EditAttrs->prepend("onchange", "ew.updateOptions.call(this);"); ?>
 <div class="input-group">
 	<select class="custom-select ew-custom-select" data-table="t205_default" data-field="x_User_ID" data-value-separator="<?php echo $t205_default_edit->User_ID->displayValueSeparatorAttribute() ?>" id="x_User_ID" name="x_User_ID"<?php echo $t205_default_edit->User_ID->editAttributes() ?>>
 			<?php echo $t205_default_edit->User_ID->selectOptionListHtml("x_User_ID") ?>
@@ -145,14 +144,14 @@ $t205_default_edit->showMessage();
 <?php echo $t205_default_edit->User_ID->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($t205_default_edit->Keterangan->Visible) { // Keterangan ?>
-	<div id="r_Keterangan" class="form-group row">
-		<label id="elh_t205_default_Keterangan" for="x_Keterangan" class="<?php echo $t205_default_edit->LeftColumnClass ?>"><?php echo $t205_default_edit->Keterangan->caption() ?><?php echo $t205_default_edit->Keterangan->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $t205_default_edit->RightColumnClass ?>"><div <?php echo $t205_default_edit->Keterangan->cellAttributes() ?>>
-<span id="el_t205_default_Keterangan">
-<input type="text" data-table="t205_default" data-field="x_Keterangan" name="x_Keterangan" id="x_Keterangan" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($t205_default_edit->Keterangan->getPlaceHolder()) ?>" value="<?php echo $t205_default_edit->Keterangan->EditValue ?>"<?php echo $t205_default_edit->Keterangan->editAttributes() ?>>
+<?php if ($t205_default_edit->Field_ID->Visible) { // Field_ID ?>
+	<div id="r_Field_ID" class="form-group row">
+		<label id="elh_t205_default_Field_ID" for="x_Field_ID" class="<?php echo $t205_default_edit->LeftColumnClass ?>"><?php echo $t205_default_edit->Field_ID->caption() ?><?php echo $t205_default_edit->Field_ID->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $t205_default_edit->RightColumnClass ?>"><div <?php echo $t205_default_edit->Field_ID->cellAttributes() ?>>
+<span id="el_t205_default_Field_ID">
+<input type="text" data-table="t205_default" data-field="x_Field_ID" name="x_Field_ID" id="x_Field_ID" size="30" maxlength="25" placeholder="<?php echo HtmlEncode($t205_default_edit->Field_ID->getPlaceHolder()) ?>" value="<?php echo $t205_default_edit->Field_ID->EditValue ?>"<?php echo $t205_default_edit->Field_ID->editAttributes() ?>>
 </span>
-<?php echo $t205_default_edit->Keterangan->CustomMsg ?></div></div>
+<?php echo $t205_default_edit->Field_ID->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($t205_default_edit->Nilai->Visible) { // Nilai ?>
@@ -165,14 +164,14 @@ $t205_default_edit->showMessage();
 <?php echo $t205_default_edit->Nilai->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($t205_default_edit->Field_ID->Visible) { // Field_ID ?>
-	<div id="r_Field_ID" class="form-group row">
-		<label id="elh_t205_default_Field_ID" for="x_Field_ID" class="<?php echo $t205_default_edit->LeftColumnClass ?>"><?php echo $t205_default_edit->Field_ID->caption() ?><?php echo $t205_default_edit->Field_ID->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $t205_default_edit->RightColumnClass ?>"><div <?php echo $t205_default_edit->Field_ID->cellAttributes() ?>>
-<span id="el_t205_default_Field_ID">
-<input type="text" data-table="t205_default" data-field="x_Field_ID" name="x_Field_ID" id="x_Field_ID" size="30" maxlength="25" placeholder="<?php echo HtmlEncode($t205_default_edit->Field_ID->getPlaceHolder()) ?>" value="<?php echo $t205_default_edit->Field_ID->EditValue ?>"<?php echo $t205_default_edit->Field_ID->editAttributes() ?>>
+<?php if ($t205_default_edit->Keterangan->Visible) { // Keterangan ?>
+	<div id="r_Keterangan" class="form-group row">
+		<label id="elh_t205_default_Keterangan" for="x_Keterangan" class="<?php echo $t205_default_edit->LeftColumnClass ?>"><?php echo $t205_default_edit->Keterangan->caption() ?><?php echo $t205_default_edit->Keterangan->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $t205_default_edit->RightColumnClass ?>"><div <?php echo $t205_default_edit->Keterangan->cellAttributes() ?>>
+<span id="el_t205_default_Keterangan">
+<input type="text" data-table="t205_default" data-field="x_Keterangan" name="x_Keterangan" id="x_Keterangan" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($t205_default_edit->Keterangan->getPlaceHolder()) ?>" value="<?php echo $t205_default_edit->Keterangan->EditValue ?>"<?php echo $t205_default_edit->Keterangan->editAttributes() ?>>
 </span>
-<?php echo $t205_default_edit->Field_ID->CustomMsg ?></div></div>
+<?php echo $t205_default_edit->Keterangan->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div><!-- /page* -->

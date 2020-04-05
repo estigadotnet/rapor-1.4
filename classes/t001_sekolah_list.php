@@ -812,7 +812,7 @@ class t001_sekolah_list extends t001_sekolah
 
 		// Setup export options
 		$this->setupExportOptions();
-		$this->id->Visible = FALSE;
+		$this->id->setVisibility();
 		$this->Nama->setVisibility();
 		$this->Alamat->setVisibility();
 		$this->KepalaSekolah->setVisibility();
@@ -1357,6 +1357,7 @@ class t001_sekolah_list extends t001_sekolah
 		if (Get("order") !== NULL) {
 			$this->CurrentOrder = Get("order");
 			$this->CurrentOrderType = Get("ordertype", "");
+			$this->updateSort($this->id, $ctrl); // id
 			$this->updateSort($this->Nama, $ctrl); // Nama
 			$this->updateSort($this->Alamat, $ctrl); // Alamat
 			$this->updateSort($this->KepalaSekolah, $ctrl); // KepalaSekolah
@@ -1396,6 +1397,7 @@ class t001_sekolah_list extends t001_sekolah
 			if ($this->Command == "resetsort") {
 				$orderBy = "";
 				$this->setSessionOrderBy($orderBy);
+				$this->id->setSort("");
 				$this->Nama->setSort("");
 				$this->Alamat->setSort("");
 				$this->KepalaSekolah->setSort("");
@@ -1891,6 +1893,11 @@ class t001_sekolah_list extends t001_sekolah
 			// NIPKepalaSekolah
 			$this->NIPKepalaSekolah->ViewValue = $this->NIPKepalaSekolah->CurrentValue;
 			$this->NIPKepalaSekolah->ViewCustomAttributes = "";
+
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
 
 			// Nama
 			$this->Nama->LinkCustomAttributes = "";

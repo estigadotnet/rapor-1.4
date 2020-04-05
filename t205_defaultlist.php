@@ -150,12 +150,12 @@ $t205_default_list->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($t205_default_list->Keterangan->Visible) { // Keterangan ?>
-	<?php if ($t205_default_list->SortUrl($t205_default_list->Keterangan) == "") { ?>
-		<th data-name="Keterangan" class="<?php echo $t205_default_list->Keterangan->headerCellClass() ?>"><div id="elh_t205_default_Keterangan" class="t205_default_Keterangan"><div class="ew-table-header-caption"><?php echo $t205_default_list->Keterangan->caption() ?></div></div></th>
+<?php if ($t205_default_list->Field_ID->Visible) { // Field_ID ?>
+	<?php if ($t205_default_list->SortUrl($t205_default_list->Field_ID) == "") { ?>
+		<th data-name="Field_ID" class="<?php echo $t205_default_list->Field_ID->headerCellClass() ?>"><div id="elh_t205_default_Field_ID" class="t205_default_Field_ID"><div class="ew-table-header-caption"><?php echo $t205_default_list->Field_ID->caption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="Keterangan" class="<?php echo $t205_default_list->Keterangan->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event, '<?php echo $t205_default_list->SortUrl($t205_default_list->Keterangan) ?>', 2);"><div id="elh_t205_default_Keterangan" class="t205_default_Keterangan">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $t205_default_list->Keterangan->caption() ?><?php echo $Language->phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($t205_default_list->Keterangan->getSort() == "ASC") { ?><i class="fas fa-sort-up"></i><?php } elseif ($t205_default_list->Keterangan->getSort() == "DESC") { ?><i class="fas fa-sort-down"></i><?php } ?></span></div>
+		<th data-name="Field_ID" class="<?php echo $t205_default_list->Field_ID->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event, '<?php echo $t205_default_list->SortUrl($t205_default_list->Field_ID) ?>', 2);"><div id="elh_t205_default_Field_ID" class="t205_default_Field_ID">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $t205_default_list->Field_ID->caption() ?><?php echo $Language->phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($t205_default_list->Field_ID->getSort() == "ASC") { ?><i class="fas fa-sort-up"></i><?php } elseif ($t205_default_list->Field_ID->getSort() == "DESC") { ?><i class="fas fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -168,12 +168,12 @@ $t205_default_list->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($t205_default_list->Field_ID->Visible) { // Field_ID ?>
-	<?php if ($t205_default_list->SortUrl($t205_default_list->Field_ID) == "") { ?>
-		<th data-name="Field_ID" class="<?php echo $t205_default_list->Field_ID->headerCellClass() ?>"><div id="elh_t205_default_Field_ID" class="t205_default_Field_ID"><div class="ew-table-header-caption"><?php echo $t205_default_list->Field_ID->caption() ?></div></div></th>
+<?php if ($t205_default_list->Keterangan->Visible) { // Keterangan ?>
+	<?php if ($t205_default_list->SortUrl($t205_default_list->Keterangan) == "") { ?>
+		<th data-name="Keterangan" class="<?php echo $t205_default_list->Keterangan->headerCellClass() ?>"><div id="elh_t205_default_Keterangan" class="t205_default_Keterangan"><div class="ew-table-header-caption"><?php echo $t205_default_list->Keterangan->caption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="Field_ID" class="<?php echo $t205_default_list->Field_ID->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event, '<?php echo $t205_default_list->SortUrl($t205_default_list->Field_ID) ?>', 2);"><div id="elh_t205_default_Field_ID" class="t205_default_Field_ID">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $t205_default_list->Field_ID->caption() ?><?php echo $Language->phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($t205_default_list->Field_ID->getSort() == "ASC") { ?><i class="fas fa-sort-up"></i><?php } elseif ($t205_default_list->Field_ID->getSort() == "DESC") { ?><i class="fas fa-sort-down"></i><?php } ?></span></div>
+		<th data-name="Keterangan" class="<?php echo $t205_default_list->Keterangan->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event, '<?php echo $t205_default_list->SortUrl($t205_default_list->Keterangan) ?>', 2);"><div id="elh_t205_default_Keterangan" class="t205_default_Keterangan">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $t205_default_list->Keterangan->caption() ?><?php echo $Language->phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($t205_default_list->Keterangan->getSort() == "ASC") { ?><i class="fas fa-sort-up"></i><?php } elseif ($t205_default_list->Keterangan->getSort() == "DESC") { ?><i class="fas fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -249,10 +249,10 @@ $t205_default_list->ListOptions->render("body", "left", $t205_default_list->RowC
 </span>
 </td>
 	<?php } ?>
-	<?php if ($t205_default_list->Keterangan->Visible) { // Keterangan ?>
-		<td data-name="Keterangan" <?php echo $t205_default_list->Keterangan->cellAttributes() ?>>
-<span id="el<?php echo $t205_default_list->RowCount ?>_t205_default_Keterangan">
-<span<?php echo $t205_default_list->Keterangan->viewAttributes() ?>><?php echo $t205_default_list->Keterangan->getViewValue() ?></span>
+	<?php if ($t205_default_list->Field_ID->Visible) { // Field_ID ?>
+		<td data-name="Field_ID" <?php echo $t205_default_list->Field_ID->cellAttributes() ?>>
+<span id="el<?php echo $t205_default_list->RowCount ?>_t205_default_Field_ID">
+<span<?php echo $t205_default_list->Field_ID->viewAttributes() ?>><?php echo $t205_default_list->Field_ID->getViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>
@@ -263,10 +263,10 @@ $t205_default_list->ListOptions->render("body", "left", $t205_default_list->RowC
 </span>
 </td>
 	<?php } ?>
-	<?php if ($t205_default_list->Field_ID->Visible) { // Field_ID ?>
-		<td data-name="Field_ID" <?php echo $t205_default_list->Field_ID->cellAttributes() ?>>
-<span id="el<?php echo $t205_default_list->RowCount ?>_t205_default_Field_ID">
-<span<?php echo $t205_default_list->Field_ID->viewAttributes() ?>><?php echo $t205_default_list->Field_ID->getViewValue() ?></span>
+	<?php if ($t205_default_list->Keterangan->Visible) { // Keterangan ?>
+		<td data-name="Keterangan" <?php echo $t205_default_list->Keterangan->cellAttributes() ?>>
+<span id="el<?php echo $t205_default_list->RowCount ?>_t205_default_Keterangan">
+<span<?php echo $t205_default_list->Keterangan->viewAttributes() ?>><?php echo $t205_default_list->Keterangan->getViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

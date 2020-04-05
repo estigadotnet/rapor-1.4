@@ -671,9 +671,9 @@ class t205_default_edit extends t205_default
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->Visible = FALSE;
 		$this->User_ID->setVisibility();
-		$this->Keterangan->setVisibility();
-		$this->Nilai->setVisibility();
 		$this->Field_ID->setVisibility();
+		$this->Nilai->setVisibility();
+		$this->Keterangan->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -858,13 +858,13 @@ class t205_default_edit extends t205_default
 				$this->User_ID->setFormValue($val);
 		}
 
-		// Check field name 'Keterangan' first before field var 'x_Keterangan'
-		$val = $CurrentForm->hasValue("Keterangan") ? $CurrentForm->getValue("Keterangan") : $CurrentForm->getValue("x_Keterangan");
-		if (!$this->Keterangan->IsDetailKey) {
+		// Check field name 'Field_ID' first before field var 'x_Field_ID'
+		$val = $CurrentForm->hasValue("Field_ID") ? $CurrentForm->getValue("Field_ID") : $CurrentForm->getValue("x_Field_ID");
+		if (!$this->Field_ID->IsDetailKey) {
 			if (IsApi() && $val == NULL)
-				$this->Keterangan->Visible = FALSE; // Disable update for API request
+				$this->Field_ID->Visible = FALSE; // Disable update for API request
 			else
-				$this->Keterangan->setFormValue($val);
+				$this->Field_ID->setFormValue($val);
 		}
 
 		// Check field name 'Nilai' first before field var 'x_Nilai'
@@ -876,13 +876,13 @@ class t205_default_edit extends t205_default
 				$this->Nilai->setFormValue($val);
 		}
 
-		// Check field name 'Field_ID' first before field var 'x_Field_ID'
-		$val = $CurrentForm->hasValue("Field_ID") ? $CurrentForm->getValue("Field_ID") : $CurrentForm->getValue("x_Field_ID");
-		if (!$this->Field_ID->IsDetailKey) {
+		// Check field name 'Keterangan' first before field var 'x_Keterangan'
+		$val = $CurrentForm->hasValue("Keterangan") ? $CurrentForm->getValue("Keterangan") : $CurrentForm->getValue("x_Keterangan");
+		if (!$this->Keterangan->IsDetailKey) {
 			if (IsApi() && $val == NULL)
-				$this->Field_ID->Visible = FALSE; // Disable update for API request
+				$this->Keterangan->Visible = FALSE; // Disable update for API request
 			else
-				$this->Field_ID->setFormValue($val);
+				$this->Keterangan->setFormValue($val);
 		}
 
 		// Check field name 'id' first before field var 'x_id'
@@ -897,9 +897,9 @@ class t205_default_edit extends t205_default
 		global $CurrentForm;
 		$this->id->CurrentValue = $this->id->FormValue;
 		$this->User_ID->CurrentValue = $this->User_ID->FormValue;
-		$this->Keterangan->CurrentValue = $this->Keterangan->FormValue;
-		$this->Nilai->CurrentValue = $this->Nilai->FormValue;
 		$this->Field_ID->CurrentValue = $this->Field_ID->FormValue;
+		$this->Nilai->CurrentValue = $this->Nilai->FormValue;
+		$this->Keterangan->CurrentValue = $this->Keterangan->FormValue;
 	}
 
 	// Load row based on key values
@@ -939,9 +939,9 @@ class t205_default_edit extends t205_default
 			return;
 		$this->id->setDbValue($row['id']);
 		$this->User_ID->setDbValue($row['User_ID']);
-		$this->Keterangan->setDbValue($row['Keterangan']);
-		$this->Nilai->setDbValue($row['Nilai']);
 		$this->Field_ID->setDbValue($row['Field_ID']);
+		$this->Nilai->setDbValue($row['Nilai']);
+		$this->Keterangan->setDbValue($row['Keterangan']);
 	}
 
 	// Return a row with default values
@@ -950,9 +950,9 @@ class t205_default_edit extends t205_default
 		$row = [];
 		$row['id'] = NULL;
 		$row['User_ID'] = NULL;
-		$row['Keterangan'] = NULL;
-		$row['Nilai'] = NULL;
 		$row['Field_ID'] = NULL;
+		$row['Nilai'] = NULL;
+		$row['Keterangan'] = NULL;
 		return $row;
 	}
 
@@ -992,9 +992,9 @@ class t205_default_edit extends t205_default
 		// Common render codes for all row types
 		// id
 		// User_ID
-		// Keterangan
-		// Nilai
 		// Field_ID
+		// Nilai
+		// Keterangan
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1024,37 +1024,37 @@ class t205_default_edit extends t205_default
 			}
 			$this->User_ID->ViewCustomAttributes = "";
 
-			// Keterangan
-			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
-			$this->Keterangan->ViewCustomAttributes = "";
+			// Field_ID
+			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
+			$this->Field_ID->ViewCustomAttributes = "";
 
 			// Nilai
 			$this->Nilai->ViewValue = $this->Nilai->CurrentValue;
 			$this->Nilai->ViewCustomAttributes = "";
 
-			// Field_ID
-			$this->Field_ID->ViewValue = $this->Field_ID->CurrentValue;
-			$this->Field_ID->ViewCustomAttributes = "";
+			// Keterangan
+			$this->Keterangan->ViewValue = $this->Keterangan->CurrentValue;
+			$this->Keterangan->ViewCustomAttributes = "";
 
 			// User_ID
 			$this->User_ID->LinkCustomAttributes = "";
 			$this->User_ID->HrefValue = "";
 			$this->User_ID->TooltipValue = "";
 
-			// Keterangan
-			$this->Keterangan->LinkCustomAttributes = "";
-			$this->Keterangan->HrefValue = "";
-			$this->Keterangan->TooltipValue = "";
+			// Field_ID
+			$this->Field_ID->LinkCustomAttributes = "";
+			$this->Field_ID->HrefValue = "";
+			$this->Field_ID->TooltipValue = "";
 
 			// Nilai
 			$this->Nilai->LinkCustomAttributes = "";
 			$this->Nilai->HrefValue = "";
 			$this->Nilai->TooltipValue = "";
 
-			// Field_ID
-			$this->Field_ID->LinkCustomAttributes = "";
-			$this->Field_ID->HrefValue = "";
-			$this->Field_ID->TooltipValue = "";
+			// Keterangan
+			$this->Keterangan->LinkCustomAttributes = "";
+			$this->Keterangan->HrefValue = "";
+			$this->Keterangan->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
 
 			// User_ID
@@ -1081,13 +1081,13 @@ class t205_default_edit extends t205_default
 				$this->User_ID->EditValue = $arwrk;
 			}
 
-			// Keterangan
-			$this->Keterangan->EditAttrs["class"] = "form-control";
-			$this->Keterangan->EditCustomAttributes = "";
-			if (!$this->Keterangan->Raw)
-				$this->Keterangan->CurrentValue = HtmlDecode($this->Keterangan->CurrentValue);
-			$this->Keterangan->EditValue = HtmlEncode($this->Keterangan->CurrentValue);
-			$this->Keterangan->PlaceHolder = RemoveHtml($this->Keterangan->caption());
+			// Field_ID
+			$this->Field_ID->EditAttrs["class"] = "form-control";
+			$this->Field_ID->EditCustomAttributes = "";
+			if (!$this->Field_ID->Raw)
+				$this->Field_ID->CurrentValue = HtmlDecode($this->Field_ID->CurrentValue);
+			$this->Field_ID->EditValue = HtmlEncode($this->Field_ID->CurrentValue);
+			$this->Field_ID->PlaceHolder = RemoveHtml($this->Field_ID->caption());
 
 			// Nilai
 			$this->Nilai->EditAttrs["class"] = "form-control";
@@ -1097,13 +1097,13 @@ class t205_default_edit extends t205_default
 			$this->Nilai->EditValue = HtmlEncode($this->Nilai->CurrentValue);
 			$this->Nilai->PlaceHolder = RemoveHtml($this->Nilai->caption());
 
-			// Field_ID
-			$this->Field_ID->EditAttrs["class"] = "form-control";
-			$this->Field_ID->EditCustomAttributes = "";
-			if (!$this->Field_ID->Raw)
-				$this->Field_ID->CurrentValue = HtmlDecode($this->Field_ID->CurrentValue);
-			$this->Field_ID->EditValue = HtmlEncode($this->Field_ID->CurrentValue);
-			$this->Field_ID->PlaceHolder = RemoveHtml($this->Field_ID->caption());
+			// Keterangan
+			$this->Keterangan->EditAttrs["class"] = "form-control";
+			$this->Keterangan->EditCustomAttributes = "";
+			if (!$this->Keterangan->Raw)
+				$this->Keterangan->CurrentValue = HtmlDecode($this->Keterangan->CurrentValue);
+			$this->Keterangan->EditValue = HtmlEncode($this->Keterangan->CurrentValue);
+			$this->Keterangan->PlaceHolder = RemoveHtml($this->Keterangan->caption());
 
 			// Edit refer script
 			// User_ID
@@ -1111,17 +1111,17 @@ class t205_default_edit extends t205_default
 			$this->User_ID->LinkCustomAttributes = "";
 			$this->User_ID->HrefValue = "";
 
-			// Keterangan
-			$this->Keterangan->LinkCustomAttributes = "";
-			$this->Keterangan->HrefValue = "";
+			// Field_ID
+			$this->Field_ID->LinkCustomAttributes = "";
+			$this->Field_ID->HrefValue = "";
 
 			// Nilai
 			$this->Nilai->LinkCustomAttributes = "";
 			$this->Nilai->HrefValue = "";
 
-			// Field_ID
-			$this->Field_ID->LinkCustomAttributes = "";
-			$this->Field_ID->HrefValue = "";
+			// Keterangan
+			$this->Keterangan->LinkCustomAttributes = "";
+			$this->Keterangan->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -1147,9 +1147,9 @@ class t205_default_edit extends t205_default
 				AddMessage($FormError, str_replace("%s", $this->User_ID->caption(), $this->User_ID->RequiredErrorMessage));
 			}
 		}
-		if ($this->Keterangan->Required) {
-			if (!$this->Keterangan->IsDetailKey && $this->Keterangan->FormValue != NULL && $this->Keterangan->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->Keterangan->caption(), $this->Keterangan->RequiredErrorMessage));
+		if ($this->Field_ID->Required) {
+			if (!$this->Field_ID->IsDetailKey && $this->Field_ID->FormValue != NULL && $this->Field_ID->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->Field_ID->caption(), $this->Field_ID->RequiredErrorMessage));
 			}
 		}
 		if ($this->Nilai->Required) {
@@ -1157,9 +1157,9 @@ class t205_default_edit extends t205_default
 				AddMessage($FormError, str_replace("%s", $this->Nilai->caption(), $this->Nilai->RequiredErrorMessage));
 			}
 		}
-		if ($this->Field_ID->Required) {
-			if (!$this->Field_ID->IsDetailKey && $this->Field_ID->FormValue != NULL && $this->Field_ID->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->Field_ID->caption(), $this->Field_ID->RequiredErrorMessage));
+		if ($this->Keterangan->Required) {
+			if (!$this->Keterangan->IsDetailKey && $this->Keterangan->FormValue != NULL && $this->Keterangan->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->Keterangan->caption(), $this->Keterangan->RequiredErrorMessage));
 			}
 		}
 
@@ -1202,14 +1202,14 @@ class t205_default_edit extends t205_default
 			// User_ID
 			$this->User_ID->setDbValueDef($rsnew, $this->User_ID->CurrentValue, 0, $this->User_ID->ReadOnly);
 
-			// Keterangan
-			$this->Keterangan->setDbValueDef($rsnew, $this->Keterangan->CurrentValue, "", $this->Keterangan->ReadOnly);
+			// Field_ID
+			$this->Field_ID->setDbValueDef($rsnew, $this->Field_ID->CurrentValue, "", $this->Field_ID->ReadOnly);
 
 			// Nilai
 			$this->Nilai->setDbValueDef($rsnew, $this->Nilai->CurrentValue, "", $this->Nilai->ReadOnly);
 
-			// Field_ID
-			$this->Field_ID->setDbValueDef($rsnew, $this->Field_ID->CurrentValue, "", $this->Field_ID->ReadOnly);
+			// Keterangan
+			$this->Keterangan->setDbValueDef($rsnew, $this->Keterangan->CurrentValue, "", $this->Keterangan->ReadOnly);
 
 			// Call Row Updating event
 			$updateRow = $this->Row_Updating($rsold, $rsnew);

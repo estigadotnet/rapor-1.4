@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Apr 02, 2020 at 02:12 PM
+-- Generation Time: Apr 05, 2020 at 10:12 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -67,16 +67,38 @@ INSERT INTO `t002_tahunajaran` (`id`, `Mulai`, `Selesai`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `t101_session`
+-- Table structure for table `t003_kelas`
 --
 
-CREATE TABLE `t101_session` (
+CREATE TABLE `t003_kelas` (
   `id` int(11) NOT NULL,
-  `sekolah_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `tanggal_jam` datetime NOT NULL,
-  `session_value` varchar(255) NOT NULL
+  `Kelas` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t003_kelas`
+--
+
+INSERT INTO `t003_kelas` (`id`, `Kelas`) VALUES
+(1, 'III (TIGA)');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `t004_semester`
+--
+
+CREATE TABLE `t004_semester` (
+  `id` int(11) NOT NULL,
+  `Semester` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t004_semester`
+--
+
+INSERT INTO `t004_semester` (`id`, `Semester`) VALUES
+(1, '2 (DUA)');
 
 -- --------------------------------------------------------
 
@@ -115,7 +137,9 @@ CREATE TABLE `t201_employees` (
 --
 
 INSERT INTO `t201_employees` (`EmployeeID`, `LastName`, `FirstName`, `Title`, `TitleOfCourtesy`, `BirthDate`, `HireDate`, `Address`, `City`, `Region`, `PostalCode`, `Country`, `HomePhone`, `Extension`, `Email`, `Photo`, `Notes`, `ReportsTo`, `Password`, `UserLevel`, `Username`, `Activated`, `Profile`) VALUES
-(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '21232f297a57a5a743894a0e4a801fc3', -1, 'admin', 'Y', NULL);
+(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '21232f297a57a5a743894a0e4a801fc3', -1, 'admin', 'Y', NULL),
+(2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ee11cbb19052e40b07aac0ca060c23ee', 1, 'user', 'Y', NULL),
+(3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '4b583376b2767b923c3e1da60d10de59', 1, 'operator', 'Y', NULL);
 
 -- --------------------------------------------------------
 
@@ -135,7 +159,8 @@ CREATE TABLE `t202_userlevels` (
 INSERT INTO `t202_userlevels` (`userlevelid`, `userlevelname`) VALUES
 (-2, 'Anonymous'),
 (-1, 'Administrator'),
-(0, 'Default');
+(0, 'Default'),
+(1, 'User');
 
 -- --------------------------------------------------------
 
@@ -183,7 +208,17 @@ INSERT INTO `t203_userlevelpermissions` (`userlevelid`, `tablename`, `permission
 (0, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t201_employees', 0),
 (0, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t202_userlevels', 0),
 (0, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t203_userlevelpermissions', 0),
-(0, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t204_audittrail', 0);
+(0, '{5AD54D4D-CCFB-4098-9C1D-F67CF7652422}t204_audittrail', 0),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c201_home.php', 367),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}c202_home.php', 367),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t001_sekolah', 360),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t002_tahunajaran', 360),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t101_session', 367),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t201_employees', 256),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t202_userlevels', 0),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t203_userlevelpermissions', 0),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t204_audittrail', 0),
+(1, '{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}t205_default', 367);
 
 -- --------------------------------------------------------
 
@@ -352,7 +387,82 @@ INSERT INTO `t204_audittrail` (`id`, `datetime`, `script`, `user`, `action`, `ta
 (141, '2020-04-02 11:52:43', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
 (142, '2020-04-02 11:52:56', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
 (143, '2020-04-02 11:54:41', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
-(144, '2020-04-02 11:54:56', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
+(144, '2020-04-02 11:54:56', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(145, '2020-04-03 08:37:24', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(146, '2020-04-03 09:00:38', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(147, '2020-04-03 09:04:24', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(148, '2020-04-03 09:06:52', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(149, '2020-04-03 09:21:28', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(150, '2020-04-03 09:27:36', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(151, '2020-04-03 09:30:55', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(152, '2020-04-03 09:31:01', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(153, '2020-04-04 01:00:25', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(154, '2020-04-04 01:09:05', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(155, '2020-04-04 01:09:22', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(156, '2020-04-04 01:09:58', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(157, '2020-04-04 01:10:12', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(158, '2020-04-04 01:10:55', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(159, '2020-04-04 01:11:03', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(160, '2020-04-04 01:11:08', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(161, '2020-04-04 01:11:13', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(162, '2020-04-04 01:11:18', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(163, '2020-04-04 01:11:25', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(164, '2020-04-04 01:18:08', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(165, '2020-04-04 01:20:05', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(166, '2020-04-04 01:20:09', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(167, '2020-04-04 01:20:16', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(168, '2020-04-05 02:11:16', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(169, '2020-04-05 02:11:25', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(170, '2020-04-05 02:25:37', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(171, '2020-04-05 02:25:47', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(172, '2020-04-05 02:34:33', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(173, '2020-04-05 02:34:39', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(174, '2020-04-05 02:34:48', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(175, '2020-04-05 02:34:56', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(176, '2020-04-05 02:35:06', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(177, '2020-04-05 02:35:15', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(178, '2020-04-05 02:37:13', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(179, '2020-04-05 02:37:20', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(180, '2020-04-05 02:43:49', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(181, '2020-04-05 02:43:55', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(182, '2020-04-05 03:16:39', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(183, '2020-04-05 03:16:47', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(184, '2020-04-05 03:17:27', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(185, '2020-04-05 03:17:34', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(186, '2020-04-05 03:18:24', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(187, '2020-04-05 03:20:29', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(188, '2020-04-05 03:20:44', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(189, '2020-04-05 03:21:07', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(190, '2020-04-05 03:21:40', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(191, '2020-04-05 03:21:47', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(192, '2020-04-05 03:22:07', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(193, '2020-04-05 03:22:13', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(194, '2020-04-05 03:23:04', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(195, '2020-04-05 03:23:09', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(196, '2020-04-05 03:25:14', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(197, '2020-04-05 03:25:22', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(198, '2020-04-05 03:27:20', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(199, '2020-04-05 03:27:32', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(200, '2020-04-05 03:28:34', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(201, '2020-04-05 16:57:28', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(202, '2020-04-05 17:11:44', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(203, '2020-04-05 17:11:50', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(204, '2020-04-05 17:12:28', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(205, '2020-04-05 17:13:31', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(206, '2020-04-05 17:35:18', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(207, '2020-04-05 17:35:44', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(208, '2020-04-05 17:38:15', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(209, '2020-04-05 17:38:23', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(210, '2020-04-05 17:39:11', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(211, '2020-04-05 17:39:20', '/rapor-1.4/login.php', 'operator', 'login', '::1', '', '', '', ''),
+(212, '2020-04-05 17:39:48', '/rapor-1.4/logout.php', 'operator', 'logout', '::1', '', '', '', ''),
+(213, '2020-04-05 17:39:55', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(214, '2020-04-05 17:40:40', '/rapor-1.4/logout.php', 'admin', 'logout', '::1', '', '', '', ''),
+(215, '2020-04-05 17:40:47', '/rapor-1.4/login.php', 'user', 'login', '::1', '', '', '', ''),
+(216, '2020-04-05 17:41:20', '/rapor-1.4/logout.php', 'user', 'logout', '::1', '', '', '', ''),
+(217, '2020-04-05 17:41:27', '/rapor-1.4/login.php', 'operator', 'login', '::1', '', '', '', ''),
+(218, '2020-04-05 18:35:40', '/rapor-1.4/logout.php', 'operator', 'logout', '::1', '', '', '', ''),
+(219, '2020-04-05 18:35:48', '/rapor-1.4/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -374,7 +484,13 @@ CREATE TABLE `t205_default` (
 
 INSERT INTO `t205_default` (`id`, `User_ID`, `Field_ID`, `Keterangan`, `Nilai`) VALUES
 (1, 1, 'sekolah_id', 'Sekolah', '1'),
-(2, 1, 'tahunajaran_id', 'Tahun Ajaran', '1');
+(2, 1, 'tahunajaran_id', 'Tahun Ajaran', '1'),
+(3, 2, 'sekolah_id', 'Sekolah', '1'),
+(4, 2, 'tahunajaran_id', 'Tahun Ajaran', '1'),
+(5, 3, 'sekolah_id', 'Sekolah', '2'),
+(6, 3, 'tahunajaran_id', 'Tahun Ajaran', '2'),
+(7, 1, 'kelas_id', 'Kelas', '1'),
+(8, 1, 'semester_id', 'Semester', '1');
 
 --
 -- Indexes for dumped tables
@@ -393,9 +509,15 @@ ALTER TABLE `t002_tahunajaran`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `t101_session`
+-- Indexes for table `t003_kelas`
 --
-ALTER TABLE `t101_session`
+ALTER TABLE `t003_kelas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `t004_semester`
+--
+ALTER TABLE `t004_semester`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -446,28 +568,34 @@ ALTER TABLE `t002_tahunajaran`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `t101_session`
+-- AUTO_INCREMENT for table `t003_kelas`
 --
-ALTER TABLE `t101_session`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `t003_kelas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `t004_semester`
+--
+ALTER TABLE `t004_semester`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `t201_employees`
 --
 ALTER TABLE `t201_employees`
-  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `t204_audittrail`
 --
 ALTER TABLE `t204_audittrail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=220;
 
 --
 -- AUTO_INCREMENT for table `t205_default`
 --
 ALTER TABLE `t205_default`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

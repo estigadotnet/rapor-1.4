@@ -4,20 +4,20 @@ namespace PHPMaker2020\p_rapor_1_4;
 /**
  * Page class
  */
-class t101_session_add extends t101_session
+class t003_kelas_edit extends t003_kelas
 {
 
 	// Page ID
-	public $PageID = "add";
+	public $PageID = "edit";
 
 	// Project ID
 	public $ProjectID = "{3C5552E0-8BEE-4542-ADE6-BB9DE9BAE233}";
 
 	// Table name
-	public $TableName = 't101_session';
+	public $TableName = 't003_kelas';
 
 	// Page object name
-	public $PageObjName = "t101_session_add";
+	public $PageObjName = "t003_kelas_edit";
 
 	// Page headings
 	public $Heading = "";
@@ -341,10 +341,10 @@ class t101_session_add extends t101_session
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t101_session)
-		if (!isset($GLOBALS["t101_session"]) || get_class($GLOBALS["t101_session"]) == PROJECT_NAMESPACE . "t101_session") {
-			$GLOBALS["t101_session"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t101_session"];
+		// Table object (t003_kelas)
+		if (!isset($GLOBALS["t003_kelas"]) || get_class($GLOBALS["t003_kelas"]) == PROJECT_NAMESPACE . "t003_kelas") {
+			$GLOBALS["t003_kelas"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t003_kelas"];
 		}
 
 		// Table object (t201_employees)
@@ -353,11 +353,11 @@ class t101_session_add extends t101_session
 
 		// Page ID (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
-			define(PROJECT_NAMESPACE . "PAGE_ID", 'add');
+			define(PROJECT_NAMESPACE . "PAGE_ID", 'edit');
 
 		// Table name (for backward compatibility only)
 		if (!defined(PROJECT_NAMESPACE . "TABLE_NAME"))
-			define(PROJECT_NAMESPACE . "TABLE_NAME", 't101_session');
+			define(PROJECT_NAMESPACE . "TABLE_NAME", 't003_kelas');
 
 		// Start timer
 		if (!isset($GLOBALS["DebugTimer"]))
@@ -386,14 +386,14 @@ class t101_session_add extends t101_session
 		Page_Unloaded();
 
 		// Export
-		global $t101_session;
+		global $t003_kelas;
 		if ($this->CustomExport && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, Config("EXPORT_CLASSES"))) {
 				$content = ob_get_contents();
 			if ($ExportFileName == "")
 				$ExportFileName = $this->TableVar;
 			$class = PROJECT_NAMESPACE . Config("EXPORT_CLASSES." . $this->CustomExport);
 			if (class_exists($class)) {
-				$doc = new $class($t101_session);
+				$doc = new $class($t003_kelas);
 				$doc->Text = @$content;
 				if ($this->isExport("email"))
 					echo $this->exportEmail($doc->Text);
@@ -428,7 +428,7 @@ class t101_session_add extends t101_session
 				$pageName = GetPageName($url);
 				if ($pageName != $this->getListUrl()) { // Not List page
 					$row["caption"] = $this->getModalCaption($pageName);
-					if ($pageName == "t101_sessionview.php")
+					if ($pageName == "t003_kelasview.php")
 						$row["view"] = "1";
 				} else { // List page should not be shown as modal => error
 					$row["error"] = $this->getFailureMessage();
@@ -619,15 +619,11 @@ class t101_session_add extends t101_session
 		}
 		return FALSE;
 	}
-	public $FormClassName = "ew-horizontal ew-form ew-add-form";
+	public $FormClassName = "ew-horizontal ew-form ew-edit-form";
 	public $IsModal = FALSE;
 	public $IsMobileOrModal = FALSE;
-	public $DbMasterFilter = "";
-	public $DbDetailFilter = "";
-	public $StartRecord;
-	public $Priv = 0;
-	public $OldRecordset;
-	public $CopyRecord;
+	public $DbMasterFilter;
+	public $DbDetailFilter;
 
 	//
 	// Page run
@@ -654,11 +650,11 @@ class t101_session_add extends t101_session
 			$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName);
 			if ($Security->isLoggedIn())
 				$Security->TablePermission_Loaded();
-			if (!$Security->canAdd()) {
+			if (!$Security->canEdit()) {
 				$Security->saveLastUrl();
 				$this->setFailureMessage(DeniedMessage()); // Set no permission
 				if ($Security->canList())
-					$this->terminate(GetUrl("t101_sessionlist.php"));
+					$this->terminate(GetUrl("t003_kelaslist.php"));
 				else
 					$this->terminate(GetUrl("login.php"));
 				return;
@@ -674,10 +670,7 @@ class t101_session_add extends t101_session
 		$CurrentForm = new HttpForm();
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->Visible = FALSE;
-		$this->sekolah_id->setVisibility();
-		$this->user_id->setVisibility();
-		$this->tanggal_jam->setVisibility();
-		$this->session_value->setVisibility();
+		$this->Kelas->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Do not use lookup cache
@@ -699,12 +692,11 @@ class t101_session_add extends t101_session
 		$this->createToken();
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->sekolah_id);
-
 		// Check permission
-		if (!$Security->canAdd()) {
+
+		if (!$Security->canEdit()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
-			$this->terminate("t101_sessionlist.php");
+			$this->terminate("t003_kelaslist.php");
 			return;
 		}
 
@@ -712,98 +704,130 @@ class t101_session_add extends t101_session
 		if ($this->IsModal)
 			$SkipHeaderFooter = TRUE;
 		$this->IsMobileOrModal = IsMobile() || $this->IsModal;
-		$this->FormClassName = "ew-form ew-add-form ew-horizontal";
+		$this->FormClassName = "ew-form ew-edit-form ew-horizontal";
+		$loaded = FALSE;
 		$postBack = FALSE;
 
-		// Set up current action
+		// Set up current action and primary key
 		if (IsApi()) {
-			$this->CurrentAction = "insert"; // Add record directly
-			$postBack = TRUE;
-		} elseif (Post("action") !== NULL) {
-			$this->CurrentAction = Post("action"); // Get form action
-			$postBack = TRUE;
-		} else { // Not post back
 
-			// Load key values from QueryString
-			$this->CopyRecord = TRUE;
+			// Load key values
+			$loaded = TRUE;
 			if (Get("id") !== NULL) {
 				$this->id->setQueryStringValue(Get("id"));
-				$this->setKey("id", $this->id->CurrentValue); // Set up key
+				$this->id->setOldValue($this->id->QueryStringValue);
+			} elseif (Key(0) !== NULL) {
+				$this->id->setQueryStringValue(Key(0));
+				$this->id->setOldValue($this->id->QueryStringValue);
+			} elseif (Post("id") !== NULL) {
+				$this->id->setFormValue(Post("id"));
+				$this->id->setOldValue($this->id->FormValue);
+			} elseif (Route(2) !== NULL) {
+				$this->id->setQueryStringValue(Route(2));
+				$this->id->setOldValue($this->id->QueryStringValue);
 			} else {
-				$this->setKey("id", ""); // Clear key
-				$this->CopyRecord = FALSE;
+				$loaded = FALSE; // Unable to load key
 			}
-			if ($this->CopyRecord) {
-				$this->CurrentAction = "copy"; // Copy record
+
+			// Load record
+			if ($loaded)
+				$loaded = $this->loadRow();
+			if (!$loaded) {
+				$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
+				$this->terminate();
+				return;
+			}
+			$this->CurrentAction = "update"; // Update record directly
+			$postBack = TRUE;
+		} else {
+			if (Post("action") !== NULL) {
+				$this->CurrentAction = Post("action"); // Get action code
+				if (!$this->isShow()) // Not reload record, handle as postback
+					$postBack = TRUE;
+
+				// Load key from Form
+				if ($CurrentForm->hasValue("x_id")) {
+					$this->id->setFormValue($CurrentForm->getValue("x_id"));
+				}
 			} else {
-				$this->CurrentAction = "show"; // Display blank record
+				$this->CurrentAction = "show"; // Default action is display
+
+				// Load key from QueryString / Route
+				$loadByQuery = FALSE;
+				if (Get("id") !== NULL) {
+					$this->id->setQueryStringValue(Get("id"));
+					$loadByQuery = TRUE;
+				} elseif (Route(2) !== NULL) {
+					$this->id->setQueryStringValue(Route(2));
+					$loadByQuery = TRUE;
+				} else {
+					$this->id->CurrentValue = NULL;
+				}
 			}
+
+			// Load current record
+			$loaded = $this->loadRow();
 		}
 
-		// Load old record / default values
-		$loaded = $this->loadOldRecord();
-
-		// Load form values
+		// Process form if post back
 		if ($postBack) {
-			$this->loadFormValues(); // Load form values
+			$this->loadFormValues(); // Get form values
 		}
 
 		// Validate form if post back
 		if ($postBack) {
 			if (!$this->validateForm()) {
-				$this->EventCancelled = TRUE; // Event cancelled
-				$this->restoreFormValues(); // Restore form values
 				$this->setFailureMessage($FormError);
+				$this->EventCancelled = TRUE; // Event cancelled
+				$this->restoreFormValues();
 				if (IsApi()) {
 					$this->terminate();
 					return;
 				} else {
-					$this->CurrentAction = "show"; // Form error, reset action
+					$this->CurrentAction = ""; // Form error, reset action
 				}
 			}
 		}
 
 		// Perform current action
 		switch ($this->CurrentAction) {
-			case "copy": // Copy an existing record
-				if (!$loaded) { // Record not loaded
+			case "show": // Get a record to display
+				if (!$loaded) { // Load record based on key
 					if ($this->getFailureMessage() == "")
 						$this->setFailureMessage($Language->phrase("NoRecord")); // No record found
-					$this->terminate("t101_sessionlist.php"); // No matching record, return to list
+					$this->terminate("t003_kelaslist.php"); // No matching record, return to list
 				}
 				break;
-			case "insert": // Add new record
-				$this->SendEmail = TRUE; // Send email on add success
-				if ($this->addRow($this->OldRecordset)) { // Add successful
+			case "update": // Update
+				$returnUrl = $this->getReturnUrl();
+				if (GetPageName($returnUrl) == "t003_kelaslist.php")
+					$returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
+				$this->SendEmail = TRUE; // Send email on update success
+				if ($this->editRow()) { // Update record based on key
 					if ($this->getSuccessMessage() == "")
-						$this->setSuccessMessage($Language->phrase("AddSuccess")); // Set up success message
-					$returnUrl = $this->getReturnUrl();
-					if (GetPageName($returnUrl) == "t101_sessionlist.php")
-						$returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
-					elseif (GetPageName($returnUrl) == "t101_sessionview.php")
-						$returnUrl = $this->getViewUrl(); // View page, return to View page with keyurl directly
-					if (IsApi()) { // Return to caller
+						$this->setSuccessMessage($Language->phrase("UpdateSuccess")); // Update success
+					if (IsApi()) {
 						$this->terminate(TRUE);
 						return;
 					} else {
-						$this->terminate($returnUrl);
+						$this->terminate($returnUrl); // Return to caller
 					}
 				} elseif (IsApi()) { // API request, return
 					$this->terminate();
 					return;
+				} elseif ($this->getFailureMessage() == $Language->phrase("NoRecord")) {
+					$this->terminate($returnUrl); // Return to caller
 				} else {
 					$this->EventCancelled = TRUE; // Event cancelled
-					$this->restoreFormValues(); // Add failed, restore form values
+					$this->restoreFormValues(); // Restore form values if update failed
 				}
 		}
 
 		// Set up Breadcrumb
 		$this->setupBreadcrumb();
 
-		// Render row based on row type
-		$this->RowType = ROWTYPE_ADD; // Render add type
-
-		// Render row
+		// Render the record
+		$this->RowType = ROWTYPE_EDIT; // Render as Edit
 		$this->resetAttributes();
 		$this->renderRow();
 	}
@@ -814,21 +838,6 @@ class t101_session_add extends t101_session
 		global $CurrentForm, $Language;
 	}
 
-	// Load default values
-	protected function loadDefaultValues()
-	{
-		$this->id->CurrentValue = NULL;
-		$this->id->OldValue = $this->id->CurrentValue;
-		$this->sekolah_id->CurrentValue = NULL;
-		$this->sekolah_id->OldValue = $this->sekolah_id->CurrentValue;
-		$this->user_id->CurrentValue = NULL;
-		$this->user_id->OldValue = $this->user_id->CurrentValue;
-		$this->tanggal_jam->CurrentValue = NULL;
-		$this->tanggal_jam->OldValue = $this->tanggal_jam->CurrentValue;
-		$this->session_value->CurrentValue = NULL;
-		$this->session_value->OldValue = $this->session_value->CurrentValue;
-	}
-
 	// Load form values
 	protected function loadFormValues()
 	{
@@ -836,56 +845,27 @@ class t101_session_add extends t101_session
 		// Load from form
 		global $CurrentForm;
 
-		// Check field name 'sekolah_id' first before field var 'x_sekolah_id'
-		$val = $CurrentForm->hasValue("sekolah_id") ? $CurrentForm->getValue("sekolah_id") : $CurrentForm->getValue("x_sekolah_id");
-		if (!$this->sekolah_id->IsDetailKey) {
+		// Check field name 'Kelas' first before field var 'x_Kelas'
+		$val = $CurrentForm->hasValue("Kelas") ? $CurrentForm->getValue("Kelas") : $CurrentForm->getValue("x_Kelas");
+		if (!$this->Kelas->IsDetailKey) {
 			if (IsApi() && $val == NULL)
-				$this->sekolah_id->Visible = FALSE; // Disable update for API request
+				$this->Kelas->Visible = FALSE; // Disable update for API request
 			else
-				$this->sekolah_id->setFormValue($val);
-		}
-
-		// Check field name 'user_id' first before field var 'x_user_id'
-		$val = $CurrentForm->hasValue("user_id") ? $CurrentForm->getValue("user_id") : $CurrentForm->getValue("x_user_id");
-		if (!$this->user_id->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->user_id->Visible = FALSE; // Disable update for API request
-			else
-				$this->user_id->setFormValue($val);
-		}
-
-		// Check field name 'tanggal_jam' first before field var 'x_tanggal_jam'
-		$val = $CurrentForm->hasValue("tanggal_jam") ? $CurrentForm->getValue("tanggal_jam") : $CurrentForm->getValue("x_tanggal_jam");
-		if (!$this->tanggal_jam->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->tanggal_jam->Visible = FALSE; // Disable update for API request
-			else
-				$this->tanggal_jam->setFormValue($val);
-			$this->tanggal_jam->CurrentValue = UnFormatDateTime($this->tanggal_jam->CurrentValue, 0);
-		}
-
-		// Check field name 'session_value' first before field var 'x_session_value'
-		$val = $CurrentForm->hasValue("session_value") ? $CurrentForm->getValue("session_value") : $CurrentForm->getValue("x_session_value");
-		if (!$this->session_value->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->session_value->Visible = FALSE; // Disable update for API request
-			else
-				$this->session_value->setFormValue($val);
+				$this->Kelas->setFormValue($val);
 		}
 
 		// Check field name 'id' first before field var 'x_id'
 		$val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
+		if (!$this->id->IsDetailKey)
+			$this->id->setFormValue($val);
 	}
 
 	// Restore form values
 	public function restoreFormValues()
 	{
 		global $CurrentForm;
-		$this->sekolah_id->CurrentValue = $this->sekolah_id->FormValue;
-		$this->user_id->CurrentValue = $this->user_id->FormValue;
-		$this->tanggal_jam->CurrentValue = $this->tanggal_jam->FormValue;
-		$this->tanggal_jam->CurrentValue = UnFormatDateTime($this->tanggal_jam->CurrentValue, 0);
-		$this->session_value->CurrentValue = $this->session_value->FormValue;
+		$this->id->CurrentValue = $this->id->FormValue;
+		$this->Kelas->CurrentValue = $this->Kelas->FormValue;
 	}
 
 	// Load row based on key values
@@ -924,22 +904,15 @@ class t101_session_add extends t101_session
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->sekolah_id->setDbValue($row['sekolah_id']);
-		$this->user_id->setDbValue($row['user_id']);
-		$this->tanggal_jam->setDbValue($row['tanggal_jam']);
-		$this->session_value->setDbValue($row['session_value']);
+		$this->Kelas->setDbValue($row['Kelas']);
 	}
 
 	// Return a row with default values
 	protected function newRow()
 	{
-		$this->loadDefaultValues();
 		$row = [];
-		$row['id'] = $this->id->CurrentValue;
-		$row['sekolah_id'] = $this->sekolah_id->CurrentValue;
-		$row['user_id'] = $this->user_id->CurrentValue;
-		$row['tanggal_jam'] = $this->tanggal_jam->CurrentValue;
-		$row['session_value'] = $this->session_value->CurrentValue;
+		$row['id'] = NULL;
+		$row['Kelas'] = NULL;
 		return $row;
 	}
 
@@ -978,10 +951,7 @@ class t101_session_add extends t101_session
 
 		// Common render codes for all row types
 		// id
-		// sekolah_id
-		// user_id
-		// tanggal_jam
-		// session_value
+		// Kelas
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -989,124 +959,29 @@ class t101_session_add extends t101_session
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
 
-			// sekolah_id
-			$curVal = strval($this->sekolah_id->CurrentValue);
-			if ($curVal != "") {
-				$this->sekolah_id->ViewValue = $this->sekolah_id->lookupCacheOption($curVal);
-				if ($this->sekolah_id->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->sekolah_id->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = [];
-						$arwrk[1] = $rswrk->fields('df');
-						$this->sekolah_id->ViewValue = $this->sekolah_id->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->sekolah_id->ViewValue = $this->sekolah_id->CurrentValue;
-					}
-				}
-			} else {
-				$this->sekolah_id->ViewValue = NULL;
-			}
-			$this->sekolah_id->ViewCustomAttributes = "";
+			// Kelas
+			$this->Kelas->ViewValue = $this->Kelas->CurrentValue;
+			$this->Kelas->ViewCustomAttributes = "";
 
-			// user_id
-			$this->user_id->ViewValue = $this->user_id->CurrentValue;
-			$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
-			$this->user_id->ViewCustomAttributes = "";
+			// Kelas
+			$this->Kelas->LinkCustomAttributes = "";
+			$this->Kelas->HrefValue = "";
+			$this->Kelas->TooltipValue = "";
+		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
 
-			// tanggal_jam
-			$this->tanggal_jam->ViewValue = $this->tanggal_jam->CurrentValue;
-			$this->tanggal_jam->ViewValue = FormatDateTime($this->tanggal_jam->ViewValue, 0);
-			$this->tanggal_jam->ViewCustomAttributes = "";
+			// Kelas
+			$this->Kelas->EditAttrs["class"] = "form-control";
+			$this->Kelas->EditCustomAttributes = "";
+			if (!$this->Kelas->Raw)
+				$this->Kelas->CurrentValue = HtmlDecode($this->Kelas->CurrentValue);
+			$this->Kelas->EditValue = HtmlEncode($this->Kelas->CurrentValue);
+			$this->Kelas->PlaceHolder = RemoveHtml($this->Kelas->caption());
 
-			// session_value
-			$this->session_value->ViewValue = $this->session_value->CurrentValue;
-			$this->session_value->ViewCustomAttributes = "";
+			// Edit refer script
+			// Kelas
 
-			// sekolah_id
-			$this->sekolah_id->LinkCustomAttributes = "";
-			$this->sekolah_id->HrefValue = "";
-			$this->sekolah_id->TooltipValue = "";
-
-			// user_id
-			$this->user_id->LinkCustomAttributes = "";
-			$this->user_id->HrefValue = "";
-			$this->user_id->TooltipValue = "";
-
-			// tanggal_jam
-			$this->tanggal_jam->LinkCustomAttributes = "";
-			$this->tanggal_jam->HrefValue = "";
-			$this->tanggal_jam->TooltipValue = "";
-
-			// session_value
-			$this->session_value->LinkCustomAttributes = "";
-			$this->session_value->HrefValue = "";
-			$this->session_value->TooltipValue = "";
-		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
-
-			// sekolah_id
-			$this->sekolah_id->EditAttrs["class"] = "form-control";
-			$this->sekolah_id->EditCustomAttributes = "";
-			$curVal = trim(strval($this->sekolah_id->CurrentValue));
-			if ($curVal != "")
-				$this->sekolah_id->ViewValue = $this->sekolah_id->lookupCacheOption($curVal);
-			else
-				$this->sekolah_id->ViewValue = $this->sekolah_id->Lookup !== NULL && is_array($this->sekolah_id->Lookup->Options) ? $curVal : NULL;
-			if ($this->sekolah_id->ViewValue !== NULL) { // Load from cache
-				$this->sekolah_id->EditValue = array_values($this->sekolah_id->Lookup->Options);
-			} else { // Lookup from database
-				if ($curVal == "") {
-					$filterWrk = "0=1";
-				} else {
-					$filterWrk = "`id`" . SearchString("=", $this->sekolah_id->CurrentValue, DATATYPE_NUMBER, "");
-				}
-				$sqlWrk = $this->sekolah_id->Lookup->getSql(TRUE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				$arwrk = $rswrk ? $rswrk->getRows() : [];
-				if ($rswrk)
-					$rswrk->close();
-				$this->sekolah_id->EditValue = $arwrk;
-			}
-
-			// user_id
-			$this->user_id->EditAttrs["class"] = "form-control";
-			$this->user_id->EditCustomAttributes = "";
-			$this->user_id->EditValue = HtmlEncode($this->user_id->CurrentValue);
-			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
-
-			// tanggal_jam
-			$this->tanggal_jam->EditAttrs["class"] = "form-control";
-			$this->tanggal_jam->EditCustomAttributes = "";
-			$this->tanggal_jam->EditValue = HtmlEncode(FormatDateTime($this->tanggal_jam->CurrentValue, 8));
-			$this->tanggal_jam->PlaceHolder = RemoveHtml($this->tanggal_jam->caption());
-
-			// session_value
-			$this->session_value->EditAttrs["class"] = "form-control";
-			$this->session_value->EditCustomAttributes = "";
-			if (!$this->session_value->Raw)
-				$this->session_value->CurrentValue = HtmlDecode($this->session_value->CurrentValue);
-			$this->session_value->EditValue = HtmlEncode($this->session_value->CurrentValue);
-			$this->session_value->PlaceHolder = RemoveHtml($this->session_value->caption());
-
-			// Add refer script
-			// sekolah_id
-
-			$this->sekolah_id->LinkCustomAttributes = "";
-			$this->sekolah_id->HrefValue = "";
-
-			// user_id
-			$this->user_id->LinkCustomAttributes = "";
-			$this->user_id->HrefValue = "";
-
-			// tanggal_jam
-			$this->tanggal_jam->LinkCustomAttributes = "";
-			$this->tanggal_jam->HrefValue = "";
-
-			// session_value
-			$this->session_value->LinkCustomAttributes = "";
-			$this->session_value->HrefValue = "";
+			$this->Kelas->LinkCustomAttributes = "";
+			$this->Kelas->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -1127,30 +1002,9 @@ class t101_session_add extends t101_session
 		// Check if validation required
 		if (!Config("SERVER_VALIDATE"))
 			return ($FormError == "");
-		if ($this->sekolah_id->Required) {
-			if (!$this->sekolah_id->IsDetailKey && $this->sekolah_id->FormValue != NULL && $this->sekolah_id->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->sekolah_id->caption(), $this->sekolah_id->RequiredErrorMessage));
-			}
-		}
-		if ($this->user_id->Required) {
-			if (!$this->user_id->IsDetailKey && $this->user_id->FormValue != NULL && $this->user_id->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->user_id->caption(), $this->user_id->RequiredErrorMessage));
-			}
-		}
-		if (!CheckInteger($this->user_id->FormValue)) {
-			AddMessage($FormError, $this->user_id->errorMessage());
-		}
-		if ($this->tanggal_jam->Required) {
-			if (!$this->tanggal_jam->IsDetailKey && $this->tanggal_jam->FormValue != NULL && $this->tanggal_jam->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->tanggal_jam->caption(), $this->tanggal_jam->RequiredErrorMessage));
-			}
-		}
-		if (!CheckDate($this->tanggal_jam->FormValue)) {
-			AddMessage($FormError, $this->tanggal_jam->errorMessage());
-		}
-		if ($this->session_value->Required) {
-			if (!$this->session_value->IsDetailKey && $this->session_value->FormValue != NULL && $this->session_value->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->session_value->caption(), $this->session_value->RequiredErrorMessage));
+		if ($this->Kelas->Required) {
+			if (!$this->Kelas->IsDetailKey && $this->Kelas->FormValue != NULL && $this->Kelas->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->Kelas->caption(), $this->Kelas->RequiredErrorMessage));
 			}
 		}
 
@@ -1166,68 +1020,87 @@ class t101_session_add extends t101_session
 		return $validateForm;
 	}
 
-	// Add record
-	protected function addRow($rsold = NULL)
+	// Update record based on key values
+	protected function editRow()
 	{
-		global $Language, $Security;
+		global $Security, $Language;
+		$oldKeyFilter = $this->getRecordFilter();
+		$filter = $this->applyUserIDFilters($oldKeyFilter);
 		$conn = $this->getConnection();
-
-		// Load db values from rsold
-		$this->loadDbValues($rsold);
-		if ($rsold) {
-		}
-		$rsnew = [];
-
-		// sekolah_id
-		$this->sekolah_id->setDbValueDef($rsnew, $this->sekolah_id->CurrentValue, 0, FALSE);
-
-		// user_id
-		$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, FALSE);
-
-		// tanggal_jam
-		$this->tanggal_jam->setDbValueDef($rsnew, UnFormatDateTime($this->tanggal_jam->CurrentValue, 0), CurrentDate(), FALSE);
-
-		// session_value
-		$this->session_value->setDbValueDef($rsnew, $this->session_value->CurrentValue, "", FALSE);
-
-		// Call Row Inserting event
-		$rs = ($rsold) ? $rsold->fields : NULL;
-		$insertRow = $this->Row_Inserting($rs, $rsnew);
-		if ($insertRow) {
-			$conn->raiseErrorFn = Config("ERROR_FUNC");
-			$addRow = $this->insert($rsnew);
-			$conn->raiseErrorFn = "";
-			if ($addRow) {
-			}
+		$this->CurrentFilter = $filter;
+		$sql = $this->getCurrentSql();
+		$conn->raiseErrorFn = Config("ERROR_FUNC");
+		$rs = $conn->execute($sql);
+		$conn->raiseErrorFn = "";
+		if ($rs === FALSE)
+			return FALSE;
+		if ($rs->EOF) {
+			$this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
+			$editRow = FALSE; // Update Failed
 		} else {
-			if ($this->getSuccessMessage() != "" || $this->getFailureMessage() != "") {
 
-				// Use the message, do nothing
-			} elseif ($this->CancelMessage != "") {
-				$this->setFailureMessage($this->CancelMessage);
-				$this->CancelMessage = "";
-			} else {
-				$this->setFailureMessage($Language->phrase("InsertCancelled"));
+			// Save old values
+			$rsold = &$rs->fields;
+			$this->loadDbValues($rsold);
+			$rsnew = [];
+
+			// Kelas
+			$this->Kelas->setDbValueDef($rsnew, $this->Kelas->CurrentValue, "", $this->Kelas->ReadOnly);
+
+			// Call Row Updating event
+			$updateRow = $this->Row_Updating($rsold, $rsnew);
+
+			// Check for duplicate key when key changed
+			if ($updateRow) {
+				$newKeyFilter = $this->getRecordFilter($rsnew);
+				if ($newKeyFilter != $oldKeyFilter) {
+					$rsChk = $this->loadRs($newKeyFilter);
+					if ($rsChk && !$rsChk->EOF) {
+						$keyErrMsg = str_replace("%f", $newKeyFilter, $Language->phrase("DupKey"));
+						$this->setFailureMessage($keyErrMsg);
+						$rsChk->close();
+						$updateRow = FALSE;
+					}
+				}
 			}
-			$addRow = FALSE;
-		}
-		if ($addRow) {
+			if ($updateRow) {
+				$conn->raiseErrorFn = Config("ERROR_FUNC");
+				if (count($rsnew) > 0)
+					$editRow = $this->update($rsnew, "", $rsold);
+				else
+					$editRow = TRUE; // No field to update
+				$conn->raiseErrorFn = "";
+				if ($editRow) {
+				}
+			} else {
+				if ($this->getSuccessMessage() != "" || $this->getFailureMessage() != "") {
 
-			// Call Row Inserted event
-			$rs = ($rsold) ? $rsold->fields : NULL;
-			$this->Row_Inserted($rs, $rsnew);
+					// Use the message, do nothing
+				} elseif ($this->CancelMessage != "") {
+					$this->setFailureMessage($this->CancelMessage);
+					$this->CancelMessage = "";
+				} else {
+					$this->setFailureMessage($Language->phrase("UpdateCancelled"));
+				}
+				$editRow = FALSE;
+			}
 		}
+
+		// Call Row_Updated event
+		if ($editRow)
+			$this->Row_Updated($rsold, $rsnew);
+		$rs->close();
 
 		// Clean upload path if any
-		if ($addRow) {
+		if ($editRow) {
 		}
 
 		// Write JSON for API request
-		if (IsApi() && $addRow) {
+		if (IsApi() && $editRow) {
 			$row = $this->getRecordsFromRecordset([$rsnew], TRUE);
 			WriteJson(["success" => TRUE, $this->TableVar => $row]);
 		}
-		return $addRow;
+		return $editRow;
 	}
 
 	// Set up Breadcrumb
@@ -1236,9 +1109,9 @@ class t101_session_add extends t101_session
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new Breadcrumb();
 		$url = substr(CurrentUrl(), strrpos(CurrentUrl(), "/")+1);
-		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t101_sessionlist.php"), "", $this->TableVar, TRUE);
-		$pageId = ($this->isCopy()) ? "Copy" : "Add";
-		$Breadcrumb->add("add", $pageId, $url);
+		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("t003_kelaslist.php"), "", $this->TableVar, TRUE);
+		$pageId = "edit";
+		$Breadcrumb->add("edit", $pageId, $url);
 	}
 
 	// Setup lookup options
@@ -1255,8 +1128,6 @@ class t101_session_add extends t101_session
 
 			// Set up lookup SQL and connection
 			switch ($fld->FieldVar) {
-				case "x_sekolah_id":
-					break;
 				default:
 					$lookupFilter = "";
 					break;
@@ -1277,8 +1148,6 @@ class t101_session_add extends t101_session
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x_sekolah_id":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();
@@ -1287,6 +1156,44 @@ class t101_session_add extends t101_session
 					$rs->close();
 				$fld->Lookup->Options = $ar;
 			}
+		}
+	}
+
+	// Set up starting record parameters
+	public function setupStartRecord()
+	{
+		if ($this->DisplayRecords == 0)
+			return;
+		if ($this->isPageRequest()) { // Validate request
+			$startRec = Get(Config("TABLE_START_REC"));
+			$pageNo = Get(Config("TABLE_PAGE_NO"));
+			if ($pageNo !== NULL) { // Check for "pageno" parameter first
+				if (is_numeric($pageNo)) {
+					$this->StartRecord = ($pageNo - 1) * $this->DisplayRecords + 1;
+					if ($this->StartRecord <= 0) {
+						$this->StartRecord = 1;
+					} elseif ($this->StartRecord >= (int)(($this->TotalRecords - 1)/$this->DisplayRecords) * $this->DisplayRecords + 1) {
+						$this->StartRecord = (int)(($this->TotalRecords - 1)/$this->DisplayRecords) * $this->DisplayRecords + 1;
+					}
+					$this->setStartRecordNumber($this->StartRecord);
+				}
+			} elseif ($startRec !== NULL) { // Check for "start" parameter
+				$this->StartRecord = $startRec;
+				$this->setStartRecordNumber($this->StartRecord);
+			}
+		}
+		$this->StartRecord = $this->getStartRecordNumber();
+
+		// Check if correct start record counter
+		if (!is_numeric($this->StartRecord) || $this->StartRecord == "") { // Avoid invalid start record counter
+			$this->StartRecord = 1; // Reset start record counter
+			$this->setStartRecordNumber($this->StartRecord);
+		} elseif ($this->StartRecord > $this->TotalRecords) { // Avoid starting record > total records
+			$this->StartRecord = (int)(($this->TotalRecords - 1)/$this->DisplayRecords) * $this->DisplayRecords + 1; // Point to last page first record
+			$this->setStartRecordNumber($this->StartRecord);
+		} elseif (($this->StartRecord - 1) % $this->DisplayRecords != 0) {
+			$this->StartRecord = (int)(($this->StartRecord - 1)/$this->DisplayRecords) * $this->DisplayRecords + 1; // Point to page boundary
+			$this->setStartRecordNumber($this->StartRecord);
 		}
 	}
 

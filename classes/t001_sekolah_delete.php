@@ -576,7 +576,7 @@ class t001_sekolah_delete extends t001_sekolah
 			}
 		}
 		$this->CurrentAction = Param("action"); // Set up current action
-		$this->id->Visible = FALSE;
+		$this->id->setVisibility();
 		$this->Nama->setVisibility();
 		$this->Alamat->setVisibility();
 		$this->KepalaSekolah->setVisibility();
@@ -783,6 +783,11 @@ class t001_sekolah_delete extends t001_sekolah
 			// NIPKepalaSekolah
 			$this->NIPKepalaSekolah->ViewValue = $this->NIPKepalaSekolah->CurrentValue;
 			$this->NIPKepalaSekolah->ViewCustomAttributes = "";
+
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
 
 			// Nama
 			$this->Nama->LinkCustomAttributes = "";
